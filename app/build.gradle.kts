@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "se.avelon.estepona"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "se.avelon.estepona"

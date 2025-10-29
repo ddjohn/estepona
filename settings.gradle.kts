@@ -20,4 +20,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Estepona"
-include(":app")
+include(":estepona")

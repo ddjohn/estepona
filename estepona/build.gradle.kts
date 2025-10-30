@@ -5,6 +5,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("../etc/keystore.jks")
+            storePassword = "android"
+            keyAlias = "testkey"
+            keyPassword = "android"
+        }
+    }
     namespace = "se.avelon.estepona"
     compileSdk = 36
 
@@ -40,6 +48,9 @@ android {
 }
 
 dependencies {
+    /* Firebase */
+    implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
+    implementation("com.google.firebase:firebase-auth")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

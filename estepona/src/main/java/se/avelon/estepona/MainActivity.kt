@@ -19,6 +19,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -29,15 +30,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
 class MainActivity : ComponentActivity() {
+    companion object {
+        val TAG = DLog.forTag(MainActivity::class.java)
+    }
+
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        DLog.method(TAG, "onCreate(): $savedInstanceState")
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
+
+        DLog.info(TAG, "SetContent...")
         setContent {
             EsteponaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
+                    /*Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding),
+                    )*/
+                    DragAndDropBoxes(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize(),
                     )
                 }
             }

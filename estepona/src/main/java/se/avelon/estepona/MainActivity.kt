@@ -15,6 +15,7 @@
  */
 package se.avelon.estepona
 
+import android.app.UiModeManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -39,6 +40,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         DLog.method(TAG, "onCreate(): $savedInstanceState")
         super.onCreate(savedInstanceState)
+
+        val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager
+        uiModeManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_YES)
 
         enableEdgeToEdge()
 

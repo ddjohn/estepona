@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import se.avelon.estepona.logging.DLog
+import se.avelon.estepona.packages.PackageGrid
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
 class MainActivity : ComponentActivity() {
@@ -59,10 +60,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(innerPadding)
                                 .fillMaxWidth(0.2f),
                         )
-                        Greeting(
-                            name = "Android",
-                            modifier = Modifier.padding(innerPadding),
-                        )
+                        PackageGrid(modifier = Modifier.padding(innerPadding))
                     }
                 }
             }
@@ -75,7 +73,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
         modifier = modifier,
-        color = Color.White
+        color = Color.White,
     )
 }
 

@@ -21,29 +21,26 @@ import androidx.compose.material3.ShortNavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import se.avelon.estepona.logging.DLog
 
-class MyBottomBarComponent: ViewModel() {
+class MyBottomBarComponent : ViewModel() {
     companion object {
         val TAG = DLog.forTag(MyBottomBarComponent::class.java)
     }
 
     var selected by mutableStateOf(1)
-
 }
 
 @Composable
 fun MyBottomBar(viewModel: MyBottomBarComponent = MyBottomBarComponent(), modifier: Modifier = Modifier) {
     DLog.method(MyBottomBarComponent.TAG, "MyBottomBar2()")
 
-    //var selected by rememberSaveable { mutableIntStateOf(1) }
+    // var selected by rememberSaveable { mutableIntStateOf(1) }
 
     NavigationBar(modifier = modifier) {
         MyBarItem(viewModel, text = "Map", res = R.drawable.navigation_map, index = 1)
@@ -61,7 +58,7 @@ fun MyBarItem(viewModel: MyBottomBarComponent, modifier: Modifier = Modifier, te
 
     ShortNavigationBarItem(
         selected = viewModel.selected == index,
-        onClick = { viewModel.selected = index},
+        onClick = { viewModel.selected = index },
         icon = { Icon(painter = painterResource(id = res), contentDescription = null) },
         label = { Text(text) },
     )

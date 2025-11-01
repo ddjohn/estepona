@@ -40,9 +40,15 @@ import androidx.core.graphics.drawable.toBitmap
 import se.avelon.estepona.TAG
 import se.avelon.estepona.logging.DLog
 
+class PackageComponent {
+    companion object {
+        val TAG = DLog.forTag(PackageComponent::class.java)
+    }
+}
+
 @Composable
 fun PackageButton(modifier: Modifier = Modifier, item: PackageItemData, onClick: () -> Unit) {
-    DLog.method(TAG, "ClockButton()")
+    DLog.method(TAG, "PackageButton()")
 
     Card(modifier = Modifier.size(64.dp, 64.dp).padding(8.dp), onClick = onClick, border = BorderStroke(2.dp, Color.Red)) {
         Column() {
@@ -55,7 +61,7 @@ fun PackageButton(modifier: Modifier = Modifier, item: PackageItemData, onClick:
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PackageGrid(modifier: Modifier = Modifier) {
-    DLog.method(TAG, "Grid()")
+    DLog.method(TAG, "PackageGrid()")
     LazyColumn(modifier = modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center) {
         DLog.method(TAG, "LazyColumn()")
 

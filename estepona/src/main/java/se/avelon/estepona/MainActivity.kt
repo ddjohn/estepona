@@ -70,20 +70,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     },
-                    topBar = {
-                        TopAppBar(title = {
-                            Row() {
-                                Text("Text")
-                                Badge() {
-                                    Icon(
-                                        contentDescription = "Email",
-                                        painter = painterResource(R.drawable.ic_launcher_foreground),
-                                        tint = Color.Red,
-                                    )
-                                }
-                            }
-                        })
-                    },
+                    topBar = { MyTopBar() },
                     bottomBar = { MyBottomBar() },
                 ) { innerPadding ->
                     Row() {

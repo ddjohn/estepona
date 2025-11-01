@@ -37,7 +37,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import se.avelon.estepona.TAG
 import se.avelon.estepona.logging.DLog
 
 class PackageComponent {
@@ -48,7 +47,7 @@ class PackageComponent {
 
 @Composable
 fun PackageButton(modifier: Modifier = Modifier, item: PackageItemData, onClick: () -> Unit) {
-    DLog.method(TAG, "PackageButton()")
+    DLog.method(PackageComponent.TAG, "PackageButton()")
 
     Card(modifier = Modifier.size(64.dp, 64.dp).padding(8.dp), onClick = onClick, border = BorderStroke(2.dp, Color.Red)) {
         Column() {
@@ -61,9 +60,9 @@ fun PackageButton(modifier: Modifier = Modifier, item: PackageItemData, onClick:
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PackageGrid(modifier: Modifier = Modifier) {
-    DLog.method(TAG, "PackageGrid()")
+    DLog.method(PackageComponent.TAG, "PackageGrid()")
     LazyColumn(modifier = modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center) {
-        DLog.method(TAG, "LazyColumn()")
+        DLog.method(PackageComponent.TAG, "LazyColumn()")
 
         item {
             Text(modifier = Modifier.padding(bottom = 16.dp), text = "Packages", style = MaterialTheme.typography.titleMedium)
@@ -71,7 +70,7 @@ fun PackageGrid(modifier: Modifier = Modifier) {
 
         item {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                DLog.method(TAG, "FlowRow()")
+                DLog.method(PackageComponent.TAG, "FlowRow()")
 
                 val context = LocalContext.current
                 val packageManager = context.packageManager
@@ -84,7 +83,7 @@ fun PackageGrid(modifier: Modifier = Modifier) {
 
                     if (context.packageManager?.getLaunchIntentForPackage(pkg.packageName) != null) {
                         PackageButton(item = item, onClick = {
-                            DLog.method(TAG, "onClick(): $this")
+                            DLog.method(PackageComponent.TAG, "onClick(): $this")
 
                             val intent = Intent(Intent.ACTION_MAIN)
                             intent.addCategory(Intent.CATEGORY_LAUNCHER)

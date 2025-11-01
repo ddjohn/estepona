@@ -52,12 +52,16 @@ import androidx.compose.ui.unit.sp
 import se.avelon.estepona.logging.DLog
 import kotlin.random.Random
 
-const val TAG = "@@.Compose"
+class DragAndDropBoxesComponents {
+    companion object {
+        val TAG = DLog.forTag(DragAndDropBoxesComponents::class.java)
+    }
+}
 
 @ExperimentalFoundationApi
 @Composable
 fun DragAndDropBoxes(modifier: Modifier = Modifier) {
-    DLog.info(TAG, "DragAndDropBoxes(): $modifier")
+    DLog.info(DragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $modifier")
 
     var startDrag by remember { mutableStateOf(false) }
 
@@ -75,7 +79,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             }
         }
         repeat(boxCount) { index ->
-            DLog.info(TAG, "DragAndDropBoxes(): $index")
+            DLog.info(DragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $index")
 
             Box(
                 modifier = Modifier
@@ -84,7 +88,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                     .background(color.get(index))
                     .dragAndDropTarget(
                         shouldStartDragAndDrop = { event ->
-                            DLog.info(TAG, "shouldStartDragAndDrop(): $event")
+                            DLog.info(DragAndDropBoxesComponents.TAG, "shouldStartDragAndDrop(): $event")
 
                             event
                                 .mimeTypes()
@@ -93,10 +97,10 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                         target = remember {
                             object : DragAndDropTarget {
                                 override fun onDrop(event: DragAndDropEvent): Boolean {
-                                    DLog.info(TAG, "onDrop(): $event")
+                                    DLog.info(DragAndDropBoxesComponents.TAG, "onDrop(): $event")
 
                                     val text = event.toAndroidDragEvent().clipData.getItemAt(0).text
-                                    DLog.info(TAG, "Drag data(): $text")
+                                    DLog.info(DragAndDropBoxesComponents.TAG, "Drag data(): $text")
 
                                     dragBoxIndex = index
                                     return true
@@ -121,7 +125,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                                 detectTapGestures(onLongPress = { startDrag = true })
                             }
                             .dragAndDropSource(transferData = { offset ->
-                                DLog.info(TAG, "transferData(): $offset")
+                                DLog.info(DragAndDropBoxesComponents.TAG, "transferData(): $offset")
 
                                 if (startDrag) {
                                     startDrag = false

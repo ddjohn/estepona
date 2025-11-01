@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.sp
 import se.avelon.estepona.logging.DLog
 import kotlin.random.Random
 
-const val TAG = "@@.DragAndDropBoxes"
+const val TAG = "@@.Compose"
 
 @ExperimentalFoundationApi
 @Composable

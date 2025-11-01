@@ -25,11 +25,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Badge
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.packages.PackageGrid
@@ -40,7 +46,7 @@ class MainActivity : ComponentActivity() {
         val TAG = DLog.forTag(MainActivity::class.java)
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         DLog.method(TAG, "onCreate(): $savedInstanceState")
         super.onCreate(savedInstanceState)
@@ -53,7 +59,33 @@ class MainActivity : ComponentActivity() {
         DLog.info(TAG, "SetContent...")
         setContent {
             EsteponaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    floatingActionButton = {
+                        FloatingActionButton(onClick = { }) {
+                            Icon(
+                                contentDescription = "Email",
+                                painter = painterResource(R.drawable.ic_launcher_foreground),
+                                tint = Color.Blue,
+                            )
+                        }
+                    },
+                    topBar = {
+                        TopAppBar(title = {
+                            Row() {
+                                Text("Text")
+                                Badge() {
+                                    Icon(
+                                        contentDescription = "Email",
+                                        painter = painterResource(R.drawable.ic_launcher_foreground),
+                                        tint = Color.Red,
+                                    )
+                                }
+                            }
+                        })
+                    },
+                    bottomBar = { MyBottomBar() },
+                ) { innerPadding ->
                     Row() {
                         DragAndDropBoxes(
                             modifier = Modifier

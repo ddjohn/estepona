@@ -58,7 +58,10 @@ fun MyBarItem(viewModel: MyBottomBarComponent, modifier: Modifier = Modifier, te
 
     ShortNavigationBarItem(
         selected = viewModel.selected == index,
-        onClick = { viewModel.selected = index },
+        onClick = {
+            DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
+            viewModel.selected = index
+        },
         icon = { Icon(painter = painterResource(id = res), contentDescription = null) },
         label = { Text(text) },
     )

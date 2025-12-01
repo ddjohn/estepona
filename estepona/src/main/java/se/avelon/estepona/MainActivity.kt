@@ -46,12 +46,17 @@ class MainActivity : ComponentActivity() {
         DLog.method(TAG, "onCreate(): $savedInstanceState")
         super.onCreate(savedInstanceState)
 
+        DLog.test()
+
         val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager
         uiModeManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_YES)
 
         enableEdgeToEdge()
 
         DLog.info(TAG, "SetContent...")
+
+        // val navController = rememberNavController()
+
         setContent {
             EsteponaTheme {
                 Scaffold(
@@ -64,9 +69,12 @@ class MainActivity : ComponentActivity() {
 
                     Row() {
                         DLog.method(TAG, "Row()")
+
                         MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f))
+                        // NavHost(navController = navController, startDestination = "home_route", modifier = Modifier.padding(innerPadding) ) {
                         MyMapbox(modifier = Modifier.fillMaxSize())
                         PackageGrid(modifier = Modifier.padding(innerPadding))
+                        // }
                     }
                 }
             }

@@ -52,16 +52,16 @@ import androidx.compose.ui.unit.sp
 import se.avelon.estepona.logging.DLog
 import kotlin.random.Random
 
-class DragAndDropBoxesComponents {
+class MyDragAndDropBoxesComponents {
     companion object {
-        val TAG = DLog.forTag(DragAndDropBoxesComponents::class.java)
+        val TAG = DLog.forTag(MyDragAndDropBoxesComponents::class.java)
     }
 }
 
 @ExperimentalFoundationApi
 @Composable
-fun DragAndDropBoxes(modifier: Modifier = Modifier) {
-    DLog.info(DragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $modifier")
+fun MyDragAndDropBoxes(modifier: Modifier = Modifier) {
+    DLog.info(MyDragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $modifier")
 
     var startDrag by remember { mutableStateOf(false) }
 
@@ -79,7 +79,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             }
         }
         repeat(boxCount) { index ->
-            DLog.info(DragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $index")
+            DLog.info(MyDragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $index")
 
             Box(
                 modifier = Modifier
@@ -88,7 +88,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                     .background(color.get(index))
                     .dragAndDropTarget(
                         shouldStartDragAndDrop = { event ->
-                            DLog.info(DragAndDropBoxesComponents.TAG, "shouldStartDragAndDrop(): $event")
+                            DLog.info(MyDragAndDropBoxesComponents.TAG, "shouldStartDragAndDrop(): $event")
 
                             event
                                 .mimeTypes()
@@ -97,10 +97,10 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                         target = remember {
                             object : DragAndDropTarget {
                                 override fun onDrop(event: DragAndDropEvent): Boolean {
-                                    DLog.info(DragAndDropBoxesComponents.TAG, "onDrop(): $event")
+                                    DLog.info(MyDragAndDropBoxesComponents.TAG, "onDrop(): $event")
 
                                     val text = event.toAndroidDragEvent().clipData.getItemAt(0).text
-                                    DLog.info(DragAndDropBoxesComponents.TAG, "Drag data(): $text")
+                                    DLog.info(MyDragAndDropBoxesComponents.TAG, "Drag data(): $text")
 
                                     dragBoxIndex = index
                                     return true
@@ -125,7 +125,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                                 detectTapGestures(onLongPress = { startDrag = true })
                             }
                             .dragAndDropSource(transferData = { offset ->
-                                DLog.info(DragAndDropBoxesComponents.TAG, "transferData(): $offset")
+                                DLog.info(MyDragAndDropBoxesComponents.TAG, "transferData(): $offset")
 
                                 if (startDrag) {
                                     startDrag = false

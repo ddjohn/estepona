@@ -67,18 +67,8 @@ class MainActivity : ComponentActivity() {
 
                     Row() {
                         DLog.method(TAG, "Row()")
-                        DragAndDropBoxes(
-                            modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f),
-                        )
-                        MapboxMap(
-                            Modifier.fillMaxSize(),
-                            mapViewportState = rememberMapViewportState {
-                                setCameraOptions {
-                                    zoom(1.0)
-                                    center(Point.fromLngLat(-98.0, 39.5))
-                                }
-                            },
-                        )
+                        MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f))
+                        MyMapbox(modifier = Modifier.fillMaxSize())
                         PackageGrid(modifier = Modifier.padding(innerPadding))
                     }
                 }

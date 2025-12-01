@@ -32,6 +32,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.mapbox.geojson.Point
+import com.mapbox.maps.extension.compose.MapboxMap
+import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.packages.PackageGrid
 import se.avelon.estepona.ui.theme.EsteponaTheme
@@ -60,11 +63,21 @@ class MainActivity : ComponentActivity() {
                     topBar = { MyTopBar() },
                     bottomBar = { MyBottomBar() },
                 ) { innerPadding ->
+                    DLog.method(TAG, "Scaffold(): $innerPadding")
+
                     Row() {
+                        DLog.method(TAG, "Row()")
                         DragAndDropBoxes(
-                            modifier = Modifier
-                                .padding(innerPadding)
-                                .fillMaxWidth(0.2f),
+                            modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f),
+                        )
+                        MapboxMap(
+                            Modifier.fillMaxSize(),
+                            mapViewportState = rememberMapViewportState {
+                                setCameraOptions {
+                                    zoom(1.0)
+                                    center(Point.fromLngLat(-98.0, 39.5))
+                                }
+                            },
                         )
                         PackageGrid(modifier = Modifier.padding(innerPadding))
                     }

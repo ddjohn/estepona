@@ -52,6 +52,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
     implementation("com.google.firebase:firebase-auth")
 
+    /* Mapbox */
+    implementation("com.mapbox.maps:android-ndk27:11.16.6")
+    implementation("com.mapbox.extension:maps-compose-ndk27:11.16.6")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

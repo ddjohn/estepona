@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import se.avelon.estepona.logging.DLog
 
 class MyBottomBarComponent : ViewModel() {
@@ -37,30 +38,29 @@ class MyBottomBarComponent : ViewModel() {
 }
 
 @Composable
-fun MyBottomBar(viewModel: MyBottomBarComponent = MyBottomBarComponent(), modifier: Modifier = Modifier) {
+fun MyBottomBar(navController: NavController, viewModel: MyBottomBarComponent = MyBottomBarComponent(), modifier: Modifier = Modifier) {
     DLog.method(MyBottomBarComponent.TAG, "MyBottomBar2()")
 
-    // var selected by rememberSaveable { mutableIntStateOf(1) }
-
     NavigationBar(modifier = modifier) {
-        MyBarItem(viewModel, text = "Map", res = R.drawable.navigation_map, index = 1)
-        MyBarItem(viewModel, text = "Camera", res = R.drawable.navigation_camera, index = 2)
-        MyBarItem(viewModel, text = "Statistics", res = R.drawable.navigation_statistics, index = 3)
-        MyBarItem(viewModel, text = "Stocks", res = R.drawable.navigation_stocks, index = 4)
-        MyBarItem(viewModel, text = "Movie", res = R.drawable.navigtion_movie, index = 5)
-        MyBarItem(viewModel, text = "Settings", res = R.drawable.navigation_settings, index = 6)
+        MyBarItem(viewModel, navController, text = "Map", res = R.drawable.navigation_map, index = 1)
+        MyBarItem(viewModel, navController, text = "Package", res = R.drawable.navigation_camera, index = 2)
+        MyBarItem(viewModel, navController, text = "Camera", res = R.drawable.navigation_camera, index = 3)
+        MyBarItem(viewModel, navController, text = "Statistics", res = R.drawable.navigation_statistics, index = 4)
+        MyBarItem(viewModel, navController, text = "Stocks", res = R.drawable.navigation_stocks, index = 5)
+        MyBarItem(viewModel, navController, text = "Movie", res = R.drawable.navigtion_movie, index = 6)
+        MyBarItem(viewModel, navController, text = "Settings", res = R.drawable.navigation_settings, index = 7)
     }
 }
 
 @Composable
-fun MyBarItem(viewModel: MyBottomBarComponent, modifier: Modifier = Modifier, text: String, res: Int, index: Int) {
+fun MyBarItem(viewModel: MyBottomBarComponent, navController: NavController, modifier: Modifier = Modifier, text: String, res: Int, index: Int) {
     DLog.method(MyBottomBarComponent.TAG, "MyBarItem()")
 
     ShortNavigationBarItem(
         selected = viewModel.selected == index,
         onClick = {
             DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
-            viewModel.selected = index
+            navController.navigate(text)
         },
         icon = { Icon(painter = painterResource(id = res), contentDescription = null) },
         label = { Text(text) },

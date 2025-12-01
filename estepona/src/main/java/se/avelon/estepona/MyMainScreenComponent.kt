@@ -23,7 +23,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import se.avelon.estepona.MainActivity.Companion.TAG
+import se.avelon.estepona.components.MyDragAndDropBoxes
+import se.avelon.estepona.components.MyFloatingButton
+import se.avelon.estepona.components.MyMapbox
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.packages.PackageGrid
 import se.avelon.estepona.ui.theme.EsteponaTheme
@@ -37,12 +43,14 @@ class MyScreenComponent {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyMainScreen() {
+    val navController = rememberNavController()
+
     EsteponaTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             floatingActionButton = { MyFloatingButton() },
             topBar = { MyTopBar() },
-            bottomBar = { MyBottomBar() },
+            bottomBar = { MyBottomBar(navController) },
         ) { innerPadding ->
             DLog.method(TAG, "Scaffold(): $innerPadding")
 
@@ -50,10 +58,15 @@ fun MyMainScreen() {
                 DLog.method(TAG, "Row()")
 
                 MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f))
-                // NavHost(navController = navController, startDestination = "home_route", modifier = Modifier.padding(innerPadding) ) {
-                MyMapbox(modifier = Modifier.fillMaxSize())
-                PackageGrid(modifier = Modifier.padding(innerPadding))
-                // }
+                NavHost(navController = navController, startDestination = "Map", modifier = Modifier.padding(innerPadding)) {
+                    composable("Map") {
+                        MyMapbox(modifier = Modifier.fillMaxSize())
+                    }
+
+                    composable("Package") {
+                        PackageGrid(modifier = Modifier.padding(innerPadding))
+                    }
+                }
             }
         }
     }

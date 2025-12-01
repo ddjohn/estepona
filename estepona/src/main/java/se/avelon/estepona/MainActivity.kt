@@ -48,9 +48,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         DLog.info(TAG, "SetContent...")
-
-        // val navController = rememberNavController()
-
         setContent {
             MyMainScreen()
         }

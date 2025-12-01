@@ -21,19 +21,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import se.avelon.estepona.logging.DLog
-import se.avelon.estepona.packages.PackageGrid
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
 class MainActivity : ComponentActivity() {
@@ -58,26 +52,7 @@ class MainActivity : ComponentActivity() {
         // val navController = rememberNavController()
 
         setContent {
-            EsteponaTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    floatingActionButton = { MyFloatingButton() },
-                    topBar = { MyTopBar() },
-                    bottomBar = { MyBottomBar() },
-                ) { innerPadding ->
-                    DLog.method(TAG, "Scaffold(): $innerPadding")
-
-                    Row() {
-                        DLog.method(TAG, "Row()")
-
-                        MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f))
-                        // NavHost(navController = navController, startDestination = "home_route", modifier = Modifier.padding(innerPadding) ) {
-                        MyMapbox(modifier = Modifier.fillMaxSize())
-                        PackageGrid(modifier = Modifier.padding(innerPadding))
-                        // }
-                    }
-                }
-            }
+            MyMainScreen()
         }
     }
 }

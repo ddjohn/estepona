@@ -43,7 +43,7 @@ fun MyBottomBar(navController: NavController, viewModel: MyBottomBarComponent = 
 
     NavigationBar(modifier = modifier) {
         MyBarItem(viewModel, navController, text = "Map", res = R.drawable.navigation_map, index = 1)
-        MyBarItem(viewModel, navController, text = "Package", res = R.drawable.navigation_camera, index = 2)
+        MyBarItem(viewModel, navController, text = "Package", res = R.drawable.navigation_package, index = 2)
         MyBarItem(viewModel, navController, text = "Camera", res = R.drawable.navigation_camera, index = 3)
         MyBarItem(viewModel, navController, text = "Statistics", res = R.drawable.navigation_statistics, index = 4)
         MyBarItem(viewModel, navController, text = "Stocks", res = R.drawable.navigation_stocks, index = 5)

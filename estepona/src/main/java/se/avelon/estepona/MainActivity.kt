@@ -48,9 +48,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         DLog.info(TAG, "SetContent...")
-        setContent {
-            MyMainScreen()
-        }
+        setContent { MyMainScreen() }
     }
 }
 

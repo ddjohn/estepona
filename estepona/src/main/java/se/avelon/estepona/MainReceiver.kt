@@ -15,16 +15,26 @@
  */
 package se.avelon.estepona
 
-import android.app.Application
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Context.USER_SERVICE
+import android.content.Intent
+import android.os.UserManager
 import se.avelon.estepona.logging.DLog
 
-class MainApplication : Application() {
+class MainReceiver : BroadcastReceiver() {
     companion object {
-        val TAG = DLog.forTag(MainApplication::class.java)
+        val TAG = DLog.forTag(MainReceiver::class.java)
     }
 
-    override fun onCreate() {
-        DLog.method(TAG, "onCreate()")
-        super.onCreate()
+    override fun onReceive(context: Context, intent: Intent) {
+        DLog.method(TAG, "onReceive($intent)")
+
+        val userManager = context.getSystemService(USER_SERVICE) as UserManager
+        if (userManager.isSystemUser) {
+            DLog.info(TAG, "Broadcast for user 0..")
+        } else {
+            DLog.info(TAG, "Broadcast for user 1x..")
+        }
     }
 }

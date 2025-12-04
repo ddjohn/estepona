@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.packages
+package se.avelon.estepona.components.exoplayer
 
-import android.graphics.drawable.Drawable
-
-data class PackageItemData(
-    val pkg: String,
-    val icon: Drawable?,
-    val text: String,
-)
+enum class ActionType { PLAY, PAUSE, REWIND, FORWARD, PREVIOUS, NEXT, SEEK }

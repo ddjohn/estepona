@@ -36,8 +36,10 @@ fun MyMapbox(modifier: Modifier = Modifier) {
         modifier,
         mapViewportState = rememberMapViewportState {
             setCameraOptions {
-                zoom(1.0)
-                center(Point.fromLngLat(-98.0, 39.5))
+                zoom(16.0)
+                center(Point.fromLngLat(11.997013996301572, 57.68784852211992))
+                pitch(60.0)
+                bearing(120.0)
             }
         },
     )

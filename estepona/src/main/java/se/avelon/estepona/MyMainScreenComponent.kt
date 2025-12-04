@@ -28,10 +28,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import se.avelon.estepona.MainActivity.Companion.TAG
 import se.avelon.estepona.components.MyDragAndDropBoxes
-import se.avelon.estepona.components.MyFloatingButton
 import se.avelon.estepona.components.MyMapbox
+import se.avelon.estepona.components.exoplayer.PlayerRoute
+import se.avelon.estepona.components.packages.PackageGrid
 import se.avelon.estepona.logging.DLog
-import se.avelon.estepona.packages.PackageGrid
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
 class MyScreenComponent {
@@ -46,12 +46,7 @@ fun MyMainScreen() {
     val navController = rememberNavController()
 
     EsteponaTheme {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            floatingActionButton = { MyFloatingButton() },
-            topBar = { MyTopBar() },
-            bottomBar = { MyBottomBar(navController) },
-        ) { innerPadding ->
+        Scaffold(modifier = Modifier.fillMaxSize(), floatingActionButton = { MyFloatingButton() }, topBar = { MyTopBar() }, bottomBar = { MyBottomBar(navController) }) { innerPadding ->
             DLog.method(TAG, "Scaffold(): $innerPadding")
 
             Row() {
@@ -64,7 +59,11 @@ fun MyMainScreen() {
                     }
 
                     composable("Package") {
-                        PackageGrid(modifier = Modifier.padding(innerPadding))
+                        PackageGrid(modifier = Modifier.fillMaxSize())
+                    }
+
+                    composable("Movie") {
+                        PlayerRoute(modifier = Modifier.fillMaxSize())
                     }
                 }
             }

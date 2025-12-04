@@ -52,6 +52,19 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
     implementation("com.google.firebase:firebase-auth")
 
+    /* Media3 */
+    implementation("androidx.media3:media3-ui-compose:1.8.0")
+
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
+
+    /* ExoPlayer */
+    implementation(libs.androidx.media3.ui.compose)
+    implementation(libs.androidx.media3.exoplayer)
+
+    /* OkHttp3 */
+    implementation(libs.okhttp)
+    implementation(libs.media3.datasource.okhttp)
+
     /* Mapbox */
     implementation(libs.maps.ndk27)
     implementation(libs.maps.compose.ndk27)

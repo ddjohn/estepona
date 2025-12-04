@@ -39,22 +39,22 @@ class MyBottomBarComponent : ViewModel() {
 
 @Composable
 fun MyBottomBar(navController: NavController, viewModel: MyBottomBarComponent = MyBottomBarComponent(), modifier: Modifier = Modifier) {
-    DLog.method(MyBottomBarComponent.TAG, "MyBottomBar2()")
+    DLog.method(MyBottomBarComponent.TAG, "MyBottomBar()")
 
     NavigationBar(modifier = modifier) {
-        MyBarItem(viewModel, navController, text = "Map", res = R.drawable.navigation_map, index = 1)
-        MyBarItem(viewModel, navController, text = "Package", res = R.drawable.navigation_package, index = 2)
-        MyBarItem(viewModel, navController, text = "Camera", res = R.drawable.navigation_camera, index = 3)
-        MyBarItem(viewModel, navController, text = "Statistics", res = R.drawable.navigation_statistics, index = 4)
-        MyBarItem(viewModel, navController, text = "Stocks", res = R.drawable.navigation_stocks, index = 5)
-        MyBarItem(viewModel, navController, text = "Movie", res = R.drawable.navigtion_movie, index = 6)
-        MyBarItem(viewModel, navController, text = "Settings", res = R.drawable.navigation_settings, index = 7)
+        MyBarItem(viewModel, navController, "Map", R.drawable.navigation_map, 1)
+        MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 2)
+        MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 3)
+        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 4)
+        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 5)
+        MyBarItem(viewModel, navController, "Movie", R.drawable.navigtion_movie, 6)
+        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 7)
     }
 }
 
 @Composable
-fun MyBarItem(viewModel: MyBottomBarComponent, navController: NavController, modifier: Modifier = Modifier, text: String, res: Int, index: Int) {
-    DLog.method(MyBottomBarComponent.TAG, "MyBarItem()")
+fun MyBarItem(viewModel: MyBottomBarComponent, navController: NavController, text: String, res: Int, index: Int) {
+    DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index")
 
     ShortNavigationBarItem(
         selected = viewModel.selected == index,
@@ -62,7 +62,7 @@ fun MyBarItem(viewModel: MyBottomBarComponent, navController: NavController, mod
             DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
             navController.navigate(text)
         },
-        icon = { Icon(painter = painterResource(id = res), contentDescription = null) },
+        icon = { Icon(painter = painterResource(res), null) },
         label = { Text(text) },
     )
 }

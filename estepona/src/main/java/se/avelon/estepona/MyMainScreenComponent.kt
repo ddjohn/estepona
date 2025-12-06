@@ -35,6 +35,7 @@ import se.avelon.estepona.components.MyDisplays
 import se.avelon.estepona.components.MyDragAndDropBoxes
 import se.avelon.estepona.components.MyMedia
 import se.avelon.estepona.components.MyNavigation
+import se.avelon.estepona.components.MySensor
 import se.avelon.estepona.components.PackageGrid
 import se.avelon.estepona.components.vehicle.MyStatus
 import se.avelon.estepona.components.vehicle.MyVehicle
@@ -82,11 +83,12 @@ fun MyMainScreen() {
                     composable("Navigation") {
                         MyNavigation(modifier = Modifier.fillMaxSize())
                     }
-
                     composable("Package") {
                         PackageGrid(modifier = Modifier.fillMaxSize())
                     }
-
+                    composable("Sensor") {
+                        MySensor(modifier = Modifier.fillMaxSize())
+                    }
                     composable("Vehicle") {
                         MyVehicle(modifier = Modifier.fillMaxSize())
                     }

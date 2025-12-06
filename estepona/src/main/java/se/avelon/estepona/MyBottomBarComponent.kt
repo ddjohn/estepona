@@ -49,12 +49,13 @@ fun MyBottomBar(navController: NavController, viewModel: MyBottomBarComponent = 
         MyBarItem(viewModel, navController, "Display", R.drawable.navigation_display, 4)
         MyBarItem(viewModel, navController, "Media", R.drawable.navigtion_movie, 5)
         MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 6)
-
         MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 7)
-        MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 8)
-        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 9)
-        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 10)
-        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 11)
+        MyBarItem(viewModel, navController, "Sensor", R.drawable.navigation_sensor, 8)
+        MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 9)
+
+        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 10)
+        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 11)
+        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 12)
     }
 }
 

@@ -15,7 +15,9 @@
  */
 package se.avelon.estepona
 
+import android.app.ComponentCaller
 import android.app.UiModeManager
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,10 +40,19 @@ class MainActivity : ComponentActivity() {
         DLog.test()
 
         DLog.info(MyMapboxComponent.TAG, "Request permissions")
-        requestPermissions(arrayOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"), 666)
+        requestPermissions(
+            arrayOf(
+                "android.permission.ACCESS_FINE_LOCATION",
+                "android.permission.ACCESS_COARSE_LOCATION",
+                "android.permission.CAMERA",
+            ),
+            666,
+        )
+
         DLog.info(MyMapboxComponent.TAG, "Check permissions")
         checkSelfPermission("android.permission.ACCESS_FINE_LOCATION")
         checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION")
+        checkSelfPermission("android.permission.CAMERA")
 
         val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager
         uiModeManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_YES)
@@ -50,5 +61,10 @@ class MainActivity : ComponentActivity() {
 
         DLog.info(TAG, "SetContent...")
         setContent { MyMainScreen() }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, caller: ComponentCaller) {
+        DLog.method(TAG, "onActivityResult(): $requestCode, $resultCode")
+        super.onActivityResult(requestCode, resultCode, data, caller)
     }
 }

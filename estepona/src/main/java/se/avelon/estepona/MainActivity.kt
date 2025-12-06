@@ -22,6 +22,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
+import se.avelon.estepona.components.MyMapboxComponent
 import se.avelon.estepona.logging.DLog
 
 class MainActivity : ComponentActivity() {
@@ -35,6 +36,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         DLog.test()
+
+        DLog.info(MyMapboxComponent.TAG, "Request permissions")
+        requestPermissions(arrayOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"), 666)
+        DLog.info(MyMapboxComponent.TAG, "Check permissions")
+        checkSelfPermission("android.permission.ACCESS_FINE_LOCATION")
+        checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION")
 
         val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager
         uiModeManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_YES)

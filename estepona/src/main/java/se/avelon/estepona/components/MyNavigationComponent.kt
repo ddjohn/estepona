@@ -16,6 +16,7 @@
 package se.avelon.estepona.components
 
 import android.content.Context.LOCATION_SERVICE
+import android.content.pm.PackageManager
 import android.location.GnssAntennaInfo
 import android.location.GnssMeasurementsEvent
 import android.location.GnssNavigationMessage
@@ -49,6 +50,15 @@ class MyNavigationComponent {
 fun MyNavigation(modifier: Modifier = Modifier) {
     DLog.method(MyNavigationComponent.TAG, "MyMapbox()")
 
+    val context = LocalContext.current
+
+    if(context.checkSelfPermission("android.permission.ACCESS_FINE_LOCATION") != PackageManager.PERMISSION_GRANTED) {
+        return
+    }
+    if(context.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") != PackageManager.PERMISSION_GRANTED) {
+        return
+    }
+
     MapboxMap(
         modifier,
         mapViewportState = rememberMapViewportState {
@@ -60,8 +70,6 @@ fun MyNavigation(modifier: Modifier = Modifier) {
             }
         },
     )
-
-    val context = LocalContext.current
 
     val file = File("${context.dataDir}/navi_${Calendar.getInstance().timeInMillis}.log")
     DLog.info(MyNavigationComponent.TAG, "Logging to $file")

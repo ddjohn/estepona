@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
                 "android.permission.ACCESS_COARSE_LOCATION",
                 "android.permission.BLUETOOTH_CONNECT",
                 "android.permission.CAMERA",
+                "android.permission.LOCAL_MAC_ADDRESS",
             ),
             666,
         )
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
         checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION")
         checkSelfPermission("android.permission.BLUETOOTH_CONNECT")
         checkSelfPermission("android.permission.CAMERA")
+        checkSelfPermission("android.permission.LOCAL_MAC_ADDRESS")
 
         val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager
         uiModeManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_YES)

@@ -16,11 +16,13 @@
 package se.avelon.estepona.components
 
 import android.bluetooth.BluetoothAdapter
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import se.avelon.estepona.logging.DLog
 
 object MyBluetoothComponent {
@@ -31,7 +33,17 @@ object MyBluetoothComponent {
 fun MyBlutooth(modifier: Modifier) {
     DLog.method(MyBluetoothComponent.TAG, "MyBluetooth")
 
+    val context = LocalContext.current
+
     val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+
+    if(context.checkSelfPermission("android.permission.BLUETOOTH_CONNECT") != PackageManager.PERMISSION_GRANTED) {
+        return
+    }
+
+    if(context.checkSelfPermission("android.permission.LOCAL_MAC_ADDRESS") != PackageManager.PERMISSION_GRANTED) {
+        return
+    }
 
     Column(modifier) {
         for (device in bluetoothAdapter.bondedDevices) {

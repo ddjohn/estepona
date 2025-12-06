@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona
+package se.avelon.estepona.components
 
 import android.car.Car
 import android.car.CarOccupantZoneManager
@@ -29,13 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import se.avelon.estepona.logging.DLog
 
-object MyAudio {
-    val TAG = DLog.forTag(MyAudio::class.java)
+object MyAudioComponent {
+    val TAG = DLog.forTag(MyAudioComponent::class.java)
 }
 
 @Composable
 fun MyAudio(modifier: Modifier) {
-    DLog.method(MyAudio.TAG, "MyAudio()")
+    DLog.method(MyAudioComponent.TAG, "MyAudio()")
 
     val context = LocalContext.current
 
@@ -51,12 +51,12 @@ fun MyAudio(modifier: Modifier) {
                     onClick = {},
                     content = { Text("${device.id} - ${device.address} (${deviceType(device.type)})") },
                 )
-                DLog.info(MyAudio.TAG, "---")
-                DLog.info(MyAudio.TAG, "input device: ${device.id}")
-                DLog.info(MyAudio.TAG, "input device: ${device.type}")
-                DLog.info(MyAudio.TAG, "input device: ${device.isSink}")
-                DLog.info(MyAudio.TAG, "input device: ${device.isSource}")
-                DLog.info(MyAudio.TAG, "input device: ${device.address}")
+                DLog.info(MyAudioComponent.TAG, "---")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.id}")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.type}")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.isSink}")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.isSource}")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.address}")
             }
 
             for (device in audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)) {
@@ -65,12 +65,12 @@ fun MyAudio(modifier: Modifier) {
                     onClick = {},
                     content = { Text("${device.id} - ${device.address} (${deviceType(device.type)})") },
                 )
-                DLog.info(MyAudio.TAG, "---")
-                DLog.info(MyAudio.TAG, "input device: ${device.id}")
-                DLog.info(MyAudio.TAG, "input device: ${device.type}")
-                DLog.info(MyAudio.TAG, "input device: ${device.isSink}")
-                DLog.info(MyAudio.TAG, "input device: ${device.isSource}")
-                DLog.info(MyAudio.TAG, "input device: ${device.address}")
+                DLog.info(MyAudioComponent.TAG, "---")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.id}")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.type}")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.isSink}")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.isSource}")
+                DLog.info(MyAudioComponent.TAG, "input device: ${device.address}")
             }
         }
         Column(modifier = Modifier.weight(1f)) {
@@ -81,12 +81,12 @@ fun MyAudio(modifier: Modifier) {
                     onClick = {},
                     content = { Text("${device.id} - ${device.address} (${deviceType(device.type)})") },
                 )
-                DLog.info(MyAudio.TAG, "---")
-                DLog.info(MyAudio.TAG, "output device: ${device.id}")
-                DLog.info(MyAudio.TAG, "output device: ${device.type}")
-                DLog.info(MyAudio.TAG, "output device: ${device.isSink}")
-                DLog.info(MyAudio.TAG, "output device: ${device.isSource}")
-                DLog.info(MyAudio.TAG, "output device: ${device.address}")
+                DLog.info(MyAudioComponent.TAG, "---")
+                DLog.info(MyAudioComponent.TAG, "output device: ${device.id}")
+                DLog.info(MyAudioComponent.TAG, "output device: ${device.type}")
+                DLog.info(MyAudioComponent.TAG, "output device: ${device.isSink}")
+                DLog.info(MyAudioComponent.TAG, "output device: ${device.isSource}")
+                DLog.info(MyAudioComponent.TAG, "output device: ${device.address}")
             }
         }
         Column(modifier = Modifier.weight(1f)) {
@@ -96,13 +96,13 @@ fun MyAudio(modifier: Modifier) {
                     onClick = {},
                     content = { Text("${zone.zoneId} - $zone (${occupancyType(zone.occupantType)})") },
                 )
-                DLog.info(MyAudio.TAG, "---")
-                DLog.info(MyAudio.TAG, "zone: ${zone.zoneId}")
-                DLog.info(MyAudio.TAG, "zone: ${zone.occupantType}")
-                DLog.info(MyAudio.TAG, "zone: $zone")
-                DLog.info(MyAudio.TAG, "zone: $zone")
-                DLog.info(MyAudio.TAG, "zone: $zone")
-                DLog.info(MyAudio.TAG, "zone: $zone")
+                DLog.info(MyAudioComponent.TAG, "---")
+                DLog.info(MyAudioComponent.TAG, "zone: ${zone.zoneId}")
+                DLog.info(MyAudioComponent.TAG, "zone: ${zone.occupantType}")
+                DLog.info(MyAudioComponent.TAG, "zone: $zone")
+                DLog.info(MyAudioComponent.TAG, "zone: $zone")
+                DLog.info(MyAudioComponent.TAG, "zone: $zone")
+                DLog.info(MyAudioComponent.TAG, "zone: $zone")
             }
         }
     }

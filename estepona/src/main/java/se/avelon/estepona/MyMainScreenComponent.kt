@@ -28,10 +28,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import se.avelon.estepona.MainActivity.Companion.TAG
+import se.avelon.estepona.components.MyAudio
 import se.avelon.estepona.components.MyDragAndDropBoxes
 import se.avelon.estepona.components.MyMapbox
 import se.avelon.estepona.components.exoplayer.PlayerRoute
-import se.avelon.estepona.components.packages.PackageGrid
+import se.avelon.estepona.components.PackageGrid
 import se.avelon.estepona.components.vehicle.MyVehicle
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
@@ -74,6 +75,10 @@ fun MyMainScreen() {
 
                     composable("Audio") {
                         MyAudio(modifier = Modifier.fillMaxSize())
+                    }
+
+                    composable("Displays") {
+                        MyDisplays(modifier = Modifier.fillMaxSize())
                     }
                 }
             }

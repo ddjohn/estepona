@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.components.packages
+package se.avelon.estepona.components
 
 import android.content.Intent
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.content.pm.PackageManager.GET_PERMISSIONS
 import android.content.pm.PackageManager.GET_SIGNATURES
 import android.content.pm.PackageManager.MATCH_ALL
@@ -44,6 +43,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import se.avelon.estepona.components.packages.PackageItemData
 import se.avelon.estepona.logging.DLog
 import java.util.StringTokenizer
 
@@ -82,7 +82,7 @@ fun PackageGrid(modifier: Modifier = Modifier) {
 
                 val context = LocalContext.current
                 val packageManager = context.packageManager
-                for (pkg in packageManager.getInstalledPackages(PackageManager.MATCH_ALL)) {
+                for (pkg in packageManager.getInstalledPackages(MATCH_ALL)) {
                     val item = PackageItemData(
                         pkg.packageName,
                         pkg.applicationInfo?.loadIcon(context?.packageManager),

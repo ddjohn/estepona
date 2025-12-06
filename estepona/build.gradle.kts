@@ -45,6 +45,7 @@ android {
     buildFeatures {
         compose = true
     }
+    useLibrary("android.car")
 }
 
 dependencies {

@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -31,13 +32,12 @@ import se.avelon.estepona.components.MyDragAndDropBoxes
 import se.avelon.estepona.components.MyMapbox
 import se.avelon.estepona.components.exoplayer.PlayerRoute
 import se.avelon.estepona.components.packages.PackageGrid
+import se.avelon.estepona.components.vehicle.MyVehicle
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
-class MyScreenComponent {
-    companion object {
-        val TAG = DLog.forTag(MyScreenComponent::class.java)
-    }
+object MyScreenComponent {
+    val TAG = DLog.forTag(MyScreenComponent::class.java)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -48,6 +48,8 @@ fun MyMainScreen() {
     EsteponaTheme {
         Scaffold(modifier = Modifier.fillMaxSize(), floatingActionButton = { MyFloatingButton() }, topBar = { MyTopBar() }, bottomBar = { MyBottomBar(navController) }) { innerPadding ->
             DLog.method(TAG, "Scaffold(): $innerPadding")
+
+            val context = LocalContext.current
 
             Row() {
                 DLog.method(TAG, "Row()")
@@ -64,6 +66,14 @@ fun MyMainScreen() {
 
                     composable("Movie") {
                         PlayerRoute(modifier = Modifier.fillMaxSize())
+                    }
+
+                    composable("Vehicle") {
+                        MyVehicle(modifier = Modifier.fillMaxSize())
+                    }
+
+                    composable("Audio") {
+                        MyAudio(modifier = Modifier.fillMaxSize())
                     }
                 }
             }

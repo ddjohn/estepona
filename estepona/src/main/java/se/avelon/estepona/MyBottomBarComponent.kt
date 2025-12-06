@@ -44,11 +44,13 @@ fun MyBottomBar(navController: NavController, viewModel: MyBottomBarComponent = 
     NavigationBar(modifier = modifier) {
         MyBarItem(viewModel, navController, "Map", R.drawable.navigation_map, 1)
         MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 2)
-        MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 3)
-        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 4)
-        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 5)
-        MyBarItem(viewModel, navController, "Movie", R.drawable.navigtion_movie, 6)
-        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 7)
+        MyBarItem(viewModel, navController, "Movie", R.drawable.navigtion_movie, 3)
+        MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 4)
+        MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 5)
+        MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 6)
+        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 7)
+        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 8)
+        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 9)
     }
 }
 

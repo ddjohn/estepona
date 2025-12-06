@@ -35,13 +35,7 @@ class MyFloatingButtonComponent {
 fun MyFloatingButton(modifier: Modifier = Modifier) {
     DLog.method(MyFloatingButtonComponent.TAG, "MyFloatingButton()")
 
-    FloatingActionButton(onClick = {
-        DLog.method(MyFloatingButtonComponent.TAG, "onClick()")
-    }) {
-        Icon(
-            contentDescription = "Email",
-            painter = painterResource(R.drawable.floating),
-            tint = Color.White,
-        )
+    FloatingActionButton(onClick = { DLog.method(MyFloatingButtonComponent.TAG, "onClick()") }) {
+        Icon(contentDescription = "Email", painter = painterResource(R.drawable.floating), tint = Color.White)
     }
 }

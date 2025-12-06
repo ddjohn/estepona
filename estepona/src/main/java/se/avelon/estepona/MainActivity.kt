@@ -24,7 +24,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
-import se.avelon.estepona.components.MyMapboxComponent
+import se.avelon.estepona.components.MyNavigationComponent
 import se.avelon.estepona.logging.DLog
 
 class MainActivity : ComponentActivity() {
@@ -39,19 +39,21 @@ class MainActivity : ComponentActivity() {
 
         DLog.test()
 
-        DLog.info(MyMapboxComponent.TAG, "Request permissions")
+        DLog.info(MyNavigationComponent.TAG, "Request permissions")
         requestPermissions(
             arrayOf(
                 "android.permission.ACCESS_FINE_LOCATION",
                 "android.permission.ACCESS_COARSE_LOCATION",
+                "android.permission.BLUETOOTH_CONNECT",
                 "android.permission.CAMERA",
             ),
             666,
         )
 
-        DLog.info(MyMapboxComponent.TAG, "Check permissions")
+        DLog.info(MyNavigationComponent.TAG, "Check permissions")
         checkSelfPermission("android.permission.ACCESS_FINE_LOCATION")
         checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION")
+        checkSelfPermission("android.permission.BLUETOOTH_CONNECT")
         checkSelfPermission("android.permission.CAMERA")
 
         val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager

@@ -42,16 +42,19 @@ fun MyBottomBar(navController: NavController, viewModel: MyBottomBarComponent = 
     DLog.method(MyBottomBarComponent.TAG, "MyBottomBar()")
 
     NavigationBar(modifier = modifier) {
-        MyBarItem(viewModel, navController, "Map", R.drawable.navigation_map, 1)
-        MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 2)
-        MyBarItem(viewModel, navController, "Movie", R.drawable.navigtion_movie, 3)
-        MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 4)
-        MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 5)
-        MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 6)
-        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 7)
-        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 8)
-        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 9)
-        MyBarItem(viewModel, navController, "Displays", R.drawable.navigation_display, 10)
+        MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 0)
+        MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 1)
+        MyBarItem(viewModel, navController, "Bluetooth", R.drawable.navigation_bluetooth, 2)
+        MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 3)
+        MyBarItem(viewModel, navController, "Display", R.drawable.navigation_display, 4)
+        MyBarItem(viewModel, navController, "Media", R.drawable.navigtion_movie, 5)
+        MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 6)
+
+        MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 7)
+        MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 8)
+        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 9)
+        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 10)
+        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 11)
     }
 }
 

@@ -31,23 +31,23 @@ import androidx.compose.ui.platform.LocalContext
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
-import se.avelon.estepona.components.MyMapboxComponent.Companion.printWriter
+import se.avelon.estepona.components.MyNavigationComponent.Companion.printWriter
 import se.avelon.estepona.logging.DLog
 import java.io.File
 import java.io.PrintWriter
 import java.util.Calendar
 import java.util.StringTokenizer
 
-class MyMapboxComponent {
+class MyNavigationComponent {
     companion object {
-        val TAG = DLog.forTag(MyMapboxComponent::class.java)
+        val TAG = DLog.forTag(MyNavigationComponent::class.java)
         lateinit var printWriter: PrintWriter
     }
 }
 
 @Composable
-fun MyMapbox(modifier: Modifier = Modifier) {
-    DLog.method(MyMapboxComponent.TAG, "MyMapbox()")
+fun MyNavigation(modifier: Modifier = Modifier) {
+    DLog.method(MyNavigationComponent.TAG, "MyMapbox()")
 
     MapboxMap(
         modifier,
@@ -64,28 +64,28 @@ fun MyMapbox(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     val file = File("${context.dataDir}/navi_${Calendar.getInstance().timeInMillis}.log")
-    DLog.info(MyMapboxComponent.TAG, "Logging to $file")
+    DLog.info(MyNavigationComponent.TAG, "Logging to $file")
 
     file.parentFile?.mkdirs()
     printWriter = PrintWriter(file)
 
     val locationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager
     for (provide in locationManager.allProviders) {
-        DLog.info(MyMapboxComponent.TAG, "provide=$provide")
+        DLog.info(MyNavigationComponent.TAG, "provide=$provide")
     }
 
     locationManager.addNmeaListener(
         context.mainExecutor,
         object : OnNmeaMessageListener {
             override fun onNmeaMessage(message: String?, timestamp: Long) {
-                DLog.method(MyMapboxComponent.TAG, "onNmeaMessage(): $timestamp $message")
+                DLog.method(MyNavigationComponent.TAG, "onNmeaMessage(): $timestamp $message")
                 printWriter.println("onNmeaMessage(): $timestamp $message")
 
                 val tokenizer = StringTokenizer(message, ",")
 
                 val type = tokenizer.nextElement()
                 if (type == "${'$'}GNGLL") {
-                    DLog.info(MyMapboxComponent.TAG, "GNGLL")
+                    DLog.info(MyNavigationComponent.TAG, "GNGLL")
                     // val latitude = tokenizer.nextElement()
                     // val directionLatitude = tokenizer.nextElement()
                     // val longitude = tokenizer.nextElement()
@@ -95,34 +95,34 @@ fun MyMapbox(modifier: Modifier = Modifier) {
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}PAPTT") { // $PAPTT,17335561282390*6E
                     val checksum = tokenizer.nextElement()
-                    DLog.info(MyMapboxComponent.TAG, "PAPTT ($checksum)")
+                    DLog.info(MyNavigationComponent.TAG, "PAPTT ($checksum)")
                 } else if (type == "${'$'}GNRMC") {
-                    DLog.info(MyMapboxComponent.TAG, "GNRMC")
+                    DLog.info(MyNavigationComponent.TAG, "GNRMC")
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GNGLL") {
-                    DLog.info(MyMapboxComponent.TAG, "GNGLL")
+                    DLog.info(MyNavigationComponent.TAG, "GNGLL")
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GNGSA") {
-                    DLog.info(MyMapboxComponent.TAG, "GNGSA")
+                    DLog.info(MyNavigationComponent.TAG, "GNGSA")
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GLGSV") { // GLONASS Satellites
-                    DLog.info(MyMapboxComponent.TAG, "GLGSV")
+                    DLog.info(MyNavigationComponent.TAG, "GLGSV")
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GAGSV") { // Galileo satellites
-                    DLog.info(MyMapboxComponent.TAG, "GAGSV")
+                    DLog.info(MyNavigationComponent.TAG, "GAGSV")
                     satellites(tokenizer)
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GBGSV") { // BeiDou satellites
-                    DLog.info(MyMapboxComponent.TAG, "GBGSV")
+                    DLog.info(MyNavigationComponent.TAG, "GBGSV")
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GPGSV") { // GPS and SBAS satellites
-                    DLog.info(MyMapboxComponent.TAG, "GPGSV")
+                    DLog.info(MyNavigationComponent.TAG, "GPGSV")
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GNGGA") {
-                    DLog.info(MyMapboxComponent.TAG, "GNGGA")
+                    DLog.info(MyNavigationComponent.TAG, "GNGGA")
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GQGSV") { // QZSS Satellites
-                    DLog.info(MyMapboxComponent.TAG, "GQGSV")
+                    DLog.info(MyNavigationComponent.TAG, "GQGSV")
                     val utc = tokenizer.nextElement()
                     // val latitude = tokenizer.nextElement()
                     // val directionLatitude = tokenizer.nextElement()
@@ -142,10 +142,10 @@ fun MyMapbox(modifier: Modifier = Modifier) {
                     // DLog.info(TAG, "hdop=$hdop")
                     // DLog.info(TAG, "height=$height")
                 } else if (type == "${'$'}GPGGA") {
-                    DLog.info(MyMapboxComponent.TAG, "GPGGA")
+                    DLog.info(MyNavigationComponent.TAG, "GPGGA")
                     val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GPRMC") {
-                    DLog.info(MyMapboxComponent.TAG, "GPRMC")
+                    DLog.info(MyNavigationComponent.TAG, "GPRMC")
                     val checksum = tokenizer.nextElement()
                 } else {
                     throw RuntimeException("david")
@@ -157,7 +157,7 @@ fun MyMapbox(modifier: Modifier = Modifier) {
         context.mainExecutor,
         object : GnssAntennaInfo.Listener {
             override fun onGnssAntennaInfoReceived(gnssAntennaInfos: List<GnssAntennaInfo?>) {
-                DLog.info(MyMapboxComponent.TAG, "onGnssAntennaInfoReceived(): $gnssAntennaInfos")
+                DLog.info(MyNavigationComponent.TAG, "onGnssAntennaInfoReceived(): $gnssAntennaInfos")
                 printWriter.println("onGnssAntennaInfoReceived(): $gnssAntennaInfos")
             }
         },
@@ -166,7 +166,7 @@ fun MyMapbox(modifier: Modifier = Modifier) {
         context.mainExecutor,
         object : GnssMeasurementsEvent.Callback() {
             override fun onGnssMeasurementsReceived(eventArgs: GnssMeasurementsEvent?) {
-                DLog.info(MyMapboxComponent.TAG, "onGnssMeasurementsReceived(): $eventArgs")
+                DLog.info(MyNavigationComponent.TAG, "onGnssMeasurementsReceived(): $eventArgs")
                 printWriter.println("onGnssMeasurementsReceived(): $eventArgs")
                 super.onGnssMeasurementsReceived(eventArgs)
             }
@@ -176,7 +176,7 @@ fun MyMapbox(modifier: Modifier = Modifier) {
         context.mainExecutor,
         object : GnssNavigationMessage.Callback() {
             override fun onGnssNavigationMessageReceived(event: GnssNavigationMessage?) {
-                DLog.info(MyMapboxComponent.TAG, "onGnssNavigationMessageReceived(): $event")
+                DLog.info(MyNavigationComponent.TAG, "onGnssNavigationMessageReceived(): $event")
                 printWriter.println("onGnssNavigationMessageReceived(): $event")
                 super.onGnssNavigationMessageReceived(event)
             }
@@ -186,7 +186,7 @@ fun MyMapbox(modifier: Modifier = Modifier) {
         context.mainExecutor,
         object : GnssStatus.Callback() {
             override fun onSatelliteStatusChanged(status: GnssStatus) {
-                DLog.info(MyMapboxComponent.TAG, "onSatelliteStatusChanged(): $status")
+                DLog.info(MyNavigationComponent.TAG, "onSatelliteStatusChanged(): $status")
                 printWriter.println("onSatelliteStatusChanged(): $status")
                 super.onSatelliteStatusChanged(status)
             }
@@ -200,7 +200,7 @@ fun MyMapbox(modifier: Modifier = Modifier) {
         context.mainExecutor,
         object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                DLog.info(MyMapboxComponent.TAG, "onLocationChanged(): $location")
+                DLog.info(MyNavigationComponent.TAG, "onLocationChanged(): $location")
                 printWriter.println("onLocationChanged(): $location")
             }
         },
@@ -211,5 +211,5 @@ private fun satellites(tokenizer: StringTokenizer) {
     val sentences = tokenizer.nextElement()
     val number = tokenizer.nextElement()
     val satellites = tokenizer.nextElement()
-    DLog.info(MyMapboxComponent.TAG, "sentences=$sentences, number=$number, satellites=$satellites")
+    DLog.info(MyNavigationComponent.TAG, "sentences=$sentences, number=$number, satellites=$satellites")
 }

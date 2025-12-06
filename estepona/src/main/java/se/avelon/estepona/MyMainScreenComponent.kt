@@ -29,11 +29,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import se.avelon.estepona.MainActivity.Companion.TAG
 import se.avelon.estepona.components.MyAudio
+import se.avelon.estepona.components.MyBlutooth
+import se.avelon.estepona.components.MyCamera
 import se.avelon.estepona.components.MyDisplays
 import se.avelon.estepona.components.MyDragAndDropBoxes
-import se.avelon.estepona.components.MyMapbox
+import se.avelon.estepona.components.MyMedia
+import se.avelon.estepona.components.MyNavigation
 import se.avelon.estepona.components.PackageGrid
-import se.avelon.estepona.components.exoplayer.PlayerRoute
+import se.avelon.estepona.components.vehicle.MyStatus
 import se.avelon.estepona.components.vehicle.MyVehicle
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
@@ -57,33 +60,35 @@ fun MyMainScreen() {
                 DLog.method(TAG, "Row()")
 
                 MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f))
-                NavHost(navController = navController, startDestination = "Map", modifier = Modifier.padding(innerPadding)) {
-                    composable("Map") {
-                        MyMapbox(modifier = Modifier.fillMaxSize())
+                NavHost(navController = navController, startDestination = "Status", modifier = Modifier.padding(innerPadding)) {
+                    composable("Status") {
+                        MyStatus(modifier = Modifier.fillMaxSize())
+                    }
+                    composable("Audio") {
+                        MyAudio(modifier = Modifier.fillMaxSize())
+                    }
+                    composable("Bluetooth") {
+                        MyBlutooth(modifier = Modifier.fillMaxSize())
+                    }
+                    composable("Camera") {
+                        MyCamera(modifier = Modifier.fillMaxSize())
+                    }
+                    composable("Display") {
+                        MyDisplays(modifier = Modifier.fillMaxSize())
+                    }
+                    composable("Media") {
+                        MyMedia(modifier = Modifier.fillMaxSize())
+                    }
+                    composable("Navigation") {
+                        MyNavigation(modifier = Modifier.fillMaxSize())
                     }
 
                     composable("Package") {
                         PackageGrid(modifier = Modifier.fillMaxSize())
                     }
 
-                    composable("Movie") {
-                        PlayerRoute(modifier = Modifier.fillMaxSize())
-                    }
-
                     composable("Vehicle") {
                         MyVehicle(modifier = Modifier.fillMaxSize())
-                    }
-
-                    composable("Audio") {
-                        MyAudio(modifier = Modifier.fillMaxSize())
-                    }
-
-                    composable("Displays") {
-                        MyDisplays(modifier = Modifier.fillMaxSize())
-                    }
-
-                    composable("Camera") {
-                        MyCamera(modifier = Modifier.fillMaxSize())
                     }
                 }
             }

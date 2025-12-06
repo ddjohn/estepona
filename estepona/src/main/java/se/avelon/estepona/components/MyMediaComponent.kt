@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.components.exoplayer
+package se.avelon.estepona.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -65,6 +65,9 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.compose.PlayerSurface
 import kotlinx.coroutines.delay
+import se.avelon.estepona.components.exoplayer.ActionType
+import se.avelon.estepona.components.exoplayer.PlayerAction
+import se.avelon.estepona.components.exoplayer.PlayerViewModel
 import se.avelon.estepona.logging.DLog
 
 class ExoPlayerComponent {
@@ -75,7 +78,7 @@ class ExoPlayerComponent {
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
-fun PlayerRoute(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel = viewModel()) {
+fun MyMedia(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel = viewModel()) {
     DLog.method(ExoPlayerComponent.TAG, "PlayerRoute(): $modifier, $playerViewModel")
 
     val exoPlayer = playerViewModel.playerState.collectAsStateWithLifecycle()

@@ -66,11 +66,14 @@ class MyVehicleComponent(context: Context) : CarPropertyManager.CarPropertyEvent
             }
 
             try {
-                mgr.registerSupportedValuesChangeCallback(prop.propertyId, object: CarPropertyManager.SupportedValuesChangeCallback {
-                    override fun onSupportedValuesChange(p0: Int, p1: Int) {
-                        DLog.method(TAG, "onSupportedValuesChange(): $p0, $p1")
-                    }
-                })
+                mgr.registerSupportedValuesChangeCallback(
+                    prop.propertyId,
+                    object : CarPropertyManager.SupportedValuesChangeCallback {
+                        override fun onSupportedValuesChange(p0: Int, p1: Int) {
+                            DLog.method(TAG, "onSupportedValuesChange(): $p0, $p1")
+                        }
+                    },
+                )
 
                 mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_UI)
                 mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_ONCHANGE)

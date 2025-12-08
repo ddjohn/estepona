@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.components.vehicle
+package se.avelon.estepona.components
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Context.BATTERY_SERVICE
 import android.os.BatteryManager
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import se.avelon.estepona.logging.DLog
 
@@ -39,7 +46,7 @@ fun MyStatus(modifier: Modifier) {
     val batteryManager = context.getSystemService(BATTERY_SERVICE) as BatteryManager
     val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
-    Column(modifier) {
+    Column(modifier.drawBehind { drawRect(Color.Gray) }) {
         if (batteryManager.isCharging) {
             Button(onClick = {}, content = { Text("Charging") })
         } else {
@@ -50,6 +57,23 @@ fun MyStatus(modifier: Modifier) {
             Button(onClick = {}, content = { Text("Bluetooth Enabled") })
         } else {
             Button(onClick = {}, content = { Text("Bluetooth Disabled") })
+        }
+
+        // Divider()
+
+        AnimatedVisibility(
+            visible = bluetoothAdapter.isEnabled,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically(),
+        ) {
+            Text("Bluetooth Enable")
+        }
+        AnimatedVisibility(
+            visible = !bluetoothAdapter.isEnabled,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically(),
+        ) {
+            Text("Bluetooth Disabled")
         }
     }
 }

@@ -37,11 +37,11 @@ fun MyBlutooth(modifier: Modifier) {
 
     val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
-    if(context.checkSelfPermission("android.permission.BLUETOOTH_CONNECT") != PackageManager.PERMISSION_GRANTED) {
+    if (context.checkSelfPermission("android.permission.BLUETOOTH_CONNECT") != PackageManager.PERMISSION_GRANTED) {
         return
     }
 
-    if(context.checkSelfPermission("android.permission.LOCAL_MAC_ADDRESS") != PackageManager.PERMISSION_GRANTED) {
+    if (context.checkSelfPermission("android.permission.LOCAL_MAC_ADDRESS") != PackageManager.PERMISSION_GRANTED) {
         return
     }
 

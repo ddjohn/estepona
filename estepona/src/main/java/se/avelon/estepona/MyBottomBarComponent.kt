@@ -51,6 +51,7 @@ fun MyBottomBar(navController: NavController, viewModel: MyBottomBarComponent = 
         MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 6)
         MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 7)
         MyBarItem(viewModel, navController, "Sensor", R.drawable.navigation_sensor, 8)
+        MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 8)
         MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 9)
 
         MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 10)

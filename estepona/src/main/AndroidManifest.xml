@@ -84,7 +84,7 @@
     <!-- Signature or Privileged Permissions -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+        tools:ignore="PackageVisibilityPolicy,QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS"
         tools:ignore="ProtectedPermissions" />
 

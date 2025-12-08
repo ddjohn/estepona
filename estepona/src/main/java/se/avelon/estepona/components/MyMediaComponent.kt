@@ -124,6 +124,7 @@ fun MyMedia(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel = vi
     }
 }
 
+@androidx.media3.common.util.UnstableApi
 @Composable
 fun PlayerScreen(modifier: Modifier = Modifier, exoPlayer: ExoPlayer, playerActions: (PlayerAction) -> Unit) {
     DLog.method(ExoPlayerComponent.TAG, "PlayerScreen(): $modifier, $exoPlayer, $playerActions")

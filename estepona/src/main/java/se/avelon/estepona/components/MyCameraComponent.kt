@@ -41,6 +41,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -82,7 +83,7 @@ fun MyCamera(modifier: Modifier) {
     Column(modifier = modifier.fillMaxSize().wrapContentSize().widthIn(max = 480.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Hello world", textAlign = TextAlign.Center)
         Spacer(Modifier.height(16.dp))
-        CameraPreviewContent(MyCameraComponent())
+        CameraPreviewContent(viewModel<MyCameraComponent>())
     }
 }
 

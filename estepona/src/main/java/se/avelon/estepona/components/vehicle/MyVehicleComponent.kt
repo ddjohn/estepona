@@ -32,10 +32,10 @@ import java.io.File
 import java.io.PrintWriter
 import java.util.Calendar
 
-class MyVehicle(context: Context) : CarPropertyManager.CarPropertyEventCallback {
+class MyVehicleComponent(context: Context) : CarPropertyManager.CarPropertyEventCallback {
 
     companion object {
-        val TAG = DLog.forTag(MyVehicle::class.java)
+        val TAG = DLog.forTag(MyVehicleComponent::class.java)
     }
 
     val printWriter: PrintWriter
@@ -66,6 +66,12 @@ class MyVehicle(context: Context) : CarPropertyManager.CarPropertyEventCallback 
             }
 
             try {
+                mgr.registerSupportedValuesChangeCallback(prop.propertyId, object: CarPropertyManager.SupportedValuesChangeCallback {
+                    override fun onSupportedValuesChange(p0: Int, p1: Int) {
+                        DLog.method(TAG, "onSupportedValuesChange(): $p0, $p1")
+                    }
+                })
+
                 mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_UI)
                 mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_ONCHANGE)
             } catch (e: SecurityException) {
@@ -100,12 +106,12 @@ class MyVehicle(context: Context) : CarPropertyManager.CarPropertyEventCallback 
 
 @Composable
 fun MyVehicle(modifier: Modifier) {
-    DLog.method(MyVehicle.TAG, "MyVehicle(): $modifier")
+    DLog.method(MyVehicleComponent.TAG, "MyVehicle(): $modifier")
 
     val context = LocalContext.current
 
     if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
-        val vehicle = MyVehicle(LocalContext.current)
+        val vehicle = MyVehicleComponent(LocalContext.current)
     } else {
         Toast.makeText(context, "No auto feature", Toast.LENGTH_SHORT).show()
     }

@@ -15,7 +15,6 @@
  */
 package se.avelon.estepona
 
-import android.app.ComponentCaller
 import android.app.UiModeManager
 import android.content.Intent
 import android.os.Bundle
@@ -25,12 +24,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import se.avelon.estepona.components.MyNavigationComponent
+import se.avelon.estepona.permission.MyPermissions
 import se.avelon.estepona.logging.DLog
 
 class MainActivity : ComponentActivity() {
     companion object {
         val TAG = DLog.forTag(MainActivity::class.java)
     }
+
+    lateinit var permissions: MyPermissions
 
     @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,24 +41,13 @@ class MainActivity : ComponentActivity() {
 
         DLog.test()
 
+        permissions = MyPermissions(this)
+
         DLog.info(MyNavigationComponent.TAG, "Request permissions")
-        requestPermissions(
-            arrayOf(
-                "android.permission.ACCESS_FINE_LOCATION",
-                "android.permission.ACCESS_COARSE_LOCATION",
-                "android.permission.BLUETOOTH_CONNECT",
-                "android.permission.CAMERA",
-                "android.permission.LOCAL_MAC_ADDRESS",
-            ),
-            666,
-        )
+        permissions.request()
 
         DLog.info(MyNavigationComponent.TAG, "Check permissions")
-        checkSelfPermission("android.permission.ACCESS_FINE_LOCATION")
-        checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION")
-        checkSelfPermission("android.permission.BLUETOOTH_CONNECT")
-        checkSelfPermission("android.permission.CAMERA")
-        checkSelfPermission("android.permission.LOCAL_MAC_ADDRESS")
+        permissions.check()
 
         val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager
         uiModeManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_YES)
@@ -67,8 +58,10 @@ class MainActivity : ComponentActivity() {
         setContent { MyMainScreen() }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, caller: ComponentCaller) {
-        DLog.method(TAG, "onActivityResult(): $requestCode, $resultCode")
-        super.onActivityResult(requestCode, resultCode, data, caller)
+    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+        DLog.method(TAG, "onActivityResult(): $resultCode, $data")
+        super.onActivityReenter(resultCode, data)
+
+        permissions.onActivityResult(resultCode, data)
     }
 }

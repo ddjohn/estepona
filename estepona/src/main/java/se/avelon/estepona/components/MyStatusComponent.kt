@@ -18,6 +18,7 @@ package se.avelon.estepona.components
 import android.bluetooth.BluetoothAdapter
 import android.content.Context.BATTERY_SERVICE
 import android.os.BatteryManager
+import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import se.avelon.estepona.components.MyStatusComponent.TAG
 import se.avelon.estepona.logging.DLog
 
 object MyStatusComponent {
@@ -75,5 +77,35 @@ fun MyStatus(modifier: Modifier) {
         ) {
             Text("Bluetooth Disabled")
         }
+
+        val buildVariables = arrayOf(
+            Build.MANUFACTURER,
+            Build.DEVICE,
+            Build.MODEL,
+            Build.BOARD,
+            Build.BOOTLOADER,
+            Build.BRAND,
+            Build.DISPLAY,
+            Build.FINGERPRINT,
+            Build.HARDWARE,
+            Build.HOST,
+            Build.ID,
+            Build.PRODUCT,
+            Build.TAGS,
+            Build.TYPE,
+            Build.USER,
+            Build.VERSION.RELEASE,
+        )
+
+        for (buildVariable in buildVariables) {
+            DLog.info(TAG, "buildVariable=$buildVariable")
+            Button(onClick = {}, content = {
+                Text("buildVariable=$buildVariable")
+            })
+        }
+
+        // Log.e(TAG, "deviceName=" + Build.ODM_SKU);
+        // Log.e(TAG, "deviceName=" + Build.SOC_MANUFACTURER);
+        // Log.e(TAG, "deviceName=" + Build.SOC_MODEL);
     }
 }

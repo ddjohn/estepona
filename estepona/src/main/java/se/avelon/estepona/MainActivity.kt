@@ -24,8 +24,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import se.avelon.estepona.components.MyNavigationComponent
-import se.avelon.estepona.permission.MyPermissions
 import se.avelon.estepona.logging.DLog
+import se.avelon.estepona.permission.MyPermissions
 
 class MainActivity : ComponentActivity() {
     companion object {

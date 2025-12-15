@@ -40,6 +40,7 @@ import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.ChargingStation
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Badge
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -57,6 +58,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import se.avelon.estepona.R
 import se.avelon.estepona.logging.DLog
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import kotlin.concurrent.thread
 
 class MyTopBarComponent {
     companion object {
@@ -82,6 +87,7 @@ fun MyTopBar(modifier: Modifier = Modifier) {
             BluetoothIcon()
             WifiIcon()
             ChargingIcon()
+            ClockText()
         }
     })
 }
@@ -259,4 +265,21 @@ fun ChargingIcon() {
         },
         IntentFilter(BatteryManager.ACTION_CHARGING),
     )
+}
+
+@Composable
+fun ClockText() {
+    var time by remember { mutableStateOf("00:00") }
+
+    Text(text = time)
+
+    thread(true) {
+        val calendar = Calendar.getInstance()
+        while (true) {
+            Thread.sleep(2000)
+
+            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            time = dateFormat.format(calendar.time)
+        }
+    }
 }

@@ -65,20 +65,6 @@ fun MyStatus(modifier: Modifier) {
         var myEnvironment by remember { mutableStateOf(false) }
         var myBuild by remember { mutableStateOf(false) }
 
-        if (batteryManager.isCharging) {
-            Button(onClick = {}, content = { Text("Charging") })
-        } else {
-            Button(onClick = {}, content = { Text("Not Charging") })
-        }
-
-        if (bluetoothAdapter.isEnabled) {
-            Button(onClick = {}, content = { Text("Bluetooth Enabled") })
-        } else {
-            Button(onClick = {}, content = { Text("Bluetooth Disabled") })
-        }
-
-        HorizontalDivider()
-
         Row {
             Button(onClick = { myEnvironment = !myEnvironment }, content = { Text("ENVIRONMENT") })
             Button(onClick = { myBuild = !myBuild }, content = { Text("BUILD") })

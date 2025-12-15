@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona
+package se.avelon.estepona.system
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
@@ -53,12 +53,14 @@ fun MyMainScreen() {
     val navController = rememberNavController()
 
     EsteponaTheme {
-        Scaffold(modifier = Modifier.fillMaxSize(), floatingActionButton = { MyFloatingButton() }, topBar = { MyTopBar() }, bottomBar = { MyBottomBar(navController) }) { innerPadding ->
+        Scaffold(modifier = Modifier.fillMaxSize(), floatingActionButton = { MyFloatingButton() }, topBar = { MyTopBar() }, bottomBar = {
+            MyBottomBar(navController)
+        }) { innerPadding ->
             DLog.method(TAG, "Scaffold(): $innerPadding")
 
             val context = LocalContext.current
 
-            Row() {
+            Row {
                 DLog.method(TAG, "Row()")
 
                 MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f))

@@ -13,9 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.components.exoplayer
+package se.avelon.estepona
 
-data class VideoItem(
-    val currentPosition: Long = 0,
-    val duration: Long = 0,
-)
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import se.avelon.estepona.logging.DLog
+
+object MyComponents {
+    val TAG = DLog.forTag(MyComponents::class.java)
+}
+
+@Composable
+fun MyButton(
+    modifier: Modifier,
+    text: String,
+    onClick: Unit,
+) {
+    Button(onClick = { onClick }, content = { Text(text) })
+}

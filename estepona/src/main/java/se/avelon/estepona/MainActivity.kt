@@ -26,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import se.avelon.estepona.components.MyNavigationComponent
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.permission.MyPermissions
+import se.avelon.estepona.system.MyMainScreen
 
 class MainActivity : ComponentActivity() {
     companion object {
@@ -58,7 +59,10 @@ class MainActivity : ComponentActivity() {
         setContent { MyMainScreen() }
     }
 
-    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+    override fun onActivityReenter(
+        resultCode: Int,
+        data: Intent?,
+    ) {
         DLog.method(TAG, "onActivityResult(): $resultCode, $data")
         super.onActivityReenter(resultCode, data)
 

@@ -78,7 +78,10 @@ class ExoPlayerComponent {
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
-fun MyMedia(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel = viewModel()) {
+fun MyMedia(
+    modifier: Modifier = Modifier,
+    playerViewModel: PlayerViewModel = viewModel(),
+) {
     DLog.method(ExoPlayerComponent.TAG, "PlayerRoute(): $modifier, $playerViewModel")
 
     val exoPlayer = playerViewModel.playerState.collectAsStateWithLifecycle()
@@ -95,13 +98,14 @@ fun MyMedia(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel = vi
     DisposableEffect(lifecycleOwner) {
         DLog.method(ExoPlayerComponent.TAG, "DisposableEffect()")
 
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_PAUSE -> playerViewModel.executeAction(PlayerAction(ActionType.PAUSE))
-                Lifecycle.Event.ON_RESUME -> playerViewModel.executeAction(PlayerAction(ActionType.PLAY))
-                else -> Unit
+        val observer =
+            LifecycleEventObserver { _, event ->
+                when (event) {
+                    Lifecycle.Event.ON_PAUSE -> playerViewModel.executeAction(PlayerAction(ActionType.PAUSE))
+                    Lifecycle.Event.ON_RESUME -> playerViewModel.executeAction(PlayerAction(ActionType.PLAY))
+                    else -> Unit
+                }
             }
-        }
 
         lifecycleOwner.lifecycle.addObserver(observer)
 
@@ -126,7 +130,11 @@ fun MyMedia(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel = vi
 
 @androidx.media3.common.util.UnstableApi
 @Composable
-fun PlayerScreen(modifier: Modifier = Modifier, exoPlayer: ExoPlayer, playerActions: (PlayerAction) -> Unit) {
+fun PlayerScreen(
+    modifier: Modifier = Modifier,
+    exoPlayer: ExoPlayer,
+    playerActions: (PlayerAction) -> Unit,
+) {
     DLog.method(ExoPlayerComponent.TAG, "PlayerScreen(): $modifier, $exoPlayer, $playerActions")
 
     Box(modifier = modifier) {
@@ -136,7 +144,10 @@ fun PlayerScreen(modifier: Modifier = Modifier, exoPlayer: ExoPlayer, playerActi
 }
 
 @Composable
-fun VideoControls(player: ExoPlayer, playerActions: (PlayerAction) -> Unit) {
+fun VideoControls(
+    player: ExoPlayer,
+    playerActions: (PlayerAction) -> Unit,
+) {
     DLog.method(ExoPlayerComponent.TAG, "VideoControls(): $player, $playerActions")
 
     var isPlaying by remember { mutableStateOf(player.isPlaying) }
@@ -148,18 +159,42 @@ fun VideoControls(player: ExoPlayer, playerActions: (PlayerAction) -> Unit) {
     var isSeeking by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.4f)), contentAlignment = Alignment.Center) {
-        ShowButtonControllers(isPlaying = isPlaying, isBuffering = isBuffering, playerActions = playerActions, isPlayerPlaying = { player.isPlaying })
-        TimelineControllers(modifier = Modifier.align(Alignment.BottomStart), duration = duration, playerPosition = position, formatedTime = formatedTime, seeking = { isSeeking = it }) {
+        ShowButtonControllers(isPlaying = isPlaying, isBuffering = isBuffering, playerActions = playerActions, isPlayerPlaying = {
+            player.isPlaying
+        })
+        TimelineControllers(
+            modifier =
+                Modifier.align(
+                    Alignment.BottomStart,
+                ),
+            duration = duration,
+            playerPosition = position,
+            formatedTime = formatedTime,
+            seeking = {
+                isSeeking =
+                    it
+            },
+        ) {
             playerActions(PlayerAction(ActionType.SEEK, it))
         }
     }
 }
 
 @Composable
-fun ShowButtonControllers(modifier: Modifier = Modifier, isPlaying: Boolean, isBuffering: Boolean, isPlayerPlaying: () -> Boolean, playerActions: (PlayerAction) -> Unit) {
+fun ShowButtonControllers(
+    modifier: Modifier = Modifier,
+    isPlaying: Boolean,
+    isBuffering: Boolean,
+    isPlayerPlaying: () -> Boolean,
+    playerActions: (PlayerAction) -> Unit,
+) {
     DLog.method(ExoPlayerComponent.TAG, "ShowButtonControllers(): $modifier, $isPlaying, $isBuffering")
 
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly, modifier = modifier.fillMaxWidth()) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = modifier.fillMaxWidth(),
+    ) {
         IconButton(onClick = { playerActions(PlayerAction(ActionType.PREVIOUS)) }) {
             Icon(Icons.Default.SkipPrevious, "Previous", tint = Color.White, modifier = Modifier.size(48.dp))
         }
@@ -175,7 +210,12 @@ fun ShowButtonControllers(modifier: Modifier = Modifier, isPlaying: Boolean, isB
 
             AnimatedVisibility(isBuffering.not()) {
                 IconButton(onClick = { playerActions(PlayerAction(if (isPlayerPlaying()) ActionType.PAUSE else ActionType.PLAY)) }) {
-                    Icon(if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow, "Play/Pause", tint = Color.White, modifier = Modifier.size(64.dp))
+                    Icon(
+                        if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                        "Play/Pause",
+                        tint = Color.White,
+                        modifier = Modifier.size(64.dp),
+                    )
                 }
             }
         }
@@ -192,7 +232,14 @@ fun ShowButtonControllers(modifier: Modifier = Modifier, isPlaying: Boolean, isB
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimelineControllers(modifier: Modifier = Modifier, playerPosition: Long, duration: Long, seeking: (Boolean) -> Unit, formatedTime: String, seekPlayerToPosition: (Long) -> Unit) {
+fun TimelineControllers(
+    modifier: Modifier = Modifier,
+    playerPosition: Long,
+    duration: Long,
+    seeking: (Boolean) -> Unit,
+    formatedTime: String,
+    seekPlayerToPosition: (Long) -> Unit,
+) {
     DLog.method(ExoPlayerComponent.TAG, "TimelineControllers()")
 
     var position by remember { mutableLongStateOf(0L) }
@@ -209,19 +256,29 @@ fun TimelineControllers(modifier: Modifier = Modifier, playerPosition: Long, dur
                 seeking(false)
             },
             valueRange = 0f..duration.toFloat(),
-            modifier = Modifier
-                .weight(1f) // Takes all the space except what Text needs
-                .padding(end = 8.dp), // small space between slider and text
-            colors = SliderDefaults.colors(
-                thumbColor = Color.Red,
-                activeTrackColor = Color.Red,
-            ),
+            modifier =
+                Modifier
+                    .weight(1f) // Takes all the space except what Text needs
+                    .padding(end = 8.dp),
+            // small space between slider and text
+            colors =
+                SliderDefaults.colors(
+                    thumbColor = Color.Red,
+                    activeTrackColor = Color.Red,
+                ),
             thumb = {
                 Box(modifier = Modifier.size(12.dp).background(Color.Red, shape = CircleShape))
             },
             track = {
                 val fraction = if (duration == 0L) 0f else (position.toFloat().coerceAtMost(duration.toFloat()) / duration).coerceIn(0f, 1f)
-                Box(modifier = Modifier.fillMaxWidth().height(3.dp).background(Color.Gray.copy(alpha = 0.3f), shape = RoundedCornerShape(1.5.dp))) {
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(
+                                3.dp,
+                            ).background(Color.Gray.copy(alpha = 0.3f), shape = RoundedCornerShape(1.5.dp)),
+                ) {
                     Box(modifier = Modifier.fillMaxWidth(fraction).height(3.dp).background(Color.Red, shape = RoundedCornerShape(1.5.dp)))
                 }
             },

@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona
+package se.avelon.estepona.system
 
+import androidx.compose.foundation.Image
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Battery0Bar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.ShortNavigationBarItem
@@ -24,9 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import se.avelon.estepona.R
 import se.avelon.estepona.logging.DLog
 
 class MyBottomBarComponent : ViewModel() {
@@ -38,10 +43,16 @@ class MyBottomBarComponent : ViewModel() {
 }
 
 @Composable
-fun MyBottomBar(navController: NavController, viewModel: MyBottomBarComponent = MyBottomBarComponent(), modifier: Modifier = Modifier) {
+fun MyBottomBar(
+    navController: NavController,
+    viewModel: MyBottomBarComponent = MyBottomBarComponent(),
+    modifier: Modifier = Modifier,
+) {
     DLog.method(MyBottomBarComponent.TAG, "MyBottomBar()")
 
     NavigationBar(modifier = modifier) {
+        // MyBarItem2(viewModel, navController, "Test", Icons.Default.Battery0Bar, 9)
+
         MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 0)
         MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 1)
         MyBarItem(viewModel, navController, "Bluetooth", R.drawable.navigation_bluetooth, 2)
@@ -61,7 +72,13 @@ fun MyBottomBar(navController: NavController, viewModel: MyBottomBarComponent = 
 }
 
 @Composable
-fun MyBarItem(viewModel: MyBottomBarComponent, navController: NavController, text: String, res: Int, index: Int) {
+fun MyBarItem(
+    viewModel: MyBottomBarComponent,
+    navController: NavController,
+    text: String,
+    res: Int,
+    index: Int,
+) {
     DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index")
 
     ShortNavigationBarItem(
@@ -71,6 +88,27 @@ fun MyBarItem(viewModel: MyBottomBarComponent, navController: NavController, tex
             navController.navigate(text)
         },
         icon = { Icon(painter = painterResource(res), null) },
+        label = { Text(text) },
+    )
+}
+
+@Composable
+fun MyBarItem2(
+    viewModel: MyBottomBarComponent,
+    navController: NavController,
+    text: String,
+    image: ImageVector,
+    index: Int,
+) {
+    DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index")
+
+    ShortNavigationBarItem(
+        selected = viewModel.selected == index,
+        onClick = {
+            DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
+            navController.navigate(text)
+        },
+        icon = { Icon(painter = painterResource(image.hashCode()), null) },
         label = { Text(text) },
     )
 }

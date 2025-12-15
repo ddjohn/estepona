@@ -26,7 +26,9 @@ import androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime
 import se.avelon.estepona.logging.DLog
 
 @UnstableApi
-class LearningsPlayerAnalytics(private val exoPlayer: ExoPlayer?) : AnalyticsListener {
+class LearningsPlayerAnalytics(
+    private val exoPlayer: ExoPlayer?,
+) : AnalyticsListener {
     companion object {
         val TAG = DLog.forTag(LearningsPlayerAnalytics::class.java)
     }
@@ -37,7 +39,10 @@ class LearningsPlayerAnalytics(private val exoPlayer: ExoPlayer?) : AnalyticsLis
         super.onPlayerReleased(eventTime)
     }
 
-    override fun onPlaybackStateChanged(eventTime: EventTime, state: Int) {
+    override fun onPlaybackStateChanged(
+        eventTime: EventTime,
+        state: Int,
+    ) {
         DLog.method(TAG, "onPlaybackStateChanged(): $eventTime, $state")
 
         val itemId = currentMediaItemTag()
@@ -50,7 +55,10 @@ class LearningsPlayerAnalytics(private val exoPlayer: ExoPlayer?) : AnalyticsLis
         }
     }
 
-    override fun onPlayerError(eventTime: EventTime, error: PlaybackException) {
+    override fun onPlayerError(
+        eventTime: EventTime,
+        error: PlaybackException,
+    ) {
         DLog.method(TAG, "onPlayerError(): $eventTime, $error")
 
         currentMediaItemTag().let { itemId ->
@@ -63,7 +71,10 @@ class LearningsPlayerAnalytics(private val exoPlayer: ExoPlayer?) : AnalyticsLis
         }
     }
 
-    override fun onIsPlayingChanged(eventTime: EventTime, isPlaying: Boolean) {
+    override fun onIsPlayingChanged(
+        eventTime: EventTime,
+        isPlaying: Boolean,
+    ) {
         DLog.method(TAG, "onIsPlayingChanged(): $eventTime, $isPlaying")
 
         currentMediaItemTag().let { itemId ->
@@ -74,11 +85,14 @@ class LearningsPlayerAnalytics(private val exoPlayer: ExoPlayer?) : AnalyticsLis
         }
     }
 
-    override fun onMediaItemTransition(eventTime: EventTime, mediaItem: MediaItem?, reason: Int) {
+    override fun onMediaItemTransition(
+        eventTime: EventTime,
+        mediaItem: MediaItem?,
+        reason: Int,
+    ) {
         DLog.method(TAG, "onMediaItemTransition(): $eventTime, ${mediaItem?.mediaId}, $reason}")
         super.onMediaItemTransition(eventTime, mediaItem, reason)
     }
 
-    private fun currentMediaItemTag(): String? =
-        exoPlayer?.currentMediaItem?.localConfiguration?.tag as? String
+    private fun currentMediaItemTag(): String? = exoPlayer?.currentMediaItem?.localConfiguration?.tag as? String
 }

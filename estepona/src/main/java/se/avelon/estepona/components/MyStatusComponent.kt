@@ -19,21 +19,34 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context.BATTERY_SERVICE
 import android.os.BatteryManager
 import android.os.Build
+import android.os.Environment
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import se.avelon.estepona.MyButton
 import se.avelon.estepona.components.MyStatusComponent.TAG
 import se.avelon.estepona.logging.DLog
+import kotlin.concurrent.thread
 
 object MyStatusComponent {
     val TAG = DLog.forTag(MyStatusComponent::class.java)
@@ -49,6 +62,9 @@ fun MyStatus(modifier: Modifier) {
     val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
     Column(modifier.drawBehind { drawRect(Color.Gray) }) {
+        var myEnvironment by remember { mutableStateOf(false) }
+        var myBuild by remember { mutableStateOf(false) }
+
         if (batteryManager.isCharging) {
             Button(onClick = {}, content = { Text("Charging") })
         } else {
@@ -61,7 +77,66 @@ fun MyStatus(modifier: Modifier) {
             Button(onClick = {}, content = { Text("Bluetooth Disabled") })
         }
 
-        // Divider()
+        HorizontalDivider()
+
+        Row {
+            Button(onClick = { myEnvironment = !myEnvironment }, content = { Text("ENVIRONMENT") })
+            Button(onClick = { myBuild = !myBuild }, content = { Text("BUILD") })
+        }
+        AnimatedVisibility(
+            visible = myEnvironment,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically(),
+        ) {
+            val environments =
+                arrayOf(
+                    Environment.getExternalStorageState(),
+                    Environment.DIRECTORY_DOCUMENTS,
+                    Environment.getRootDirectory(),
+                    Environment.getDownloadCacheDirectory(),
+                    Environment.getDataDirectory(),
+                )
+
+            Column {
+                Text("getExternalStorageDirectory=${Environment.getExternalStorageDirectory()}")
+                Text("getDownloadCacheDirectory=${Environment.getDownloadCacheDirectory()}")
+                Text("getStorageDirectory=${Environment.getStorageDirectory()}")
+                Text("getRootDirectory=${Environment.getRootDirectory()}")
+                Text("getDataDirectory=${Environment.getDataDirectory()}")
+                Text("getDownloadCacheDirectory=${Environment.getDownloadCacheDirectory()}")
+                Text("getExternalStorageState=${Environment.getExternalStorageState()}")
+                Text("DIRECTORY_DOCUMENTS=${Environment.DIRECTORY_DOCUMENTS}")
+                Text("DIRECTORY_DCIM=${Environment.DIRECTORY_DCIM}")
+                Text("MEDIA_SHARED=${Environment.MEDIA_SHARED}")
+                Text("MEDIA_MOUNTED=${Environment.MEDIA_MOUNTED}")
+            }
+        }
+
+        AnimatedVisibility(
+            visible = myBuild,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically(),
+        ) {
+            Column {
+                Text("MANUFACTURER=${Build.MANUFACTURER}")
+                Text("DEVICE=${Build.DEVICE}")
+                Text("MODEL=${Build.MODEL}")
+                Text("BOARD=${Build.BOARD}")
+                Text("BOOTLOADER=${Build.BOOTLOADER}")
+                Text("BRAND=${Build.BRAND}")
+                Text("DISPLAY=${Build.DISPLAY}")
+                Text("FINGERPRINT=${Build.FINGERPRINT}")
+                Text("HARDWARE=${Build.HARDWARE}")
+                Text("HOST=${Build.HOST}")
+                Text("ID=${Build.ID}")
+                Text("PRODUCT=${Build.PRODUCT}")
+                Text("TAGS=${Build.TAGS}")
+                Text("TYPE=${Build.TYPE}")
+                Text("USER=${Build.USER}")
+                Text("TYPE=${Build.TYPE}")
+                Text("RELEASE=${Build.VERSION.RELEASE}")
+            }
+        }
 
         AnimatedVisibility(
             visible = bluetoothAdapter.isEnabled,
@@ -78,34 +153,6 @@ fun MyStatus(modifier: Modifier) {
             Text("Bluetooth Disabled")
         }
 
-        val buildVariables = arrayOf(
-            Build.MANUFACTURER,
-            Build.DEVICE,
-            Build.MODEL,
-            Build.BOARD,
-            Build.BOOTLOADER,
-            Build.BRAND,
-            Build.DISPLAY,
-            Build.FINGERPRINT,
-            Build.HARDWARE,
-            Build.HOST,
-            Build.ID,
-            Build.PRODUCT,
-            Build.TAGS,
-            Build.TYPE,
-            Build.USER,
-            Build.VERSION.RELEASE,
-        )
-
-        for (buildVariable in buildVariables) {
-            DLog.info(TAG, "buildVariable=$buildVariable")
-            Button(onClick = {}, content = {
-                Text("buildVariable=$buildVariable")
-            })
-        }
-
-        // Log.e(TAG, "deviceName=" + Build.ODM_SKU);
-        // Log.e(TAG, "deviceName=" + Build.SOC_MANUFACTURER);
-        // Log.e(TAG, "deviceName=" + Build.SOC_MODEL);
+        var expanded by remember { mutableStateOf(false) }
     }
 }

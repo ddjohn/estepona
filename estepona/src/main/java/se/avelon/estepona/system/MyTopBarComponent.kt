@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona
+package se.avelon.estepona.system
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Badge
@@ -24,6 +24,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import se.avelon.estepona.R
 import se.avelon.estepona.logging.DLog
 
 class MyTopBarComponent {
@@ -36,8 +37,8 @@ class MyTopBarComponent {
 @Composable
 fun MyTopBar(modifier: Modifier = Modifier) {
     TopAppBar(title = {
-        Row() {
-            Badge() {
+        Row {
+            Badge {
                 Icon(
                     contentDescription = "Email",
                     painter = painterResource(R.drawable.logo),

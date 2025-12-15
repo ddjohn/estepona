@@ -48,12 +48,18 @@ fun MySensor(modifier: Modifier) {
 
             sensorManager.registerListener(
                 object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                    override fun onAccuracyChanged(
+                        sensor: Sensor?,
+                        accuracy: Int,
+                    ) {
                         DLog.method(MySensorComponent.TAG, "onAccuracyChanged(): $sensor, $accuracy")
                     }
 
                     override fun onSensorChanged(event: SensorEvent?) {
-                        DLog.method(MySensorComponent.TAG, "onSensorChanged(): ${event?.sensor?.name}, ${event?.accuracy}, ${event?.values}")
+                        DLog.method(
+                            MySensorComponent.TAG,
+                            "onSensorChanged(): ${event?.sensor?.name}, ${event?.accuracy}, ${event?.values}",
+                        )
                     }
                 },
                 sensor,

@@ -27,7 +27,10 @@ class MainReceiver : BroadcastReceiver() {
         val TAG = DLog.forTag(MainReceiver::class.java)
     }
 
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         DLog.method(TAG, "onReceive($intent)")
 
         val userManager = context.getSystemService(USER_SERVICE) as UserManager

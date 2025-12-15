@@ -57,7 +57,6 @@
     <uses-permission android:name="android.car.permission.READ_DRIVER_MONITORING_SETTINGS"/>
     <uses-permission android:name="android.car.permission.READ_DRIVER_MONITORING_STATES"/>
     <uses-permission android:name="android.car.permission.READ_CAR_EXTERIOR_LIGHTS"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_EXTERIOR_LIGHTS"/>
     <uses-permission android:name="android.car.permission.READ_HEAD_UP_DISPLAY_STATUS"/>
     <uses-permission android:name="android.car.permission.READ_IMPACT_SENSORS"/>
     <uses-permission android:name="android.car.permission.READ_CAR_INTERIOR_LIGHTS"/>

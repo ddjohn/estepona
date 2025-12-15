@@ -108,8 +108,8 @@ fun MyAudio(modifier: Modifier) {
     }
 }
 
-fun deviceType(type: Int): String {
-    return when (type) {
+fun deviceType(type: Int): String =
+    when (type) {
         15 -> "TYPE_LINE_DIGITAL"
         16 -> "TYPE_FM"
         21 -> "TYPE_BUILTIN_MIC"
@@ -117,13 +117,11 @@ fun deviceType(type: Int): String {
         28 -> "TYPE_ECHO_REFERENCE"
         else -> "Not defined"
     }
-}
 
-fun occupancyType(type: Int): String {
-    return when (type) {
+fun occupancyType(type: Int): String =
+    when (type) {
         0 -> "OCCUPANT_TYPE_DRIVER"
         1 -> "OCCUPANT_TYPE_FRONT_PASSENGER"
         2 -> "OCCUPANT_TYPE_REAR_PASSENGER"
         else -> "Not defined"
     }
-}

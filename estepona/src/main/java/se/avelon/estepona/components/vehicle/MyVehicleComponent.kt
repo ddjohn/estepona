@@ -32,8 +32,9 @@ import java.io.File
 import java.io.PrintWriter
 import java.util.Calendar
 
-class MyVehicleComponent(context: Context) : CarPropertyManager.CarPropertyEventCallback {
-
+class MyVehicleComponent(
+    context: Context,
+) : CarPropertyManager.CarPropertyEventCallback {
     companion object {
         val TAG = DLog.forTag(MyVehicleComponent::class.java)
     }
@@ -69,7 +70,10 @@ class MyVehicleComponent(context: Context) : CarPropertyManager.CarPropertyEvent
                 mgr.registerSupportedValuesChangeCallback(
                     prop.propertyId,
                     object : CarPropertyManager.SupportedValuesChangeCallback {
-                        override fun onSupportedValuesChange(p0: Int, p1: Int) {
+                        override fun onSupportedValuesChange(
+                            p0: Int,
+                            p1: Int,
+                        ) {
                             DLog.method(TAG, "onSupportedValuesChange(): $p0, $p1")
                         }
                     },
@@ -102,7 +106,10 @@ class MyVehicleComponent(context: Context) : CarPropertyManager.CarPropertyEvent
         arrayAdapter.notifyDataSetChanged()
     }
 
-    override fun onErrorEvent(propertyValue: Int, p1: Int) {
+    override fun onErrorEvent(
+        propertyValue: Int,
+        p1: Int,
+    ) {
         DLog.error(TAG, "onErrorEvent:$propertyValue")
     }
 }

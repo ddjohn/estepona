@@ -18,28 +18,41 @@ package se.avelon.estepona.logging
 import android.util.Log
 
 object DLog {
+    fun forTag(clazz: Class<*>): String = "@@.${clazz.simpleName}"
 
-    fun forTag(clazz: Class<*>): String {
-        return "@@.${clazz.simpleName}"
-    }
-
-    fun method(tag: String, msg: Any) {
+    fun method(
+        tag: String,
+        msg: Any,
+    ) {
         Log.d(tag, "\uD83D\uDFE6$msg") // Blue box
     }
 
-    fun info(tag: String, msg: Any) {
+    fun info(
+        tag: String,
+        msg: Any,
+    ) {
         Log.i(tag, "\uD83D\uDFE9$msg") // green ball
     }
 
-    fun warning(tag: String, msg: Any) {
+    fun warning(
+        tag: String,
+        msg: Any,
+    ) {
         Log.i(tag, "\uD83D\uDFE7$msg") // orange ball
     }
 
-    fun error(tag: String, msg: Any) {
-        Log.i(tag, "\uD83D\uDFE5$msg") // red box
+    fun error(
+        tag: String,
+        msg: Any,
+    ) {
+        Log.e(tag, "\uD83D\uDFE5$msg") // red box
     }
 
-    fun exception(tag: String, msg: Any, e: Exception) {
+    fun exception(
+        tag: String,
+        msg: Any,
+        e: Exception,
+    ) {
         Log.e(tag, "\uD83D\uDFE5$msg", e) // red box
     }
 

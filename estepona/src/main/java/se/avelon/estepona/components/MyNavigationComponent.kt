@@ -61,14 +61,15 @@ fun MyNavigation(modifier: Modifier = Modifier) {
 
     MapboxMap(
         modifier,
-        mapViewportState = rememberMapViewportState {
-            setCameraOptions {
-                zoom(16.0)
-                center(Point.fromLngLat(11.997013996301572, 57.68784852211992))
-                pitch(60.0)
-                bearing(120.0)
-            }
-        },
+        mapViewportState =
+            rememberMapViewportState {
+                setCameraOptions {
+                    zoom(16.0)
+                    center(Point.fromLngLat(11.997013996301572, 57.68784852211992))
+                    pitch(60.0)
+                    bearing(120.0)
+                }
+            },
     )
 
     val file = File("${context.dataDir}/navi_${Calendar.getInstance().timeInMillis}.log")
@@ -85,7 +86,10 @@ fun MyNavigation(modifier: Modifier = Modifier) {
     locationManager.addNmeaListener(
         context.mainExecutor,
         object : OnNmeaMessageListener {
-            override fun onNmeaMessage(message: String?, timestamp: Long) {
+            override fun onNmeaMessage(
+                message: String?,
+                timestamp: Long,
+            ) {
                 DLog.method(MyNavigationComponent.TAG, "onNmeaMessage(): $timestamp $message")
                 printWriter.println("onNmeaMessage(): $timestamp $message")
 

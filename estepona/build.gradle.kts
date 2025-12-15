@@ -49,29 +49,29 @@ android {
 }
 
 dependencies {
-    /* Firebase */
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
     implementation("com.google.firebase:firebase-auth")
 
-    /* Media3 */
+    // Media3
     implementation("androidx.media3:media3-ui-compose:1.8.0")
 
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
 
-    /* ExoPlayer */
+    // ExoPlayer
     implementation(libs.androidx.media3.ui.compose)
     implementation(libs.androidx.media3.exoplayer)
 
-    /* OkHttp3 */
+    // OkHttp3
     implementation(libs.okhttp)
     implementation(libs.media3.datasource.okhttp)
 
-    /* Mapbox */
+    // Mapbox
     implementation(libs.maps.ndk27)
     implementation(libs.maps.compose.ndk27)
     implementation(libs.androidx.navigation.compose)
 
-    /* Camera */
+    // Camera
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.compose)
     implementation(libs.androidx.camera.lifecycle)
@@ -87,6 +87,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

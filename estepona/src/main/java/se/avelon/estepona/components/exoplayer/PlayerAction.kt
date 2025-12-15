@@ -15,4 +15,7 @@
  */
 package se.avelon.estepona.components.exoplayer
 
-data class PlayerAction(val actionType: ActionType, val data: Any? = null)
+data class PlayerAction(
+    val actionType: ActionType,
+    val data: Any? = null,
+)

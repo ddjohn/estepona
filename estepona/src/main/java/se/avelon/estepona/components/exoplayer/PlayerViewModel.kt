@@ -32,10 +32,10 @@ class PlayerViewModel : ViewModel() {
         val TAG = DLog.forTag(PlayerViewModel::class.java)
 
         // Source for videos: https://gist.github.com/jsturgis/3b19447b304616f18657
-        const val Video_1 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        const val Video_2 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-        const val Video_3 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-        const val Video_4 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+        const val VIDEO_1 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        const val VIDEO_2 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        const val VIDEO_3 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+        const val VIDEO_4 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
     }
 
     private val _playerState = MutableStateFlow<ExoPlayer?>(null)
@@ -48,16 +48,39 @@ class PlayerViewModel : ViewModel() {
         DLog.method(TAG, "createPlayerWithMediaItems()")
 
         if (_playerState.value == null) {
-            val mediaItems = listOf(
-                MediaItem.Builder().setUri(Video_1).setMediaId("Video_1").setTag("Video_1").build(),
-                MediaItem.Builder().setUri(Video_2).setMediaId("Video_2").setTag("Video_2").build(),
-                MediaItem.Builder().setUri(Video_3).setMediaId("Video_3").setTag("Video_3").build(),
-                MediaItem.Builder().setUri(Video_4).setMediaId("Video_4").setTag("Video_4").build(),
-            )
+            val mediaItems =
+                listOf(
+                    MediaItem
+                        .Builder()
+                        .setUri(VIDEO_1)
+                        .setMediaId("Video_1")
+                        .setTag("Video_1")
+                        .build(),
+                    MediaItem
+                        .Builder()
+                        .setUri(VIDEO_2)
+                        .setMediaId("Video_2")
+                        .setTag("Video_2")
+                        .build(),
+                    MediaItem
+                        .Builder()
+                        .setUri(VIDEO_3)
+                        .setMediaId("Video_3")
+                        .setTag("Video_3")
+                        .build(),
+                    MediaItem
+                        .Builder()
+                        .setUri(VIDEO_4)
+                        .setMediaId("Video_4")
+                        .setTag("Video_4")
+                        .build(),
+                )
 
             _playerState.update {
-                ExoPlayer.Builder(context)
-                    .build().apply {
+                ExoPlayer
+                    .Builder(context)
+                    .build()
+                    .apply {
                         setMediaItems(mediaItems)
                         prepare()
                         playWhenReady = true
@@ -141,14 +164,21 @@ class PlayerViewModel : ViewModel() {
         }
     }
 
-    private fun currentMediaItemTag(): String? = _playerState.value?.currentMediaItem?.localConfiguration?.tag as? String
+    private fun currentMediaItemTag(): String? =
+        _playerState.value
+            ?.currentMediaItem
+            ?.localConfiguration
+            ?.tag as? String
 
     private fun trackMediaItemTransitions() {
         DLog.method(TAG, "trackMediaItemTransitions()")
 
         _playerState.value?.addListener(
             object : Player.Listener {
-                override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                override fun onMediaItemTransition(
+                    mediaItem: MediaItem?,
+                    reason: Int,
+                ) {
                     DLog.method(TAG, "onMediaItemTransition(): ${mediaItem?.mediaId}, $reason}")
                     _playerState.value?.currentMediaItemIndex?.let {
                         checkAndResetPreviousMediaItemProgress(it)
@@ -182,7 +212,11 @@ class PlayerViewModel : ViewModel() {
         }
     }
 
-    fun updateCurrentPosition(id: String, position: Long, duration: Long) {
+    fun updateCurrentPosition(
+        id: String,
+        position: Long,
+        duration: Long,
+    ) {
         DLog.method(TAG, "updateCurrentPosition(): $id, $position, $duration")
 
         hashMapVideoStates[id] = hashMapVideoStates[id]?.copy(position, duration) ?: VideoItem(position, duration)

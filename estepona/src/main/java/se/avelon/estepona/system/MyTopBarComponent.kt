@@ -19,12 +19,14 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.BATTERY_SERVICE
 import android.content.Context.BLUETOOTH_SERVICE
 import android.content.Context.WIFI_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.SupplicantState
 import android.net.wifi.WifiManager
+import android.os.BatteryManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -35,6 +37,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bluetooth
+import androidx.compose.material.icons.filled.ChargingStation
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -78,6 +81,7 @@ fun MyTopBar(modifier: Modifier = Modifier) {
 
             BluetoothIcon()
             WifiIcon()
+            ChargingIcon()
         }
     })
 }
@@ -156,7 +160,7 @@ fun WifiIcon() {
         IconButton(onClick = { }) {
             Icon(
                 Icons.Default.Wifi,
-                "Bluetooth",
+                "Wifi",
                 tint = Color.White,
                 modifier = Modifier.size(24.dp),
             )
@@ -170,7 +174,7 @@ fun WifiIcon() {
         IconButton(onClick = { }) {
             Icon(
                 Icons.Default.Wifi,
-                "Bluetooth",
+                "Wifi",
                 tint = Color.DarkGray,
                 modifier = Modifier.size(24.dp),
             )
@@ -194,5 +198,65 @@ fun WifiIcon() {
             }
         },
         IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION),
+    )
+}
+
+@Composable
+fun ChargingIcon() {
+    val context = LocalContext.current
+
+    val batteryManager = context.getSystemService(BATTERY_SERVICE) as BatteryManager
+    var charging by remember { mutableStateOf(batteryManager.isCharging) }
+
+    AnimatedVisibility(
+        visible = charging,
+        enter = fadeIn() + slideInVertically(),
+        exit = fadeOut() + slideOutVertically(),
+    ) {
+        IconButton(onClick = { }) {
+            Icon(
+                Icons.Default.ChargingStation,
+                "Charging",
+                tint = Color.White,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+    }
+    AnimatedVisibility(
+        visible = !charging,
+        enter = fadeIn() + slideInVertically(),
+        exit = fadeOut() + slideOutVertically(),
+    ) {
+        IconButton(onClick = { }) {
+            Icon(
+                Icons.Default.ChargingStation,
+                "Charging",
+                tint = Color.DarkGray,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+    }
+
+    context.registerReceiver(
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context?,
+                intent: Intent?,
+            ) {
+                DLog.method(MyTopBarComponent.TAG, "Charging::Receive()")
+                val state =
+                    intent!!.getIntExtra(
+                        BatteryManager.EXTRA_STATUS,
+                        BatteryManager.BATTERY_STATUS_UNKNOWN,
+                    )
+
+                if (state == BatteryManager.BATTERY_STATUS_CHARGING) {
+                    charging = true
+                } else {
+                    charging = false
+                }
+            }
+        },
+        IntentFilter(BatteryManager.ACTION_CHARGING),
     )
 }

@@ -15,16 +15,43 @@
  */
 package se.avelon.estepona.system
 
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Context.BLUETOOTH_SERVICE
+import android.content.Context.WIFI_SERVICE
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.wifi.SupplicantState
+import android.net.wifi.WifiManager
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bluetooth
+import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import se.avelon.estepona.R
 import se.avelon.estepona.logging.DLog
 
@@ -47,9 +74,125 @@ fun MyTopBar(modifier: Modifier = Modifier) {
             }
             Text("Estepona")
 
-            HorizontalDivider()
+            Spacer(modifier)
 
-
+            BluetoothIcon()
+            WifiIcon()
         }
     })
+}
+
+@Composable
+fun BluetoothIcon() {
+    val context = LocalContext.current
+
+    val bluetoothManager = context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
+    var bluetooth by remember { mutableStateOf(bluetoothManager.adapter.isEnabled) }
+
+    AnimatedVisibility(
+        visible = bluetooth,
+        enter = fadeIn() + slideInVertically(),
+        exit = fadeOut() + slideOutVertically(),
+    ) {
+        IconButton(onClick = { }) {
+            Icon(
+                Icons.Default.Bluetooth,
+                "Bluetooth",
+                tint = Color.White,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+    }
+    AnimatedVisibility(
+        visible = !bluetooth,
+        enter = fadeIn() + slideInVertically(),
+        exit = fadeOut() + slideOutVertically(),
+    ) {
+        IconButton(onClick = { }) {
+            Icon(
+                Icons.Default.Bluetooth,
+                "Bluetooth",
+                tint = Color.DarkGray,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+    }
+
+    context.registerReceiver(
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context?,
+                intent: Intent?,
+            ) {
+                DLog.method(MyTopBarComponent.TAG, "Bluetooth:onReceive()")
+                val state =
+                    intent!!.getIntExtra(
+                        BluetoothAdapter.EXTRA_STATE,
+                        BluetoothAdapter.ERROR,
+                    )
+                if (state == BluetoothAdapter.STATE_ON) {
+                    bluetooth = true
+                } else {
+                    bluetooth = false
+                }
+            }
+        },
+        IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED),
+    )
+}
+
+@Composable
+fun WifiIcon() {
+    val context = LocalContext.current
+
+    val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
+    var wifi by remember { mutableStateOf(wifiManager.isWifiEnabled) }
+
+    AnimatedVisibility(
+        visible = wifi,
+        enter = fadeIn() + slideInVertically(),
+        exit = fadeOut() + slideOutVertically(),
+    ) {
+        IconButton(onClick = { }) {
+            Icon(
+                Icons.Default.Wifi,
+                "Bluetooth",
+                tint = Color.White,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+    }
+    AnimatedVisibility(
+        visible = !wifi,
+        enter = fadeIn() + slideInVertically(),
+        exit = fadeOut() + slideOutVertically(),
+    ) {
+        IconButton(onClick = { }) {
+            Icon(
+                Icons.Default.Wifi,
+                "Bluetooth",
+                tint = Color.DarkGray,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+    }
+
+    context.registerReceiver(
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context?,
+                intent: Intent?,
+            ) {
+                DLog.method(MyTopBarComponent.TAG, "Wifi:onReceive()")
+                val state: SupplicantState? = intent?.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
+
+                if (state == SupplicantState.ASSOCIATED) {
+                    wifi = true
+                } else {
+                    wifi = false
+                }
+            }
+        },
+        IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION),
+    )
 }

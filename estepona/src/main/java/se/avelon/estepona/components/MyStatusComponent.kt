@@ -58,9 +58,6 @@ fun MyStatus(modifier: Modifier) {
 
     val context = LocalContext.current
 
-    val batteryManager = context.getSystemService(BATTERY_SERVICE) as BatteryManager
-    val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-
     Column(modifier.drawBehind { drawRect(Color.Gray) }) {
         var myEnvironment by remember { mutableStateOf(false) }
         var myBuild by remember { mutableStateOf(false) }
@@ -123,22 +120,5 @@ fun MyStatus(modifier: Modifier) {
                 Text("RELEASE=${Build.VERSION.RELEASE}")
             }
         }
-
-        AnimatedVisibility(
-            visible = bluetoothAdapter.isEnabled,
-            enter = fadeIn() + slideInVertically(),
-            exit = fadeOut() + slideOutVertically(),
-        ) {
-            Text("Bluetooth Enable")
-        }
-        AnimatedVisibility(
-            visible = !bluetoothAdapter.isEnabled,
-            enter = fadeIn() + slideInVertically(),
-            exit = fadeOut() + slideOutVertically(),
-        ) {
-            Text("Bluetooth Disabled")
-        }
-
-        var expanded by remember { mutableStateOf(false) }
     }
 }

@@ -15,11 +15,12 @@
  */
 package se.avelon.estepona.lifecycle
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.core.app.ComponentActivity
 import se.avelon.estepona.logging.DLog
 
-open class MyLifecycleActivity : ComponentActivity() {
+open class MyLifecycleActivity : Activity() {
     companion object {
         val TAG = DLog.forTag(MyLifecycleActivity::class.java)
     }

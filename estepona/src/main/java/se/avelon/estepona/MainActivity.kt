@@ -25,6 +25,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import se.avelon.estepona.components.MyNavigationComponent
 import se.avelon.estepona.logging.DLog
+import se.avelon.estepona.notification.Notif
 import se.avelon.estepona.permission.MyPermissions
 import se.avelon.estepona.system.MyMainScreen
 
@@ -41,6 +42,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         DLog.test()
+        val notif = Notif(this)
+        notif.default(666, "title", "content")
 
         permissions = MyPermissions(this)
 

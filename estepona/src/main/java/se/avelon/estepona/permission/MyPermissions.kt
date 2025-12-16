@@ -41,6 +41,7 @@ class MyPermissions(
                 Manifest.permission.ACCESS_WIFI_STATE,
                 Manifest.permission.BIND_ACCESSIBILITY_SERVICE,
                 Manifest.permission.FOREGROUND_SERVICE,
+                Manifest.permission.POST_NOTIFICATIONS,
                 Manifest.permission.MEDIA_CONTENT_CONTROL,
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.READ_LOGS,

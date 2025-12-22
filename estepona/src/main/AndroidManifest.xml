@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <permission android:name="se.avelon.estepona.permission.testpermission" />
+
     <uses-permission android:name="android.car.permission.ADJUST_RANGE_REMAINING"/>
     <uses-permission android:name="android.car.permission.CAR_CONTROL_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.car.permission.CAR_CONTROL_AUDIO_VOLUME"/>
@@ -91,6 +93,12 @@
     <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS"
         tools:ignore="ProtectedPermissions" />
 
+    <queries>
+        <intent>
+            <action android:name="android.media.browse.MediaBrowserService" />
+        </intent>
+    </queries>
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -112,6 +120,15 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".services.MyMediaBrowserService"
+            android:exported="true"
+            android:permission="se.avelon.permissin.testpermission">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
         <receiver
             android:name=".MainReceiver"
             android:enabled="true"
@@ -121,5 +138,6 @@
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
     </application>
 </manifest>

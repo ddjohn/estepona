@@ -27,7 +27,7 @@ public class MyDevice extends JFrame {
 
 		RawImage screenshot = device.getScreenshot();
 		setTitle(device.getSerialNumber() + " (" + screenshot.width + "x" + screenshot.height + ")");
-		
+
         add(new MyMainDisplayArea(device, screenshot.asBufferedImage()), BorderLayout.CENTER);
         add(new MyBottomPanel(device), BorderLayout.SOUTH);
         

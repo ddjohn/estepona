@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.notification
+package se.avelon.estepona.os.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

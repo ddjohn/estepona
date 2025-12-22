@@ -17,7 +17,9 @@ package se.avelon.estepona
 
 import android.app.UiModeManager
 import android.content.Intent
+import android.content.pm.PackageManager.GET_RESOLVED_FILTER
 import android.os.Bundle
+import android.service.media.MediaBrowserService
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,8 +27,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import se.avelon.estepona.components.MyNavigationComponent
 import se.avelon.estepona.logging.DLog
-import se.avelon.estepona.notification.Notif
-import se.avelon.estepona.permission.MyPermissions
+import se.avelon.estepona.os.notification.Notif
+import se.avelon.estepona.os.permission.MyPermissions
 import se.avelon.estepona.system.MyMainScreen
 
 class MainActivity : ComponentActivity() {
@@ -40,6 +42,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         DLog.method(TAG, "onCreate(): $savedInstanceState")
         super.onCreate(savedInstanceState)
+
+        /* Medua sources */
+        val intent = Intent(MediaBrowserService.SERVICE_INTERFACE)
+        packageManager.queryIntentServices(intent, GET_RESOLVED_FILTER).forEach {
+            DLog.info(TAG, "Service: ${it.serviceInfo.name}")
+
+
+        }
 
         DLog.test()
         val notif = Notif(this)

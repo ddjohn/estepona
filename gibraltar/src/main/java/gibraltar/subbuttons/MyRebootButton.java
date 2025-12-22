@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.android.ddmlib.AdbCommandRejectedException;
 import com.android.ddmlib.IDevice;
+import com.android.ddmlib.IShellOutputReceiver;
 import com.android.ddmlib.NullOutputReceiver;
 import com.android.ddmlib.ShellCommandUnresponsiveException;
 import com.android.ddmlib.TimeoutException;
@@ -28,9 +29,10 @@ public class MyRebootButton extends MyButton {
 		DLog.method(TAG, "reboot");
 		
 	    try {
-			device.executeShellCommand("reboot", new NullOutputReceiver());
+			device.executeShellCommand("reboot", this);
 		} catch (TimeoutException | AdbCommandRejectedException | ShellCommandUnresponsiveException | IOException e) {
 			DLog.error(TAG, "reboot", e);
 		}
 	}
+
 }

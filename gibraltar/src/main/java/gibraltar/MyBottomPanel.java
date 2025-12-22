@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import com.android.ddmlib.IDevice;
 
+import gibraltar.subbuttons.MyBugreportButton;
 import gibraltar.subbuttons.MyRebootButton;
 import gibraltar.subbuttons.MyRootButton;
 import gibraltar.subbuttons.MyUnrootButton;
@@ -18,6 +19,7 @@ public class MyBottomPanel extends JPanel {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		add(new MyRebootButton(device));
+		add(new MyBugreportButton(device));
 		add(new MyRootButton(device));
 		add(new MyUnrootButton(device));
 	}

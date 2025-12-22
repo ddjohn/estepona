@@ -15,7 +15,8 @@
  */
 package se.avelon.estepona.components.exoplayer
 
-data class VideoItem(
-    val currentPosition: Long = 0,
-    val duration: Long = 0,
-)
+/**
+ * @property currentPosition
+ * @property duration
+ */
+data class VideoItem(val currentPosition: Long = 0, val duration: Long = 0)

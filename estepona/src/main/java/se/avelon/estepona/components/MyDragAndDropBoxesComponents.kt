@@ -49,103 +49,84 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import se.avelon.estepona.logging.DLog
 import kotlin.random.Random
+import se.avelon.estepona.logging.DLog
 
 class MyDragAndDropBoxesComponents {
-    companion object {
-        val TAG = DLog.forTag(MyDragAndDropBoxesComponents::class.java)
-    }
+  companion object {
+    val TAG = DLog.forTag(MyDragAndDropBoxesComponents::class.java)
+  }
 }
 
 @ExperimentalFoundationApi
 @Composable
 fun MyDragAndDropBoxes(modifier: Modifier = Modifier) {
-    DLog.info(MyDragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $modifier")
+  DLog.info(MyDragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $modifier")
 
-    var startDrag by remember { mutableStateOf(false) }
+  var startDrag by remember { mutableStateOf(false) }
 
-    Column(
+  Column(modifier = modifier.fillMaxSize()) {
+    val boxCount = 5
+    var dragBoxIndex by remember { mutableIntStateOf(0) }
+    var color = remember { (1..boxCount).map { Color(Random.nextLong()).copy(alpha = 1f) } }
+    repeat(boxCount) { index ->
+      DLog.info(MyDragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $index")
+
+      Box(
         modifier =
-            modifier
-                .fillMaxSize(),
-    ) {
-        val boxCount = 5
-        var dragBoxIndex by remember {
-            mutableIntStateOf(0)
-        }
-        var color =
-            remember {
-                (1..boxCount).map {
-                    Color(Random.nextLong()).copy(alpha = 1f)
-                }
-            }
-        repeat(boxCount) { index ->
-            DLog.info(MyDragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $index")
+          Modifier.weight(1f)
+            .fillMaxWidth()
+            .background(color.get(index))
+            .dragAndDropTarget(
+              shouldStartDragAndDrop = { event ->
+                DLog.info(MyDragAndDropBoxesComponents.TAG, "shouldStartDragAndDrop(): $event")
 
-            Box(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .background(color.get(index))
-                        .dragAndDropTarget(
-                            shouldStartDragAndDrop = { event ->
-                                DLog.info(MyDragAndDropBoxesComponents.TAG, "shouldStartDragAndDrop(): $event")
+                event.mimeTypes().contains(ClipDescription.MIMETYPE_TEXT_PLAIN)
+              },
+              target =
+                remember {
+                  object : DragAndDropTarget {
+                    override fun onDrop(event: DragAndDropEvent): Boolean {
+                      DLog.info(MyDragAndDropBoxesComponents.TAG, "onDrop(): $event")
 
-                                event
-                                    .mimeTypes()
-                                    .contains(ClipDescription.MIMETYPE_TEXT_PLAIN)
-                            },
-                            target =
-                                remember {
-                                    object : DragAndDropTarget {
-                                        override fun onDrop(event: DragAndDropEvent): Boolean {
-                                            DLog.info(MyDragAndDropBoxesComponents.TAG, "onDrop(): $event")
+                      val text = event.toAndroidDragEvent().clipData.getItemAt(0).text
+                      DLog.info(MyDragAndDropBoxesComponents.TAG, "Drag data(): $text")
 
-                                            val text =
-                                                event
-                                                    .toAndroidDragEvent()
-                                                    .clipData
-                                                    .getItemAt(0)
-                                                    .text
-                                            DLog.info(MyDragAndDropBoxesComponents.TAG, "Drag data(): $text")
+                      dragBoxIndex = index
+                      return true
+                    }
+                  }
+                },
+            ),
+        contentAlignment = Alignment.Center,
+      ) {
+        this@Column.AnimatedVisibility(
+          visible = index == dragBoxIndex,
+          enter = scaleIn() + fadeIn(),
+          exit = scaleOut() + fadeOut(),
+        ) {
+          Text(
+            text = "Drag me!",
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier =
+              Modifier.pointerInput(Unit) { detectTapGestures(onLongPress = { startDrag = true }) }
+                .dragAndDropSource(
+                  transferData = { offset ->
+                    DLog.info(MyDragAndDropBoxesComponents.TAG, "transferData(): $offset")
 
-                                            dragBoxIndex = index
-                                            return true
-                                        }
-                                    }
-                                },
-                        ),
-                contentAlignment = Alignment.Center,
-            ) {
-                this@Column.AnimatedVisibility(
-                    visible = index == dragBoxIndex,
-                    enter = scaleIn() + fadeIn(),
-                    exit = scaleOut() + fadeOut(),
-                ) {
-                    Text(
-                        text = "Drag me!",
-                        fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        modifier =
-                            Modifier
-                                .pointerInput(Unit) {
-                                    detectTapGestures(onLongPress = { startDrag = true })
-                                }.dragAndDropSource(transferData = { offset ->
-                                    DLog.info(MyDragAndDropBoxesComponents.TAG, "transferData(): $offset")
-
-                                    if (startDrag) {
-                                        startDrag = false
-                                    }
-                                    DragAndDropTransferData(
-                                        clipData = ClipData.newPlainText("label", "Dragged text"),
-                                    )
-                                }),
+                    if (startDrag) {
+                      startDrag = false
+                    }
+                    DragAndDropTransferData(
+                      clipData = ClipData.newPlainText("label", "Dragged text")
                     )
-                }
-            }
+                  }
+                ),
+          )
         }
+      }
     }
+  }
 }

@@ -13,8 +13,12 @@ subprojects {
         kotlin {
             target("**/*.kt")
             targetExclude("${layout.buildDirectory}/**/*.kt")
-
             ktlint()
+            trimTrailingWhitespace()
+            endWithNewline()
+            ktfmt().googleStyle()
+            //diktat()
+            //prettier()
             licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
         }
 

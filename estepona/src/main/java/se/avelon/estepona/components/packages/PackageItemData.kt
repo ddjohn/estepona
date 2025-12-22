@@ -17,8 +17,9 @@ package se.avelon.estepona.components.packages
 
 import android.graphics.drawable.Drawable
 
-data class PackageItemData(
-    val pkg: String,
-    val icon: Drawable?,
-    val text: String,
-)
+/**
+ * @property pkg
+ * @property icon
+ * @property text
+ */
+data class PackageItemData(val pkg: String, val icon: Drawable?, val text: String)

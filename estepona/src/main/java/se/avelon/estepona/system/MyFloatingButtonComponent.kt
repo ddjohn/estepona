@@ -26,17 +26,21 @@ import se.avelon.estepona.R
 import se.avelon.estepona.logging.DLog
 
 class MyFloatingButtonComponent {
-    companion object {
-        val TAG = DLog.forTag(MyFloatingButtonComponent::class.java)
-    }
+  companion object {
+    val TAG = DLog.forTag(MyFloatingButtonComponent::class.java)
+  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyFloatingButton(modifier: Modifier = Modifier) {
-    DLog.method(MyFloatingButtonComponent.TAG, "MyFloatingButton()")
+  DLog.method(MyFloatingButtonComponent.TAG, "MyFloatingButton()")
 
-    FloatingActionButton(onClick = { DLog.method(MyFloatingButtonComponent.TAG, "onClick()") }) {
-        Icon(contentDescription = "Email", painter = painterResource(R.drawable.floating), tint = Color.White)
-    }
+  FloatingActionButton(onClick = { DLog.method(MyFloatingButtonComponent.TAG, "onClick()") }) {
+    Icon(
+      contentDescription = "Email",
+      painter = painterResource(R.drawable.floating),
+      tint = Color.White,
+    )
+  }
 }

@@ -15,4 +15,12 @@
  */
 package se.avelon.estepona.components.exoplayer
 
-enum class ActionType { PLAY, PAUSE, REWIND, FORWARD, PREVIOUS, NEXT, SEEK }
+enum class ActionType {
+  PLAY,
+  PAUSE,
+  REWIND,
+  FORWARD,
+  PREVIOUS,
+  NEXT,
+  SEEK,
+}

@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,83 +53,79 @@ import kotlinx.coroutines.flow.update
 import se.avelon.estepona.logging.DLog
 
 class MyCameraComponent : ViewModel() {
-    companion object {
-        val TAG = DLog.forTag(MyCameraComponent::class.java)
+  companion object {
+    val TAG = DLog.forTag(MyCameraComponent::class.java)
+  }
+
+  // Used to set up a link between the Camera and your UI.
+  private val _surfaceRequest = MutableStateFlow<SurfaceRequest?>(null)
+  val surfaceRequest: StateFlow<SurfaceRequest?> = _surfaceRequest
+
+  private val cameraPreviewUseCase =
+    Preview.Builder().build().apply {
+      setSurfaceProvider { newSurfaceRequest -> _surfaceRequest.update { newSurfaceRequest } }
     }
 
-    // Used to set up a link between the Camera and your UI.
-    private val _surfaceRequest = MutableStateFlow<SurfaceRequest?>(null)
-    val surfaceRequest: StateFlow<SurfaceRequest?> = _surfaceRequest
+  suspend fun bindToCamera(appContext: Context, lifecycleOwner: LifecycleOwner) {
+    val processCameraProvider = ProcessCameraProvider.awaitInstance(appContext)
+    processCameraProvider.bindToLifecycle(
+      lifecycleOwner,
+      DEFAULT_FRONT_CAMERA,
+      cameraPreviewUseCase,
+    )
 
-    private val cameraPreviewUseCase =
-        Preview.Builder().build().apply {
-            setSurfaceProvider { newSurfaceRequest ->
-                _surfaceRequest.update { newSurfaceRequest }
-            }
-        }
-
-    suspend fun bindToCamera(
-        appContext: Context,
-        lifecycleOwner: LifecycleOwner,
-    ) {
-        val processCameraProvider = ProcessCameraProvider.awaitInstance(appContext)
-        processCameraProvider.bindToLifecycle(
-            lifecycleOwner,
-            DEFAULT_FRONT_CAMERA,
-            cameraPreviewUseCase,
-        )
-
-        // Cancellation signals we're done with the camera
-        try {
-            awaitCancellation()
-        } finally {
-            processCameraProvider.unbindAll()
-        }
+    // Cancellation signals we're done with the camera
+    try {
+      awaitCancellation()
+    } finally {
+      processCameraProvider.unbindAll()
     }
+  }
 
-    fun setU(cameraSelector: CameraSelector) {
-    }
+  fun setU(cameraSelector: CameraSelector) {}
 }
 
 @Composable
 fun MyCamera(modifier: Modifier) {
-    DLog.method(MyCameraComponent.TAG, "MyCamera()")
+  DLog.method(MyCameraComponent.TAG, "MyCamera()")
 
-    Column(modifier = modifier.fillMaxSize().wrapContentSize().widthIn(max = 480.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Hello world", textAlign = TextAlign.Center)
-        Spacer(Modifier.height(16.dp))
-        var viewModel = viewModel<MyCameraComponent>()
-        Box(modifier) {
-            CameraPreviewContent(viewModel)
-            Button(onClick = {
-                DLog.info(MyCameraComponent.TAG, "Button()")
-                viewModel.setU(DEFAULT_BACK_CAMERA)
-            }) {
-                Text("Rotate")
-            }
+  Column(
+    modifier = modifier.fillMaxSize().wrapContentSize().widthIn(max = 480.dp),
+    horizontalAlignment = Alignment.CenterHorizontally,
+  ) {
+    Text("Hello world", textAlign = TextAlign.Center)
+    Spacer(Modifier.height(16.dp))
+    var viewModel = viewModel<MyCameraComponent>()
+    Box(modifier) {
+      CameraPreviewContent(viewModel)
+      Button(
+        onClick = {
+          DLog.info(MyCameraComponent.TAG, "Button()")
+          viewModel.setU(DEFAULT_BACK_CAMERA)
         }
+      ) {
+        Text("Rotate")
+      }
     }
+  }
 }
 
 @Composable
 fun CameraPreviewContent(
-    viewModel: MyCameraComponent,
-    modifier: Modifier = Modifier,
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+  viewModel: MyCameraComponent,
+  modifier: Modifier = Modifier,
+  lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
-    DLog.method(MyCameraComponent.TAG, "CameraPreviewContent()")
+  DLog.method(MyCameraComponent.TAG, "CameraPreviewContent()")
 
-    val surfaceRequest by viewModel.surfaceRequest.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+  val surfaceRequest by viewModel.surfaceRequest.collectAsStateWithLifecycle()
+  val context = LocalContext.current
 
-    LaunchedEffect(lifecycleOwner) {
-        viewModel.bindToCamera(context.applicationContext, lifecycleOwner)
-    }
+  LaunchedEffect(lifecycleOwner) {
+    viewModel.bindToCamera(context.applicationContext, lifecycleOwner)
+  }
 
-    surfaceRequest?.let { request ->
-        CameraXViewfinder(
-            surfaceRequest = request,
-            modifier = modifier,
-        )
-    }
+  surfaceRequest?.let { request ->
+    CameraXViewfinder(surfaceRequest = request, modifier = modifier)
+  }
 }

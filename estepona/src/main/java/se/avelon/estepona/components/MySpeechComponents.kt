@@ -19,37 +19,39 @@ import android.speech.tts.TextToSpeech
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import java.util.Locale
 import se.avelon.estepona.components.MySpeechComponents.textToSpeech
 import se.avelon.estepona.logging.DLog
-import java.util.Locale
 
 object MySpeechComponents {
-    val TAG = DLog.forTag(MySpeechComponents::class.java)
+  val TAG = DLog.forTag(MySpeechComponents::class.java)
 
-    lateinit var textToSpeech: TextToSpeech
+  lateinit var textToSpeech: TextToSpeech
 }
 
 @Composable
 fun MySpeech(modifier: Modifier) {
-    DLog.method(MySpeechComponents.TAG, "MySpeech()")
+  DLog.method(MySpeechComponents.TAG, "MySpeech()")
 
-    val context = LocalContext.current
+  val context = LocalContext.current
 
-    textToSpeech =
-        TextToSpeech(
-            context,
-            object : TextToSpeech.OnInitListener {
-                override fun onInit(status: Int) {
-                    DLog.method(MySpeechComponents.TAG, "onInit(); $status")
-                    val result = textToSpeech.setLanguage(Locale.US)
-                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        DLog.error(MySpeechComponents.TAG, "Language not supported")
-                    } else {
-                        DLog.info(MySpeechComponents.TAG, "Speak....")
-                        textToSpeech.speak("Hello World", TextToSpeech.QUEUE_ADD, null, "david")
-                    }
-                }
-            },
-        )
-    DLog.info(MySpeechComponents.TAG, "textToSpeech=$textToSpeech")
+  textToSpeech =
+    TextToSpeech(
+      context,
+      object : TextToSpeech.OnInitListener {
+        override fun onInit(status: Int) {
+          DLog.method(MySpeechComponents.TAG, "onInit(); $status")
+          val result = textToSpeech.setLanguage(Locale.US)
+          if (
+            result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED
+          ) {
+            DLog.error(MySpeechComponents.TAG, "Language not supported")
+          } else {
+            DLog.info(MySpeechComponents.TAG, "Speak....")
+            textToSpeech.speak("Hello World", TextToSpeech.QUEUE_ADD, null, "david")
+          }
+        }
+      },
+    )
+  DLog.info(MySpeechComponents.TAG, "textToSpeech=$textToSpeech")
 }

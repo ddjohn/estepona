@@ -22,44 +22,44 @@ import androidx.core.R
 import androidx.core.app.NotificationCompat
 import se.avelon.estepona.logging.DLog
 
-class Notif(
-    val ctx: Context,
-) {
-    companion object {
-        private val TAG = DLog.forTag(Notif::class.java)
+/** @property ctx */
+class Notif(val ctx: Context) {
+  init {
+    val notificationManager =
+      ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.createNotificationChannels(channels)
+  }
 
-        val channels =
-            listOf(
-                NotificationChannel("H", "High", NotificationManager.IMPORTANCE_HIGH),
-                NotificationChannel("L", "Low", NotificationManager.IMPORTANCE_LOW),
-                // NotificationChannel("Max", "Max", NotificationManager.IMPORTANCE_MAX),
-                NotificationChannel("Min", "Min", NotificationManager.IMPORTANCE_MIN),
-                NotificationChannel("N", "None", NotificationManager.IMPORTANCE_NONE),
-                NotificationChannel("D", "Default", NotificationManager.IMPORTANCE_DEFAULT),
-                // xNotificationChannel("U", "Unspecified", NotificationManager.IMPORTANCE_UNSPECIFIED),
-            )
-    }
+  /**
+   * @param id
+   * @param title
+   * @param content
+   */
+  fun default(id: Int, title: String, content: String) {
+    DLog.method(TAG, "default(): $id, $title, $content")
+    val notificationManager =
+      ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-    init {
-        val notificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannels(channels)
-    }
+    var builder =
+      NotificationCompat.Builder(ctx, "D")
+        .setSmallIcon(R.drawable.notification_icon_background)
+        .setContentTitle(title)
+        .setContentText(content)
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+    notificationManager.notify(id, builder.build())
+  }
 
-    fun default(
-        id: Int,
-        title: String,
-        content: String,
-    ) {
-        DLog.method(TAG, "default(): $id, $title, $content")
-        val notificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        var builder =
-            NotificationCompat
-                .Builder(ctx, "D")
-                .setSmallIcon(R.drawable.notification_icon_background)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        notificationManager.notify(id, builder.build())
-    }
+  companion object {
+    private val tag = DLog.forTag(Notif::class.java)
+    val channels =
+      listOf(
+        NotificationChannel("H", "High", NotificationManager.IMPORTANCE_HIGH),
+        NotificationChannel("L", "Low", NotificationManager.IMPORTANCE_LOW),
+        // NotificationChannel("Max", "Max", NotificationManager.IMPORTANCE_MAX),
+        NotificationChannel("Min", "Min", NotificationManager.IMPORTANCE_MIN),
+        NotificationChannel("N", "None", NotificationManager.IMPORTANCE_NONE),
+        NotificationChannel("D", "Default", NotificationManager.IMPORTANCE_DEFAULT),
+        // xNotificationChannel("U", "Unspecified", NotificationManager.IMPORTANCE_UNSPECIFIED),
+      )
+  }
 }

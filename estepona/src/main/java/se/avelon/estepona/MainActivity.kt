@@ -30,42 +30,42 @@ import se.avelon.estepona.permission.MyPermissions
 import se.avelon.estepona.system.MyMainScreen
 
 class MainActivity : ComponentActivity() {
-  companion object {
-    val TAG = DLog.forTag(MainActivity::class.java)
-  }
+    companion object {
+        val TAG = DLog.forTag(MainActivity::class.java)
+    }
 
-  lateinit var permissions: MyPermissions
+    lateinit var permissions: MyPermissions
 
-  @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-  override fun onCreate(savedInstanceState: Bundle?) {
-    DLog.method(TAG, "onCreate(): $savedInstanceState")
-    super.onCreate(savedInstanceState)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        DLog.method(TAG, "onCreate(): $savedInstanceState")
+        super.onCreate(savedInstanceState)
 
-    DLog.test()
-    val notif = Notif(this)
-    notif.default(666, "title", "content")
+        DLog.test()
+        val notif = Notif(this)
+        notif.default(666, "title", "content")
 
-    permissions = MyPermissions(this)
+        permissions = MyPermissions(this)
 
-    DLog.info(MyNavigationComponent.TAG, "Request permissions")
-    permissions.request()
+        DLog.info(MyNavigationComponent.TAG, "Request permissions")
+        permissions.request()
 
-    DLog.info(MyNavigationComponent.TAG, "Check permissions")
-    permissions.check()
+        DLog.info(MyNavigationComponent.TAG, "Check permissions")
+        permissions.check()
 
-    val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager
-    uiModeManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_YES)
+        val uiModeManager = getSystemService(UI_MODE_SERVICE) as UiModeManager
+        uiModeManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_YES)
 
-    enableEdgeToEdge()
+        enableEdgeToEdge()
 
-    DLog.info(TAG, "SetContent...")
-    setContent { MyMainScreen() }
-  }
+        DLog.info(TAG, "SetContent...")
+        setContent { MyMainScreen() }
+    }
 
-  override fun onActivityReenter(resultCode: Int, data: Intent?) {
-    DLog.method(TAG, "onActivityResult(): $resultCode, $data")
-    super.onActivityReenter(resultCode, data)
+    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+        DLog.method(TAG, "onActivityResult(): $resultCode, $data")
+        super.onActivityReenter(resultCode, data)
 
-    permissions.onActivityResult(resultCode, data)
-  }
+        permissions.onActivityResult(resultCode, data)
+    }
 }

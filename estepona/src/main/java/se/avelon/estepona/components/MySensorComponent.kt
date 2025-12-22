@@ -29,37 +29,42 @@ import androidx.compose.ui.platform.LocalContext
 import se.avelon.estepona.logging.DLog
 
 object MySensorComponent {
-  val TAG = DLog.forTag(MySensorComponent::class.java)
+    val TAG = DLog.forTag(MySensorComponent::class.java)
 }
 
 @Composable
 fun MySensor(modifier: Modifier) {
-  DLog.method(MySensorComponent.TAG, "MySensor()")
+    DLog.method(MySensorComponent.TAG, "MySensor()")
 
-  val context = LocalContext.current
+    val context = LocalContext.current
 
-  val sensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
+    val sensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
 
-  Column(modifier) {
-    for (sensor in sensorManager.getSensorList(Sensor.TYPE_ALL)) {
-      Button(onClick = {}) { Text("sensor=${sensor.name} (${sensor.type}, ${sensor.vendor})") }
+    Column(modifier) {
+        for (sensor in sensorManager.getSensorList(Sensor.TYPE_ALL)) {
+            Button(onClick = {}) {
+                Text("sensor=${sensor.name} (${sensor.type}, ${sensor.vendor})")
+            }
 
-      sensorManager.registerListener(
-        object : SensorEventListener {
-          override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-            DLog.method(MySensorComponent.TAG, "onAccuracyChanged(): $sensor, $accuracy")
-          }
+            sensorManager.registerListener(
+                object : SensorEventListener {
+                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                        DLog.method(
+                            MySensorComponent.TAG,
+                            "onAccuracyChanged(): $sensor, $accuracy",
+                        )
+                    }
 
-          override fun onSensorChanged(event: SensorEvent?) {
-            DLog.method(
-              MySensorComponent.TAG,
-              "onSensorChanged(): ${event?.sensor?.name}, ${event?.accuracy}, ${event?.values}",
+                    override fun onSensorChanged(event: SensorEvent?) {
+                        DLog.method(
+                            MySensorComponent.TAG,
+                            "onSensorChanged(): ${event?.sensor?.name}, ${event?.accuracy}, ${event?.values}",
+                        )
+                    }
+                },
+                sensor,
+                SensorManager.SENSOR_DELAY_UI,
             )
-          }
-        },
-        sensor,
-        SensorManager.SENSOR_DELAY_UI,
-      )
+        }
     }
-  }
 }

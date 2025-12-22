@@ -32,80 +32,80 @@ import se.avelon.estepona.R
 import se.avelon.estepona.logging.DLog
 
 class MyBottomBarComponent : ViewModel() {
-  companion object {
-    val TAG = DLog.forTag(MyBottomBarComponent::class.java)
-  }
+    companion object {
+        val TAG = DLog.forTag(MyBottomBarComponent::class.java)
+    }
 
-  var selected by mutableStateOf(1)
+    var selected by mutableStateOf(1)
 }
 
 @Composable
 fun MyBottomBar(
-  navController: NavController,
-  viewModel: MyBottomBarComponent = MyBottomBarComponent(),
-  modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: MyBottomBarComponent = MyBottomBarComponent(),
+    modifier: Modifier = Modifier,
 ) {
-  DLog.method(MyBottomBarComponent.TAG, "MyBottomBar()")
+    DLog.method(MyBottomBarComponent.TAG, "MyBottomBar()")
 
-  NavigationBar(modifier = modifier) {
-    // MyBarItem2(viewModel, navController, "Test", Icons.Default.Battery0Bar, 9)
+    NavigationBar(modifier = modifier) {
+        // MyBarItem2(viewModel, navController, "Test", Icons.Default.Battery0Bar, 9)
 
-    MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 0)
-    MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 1)
-    MyBarItem(viewModel, navController, "Bluetooth", R.drawable.navigation_bluetooth, 2)
-    MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 3)
-    MyBarItem(viewModel, navController, "Display", R.drawable.navigation_display, 4)
-    MyBarItem(viewModel, navController, "Media", R.drawable.navigtion_movie, 5)
-    MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 6)
-    MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 7)
-    MyBarItem(viewModel, navController, "Sensor", R.drawable.navigation_sensor, 8)
-    MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 8)
-    MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 9)
+        MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 0)
+        MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 1)
+        MyBarItem(viewModel, navController, "Bluetooth", R.drawable.navigation_bluetooth, 2)
+        MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 3)
+        MyBarItem(viewModel, navController, "Display", R.drawable.navigation_display, 4)
+        MyBarItem(viewModel, navController, "Media", R.drawable.navigtion_movie, 5)
+        MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 6)
+        MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 7)
+        MyBarItem(viewModel, navController, "Sensor", R.drawable.navigation_sensor, 8)
+        MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 8)
+        MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 9)
 
-    MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 10)
-    MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 11)
-    MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 12)
-  }
+        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 10)
+        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 11)
+        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 12)
+    }
 }
 
 @Composable
 fun MyBarItem(
-  viewModel: MyBottomBarComponent,
-  navController: NavController,
-  text: String,
-  res: Int,
-  index: Int,
+    viewModel: MyBottomBarComponent,
+    navController: NavController,
+    text: String,
+    res: Int,
+    index: Int,
 ) {
-  DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index")
+    DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index")
 
-  ShortNavigationBarItem(
-    selected = viewModel.selected == index,
-    onClick = {
-      DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
-      navController.navigate(text)
-    },
-    icon = { Icon(painter = painterResource(res), null) },
-    label = { Text(text) },
-  )
+    ShortNavigationBarItem(
+        selected = viewModel.selected == index,
+        onClick = {
+            DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
+            navController.navigate(text)
+        },
+        icon = { Icon(painter = painterResource(res), null) },
+        label = { Text(text) },
+    )
 }
 
 @Composable
 fun MyBarItem2(
-  viewModel: MyBottomBarComponent,
-  navController: NavController,
-  text: String,
-  image: ImageVector,
-  index: Int,
+    viewModel: MyBottomBarComponent,
+    navController: NavController,
+    text: String,
+    image: ImageVector,
+    index: Int,
 ) {
-  DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index")
+    DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index")
 
-  ShortNavigationBarItem(
-    selected = viewModel.selected == index,
-    onClick = {
-      DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
-      navController.navigate(text)
-    },
-    icon = { Icon(painter = painterResource(image.hashCode()), null) },
-    label = { Text(text) },
-  )
+    ShortNavigationBarItem(
+        selected = viewModel.selected == index,
+        onClick = {
+            DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
+            navController.navigate(text)
+        },
+        icon = { Icon(painter = painterResource(image.hashCode()), null) },
+        label = { Text(text) },
+    )
 }

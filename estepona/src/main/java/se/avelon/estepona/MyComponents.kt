@@ -22,10 +22,10 @@ import androidx.compose.ui.Modifier
 import se.avelon.estepona.logging.DLog
 
 object MyComponents {
-  val TAG = DLog.forTag(MyComponents::class.java)
+    val TAG = DLog.forTag(MyComponents::class.java)
 }
 
 @Composable
 fun MyButton(modifier: Modifier, text: String, onClick: Unit) {
-  Button(onClick = { onClick }, content = { Text(text) })
+    Button(onClick = { onClick }, content = { Text(text) })
 }

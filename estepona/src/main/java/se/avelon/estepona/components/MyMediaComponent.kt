@@ -71,254 +71,273 @@ import se.avelon.estepona.components.exoplayer.PlayerViewModel
 import se.avelon.estepona.logging.DLog
 
 class ExoPlayerComponent {
-  companion object {
-    val TAG = DLog.forTag(ExoPlayerComponent::class.java)
-  }
+    companion object {
+        val TAG = DLog.forTag(ExoPlayerComponent::class.java)
+    }
 }
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
 fun MyMedia(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel = viewModel()) {
-  DLog.method(ExoPlayerComponent.TAG, "PlayerRoute(): $modifier, $playerViewModel")
+    DLog.method(ExoPlayerComponent.TAG, "PlayerRoute(): $modifier, $playerViewModel")
 
-  val exoPlayer = playerViewModel.playerState.collectAsStateWithLifecycle()
-  val context = LocalContext.current
-  val lifecycleOwner = LocalLifecycleOwner.current
+    val exoPlayer = playerViewModel.playerState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-  Box(modifier.fillMaxSize()) {
-    DLog.method(ExoPlayerComponent.TAG, "Box()")
-    exoPlayer.value?.let {
-      PlayerScreen(exoPlayer = it, playerActions = playerViewModel::executeAction)
-    }
-  }
-
-  DisposableEffect(lifecycleOwner) {
-    DLog.method(ExoPlayerComponent.TAG, "DisposableEffect()")
-
-    val observer = LifecycleEventObserver { _, event ->
-      when (event) {
-        Lifecycle.Event.ON_PAUSE -> playerViewModel.executeAction(PlayerAction(ActionType.PAUSE))
-        Lifecycle.Event.ON_RESUME -> playerViewModel.executeAction(PlayerAction(ActionType.PLAY))
-        else -> Unit
-      }
+    Box(modifier.fillMaxSize()) {
+        DLog.method(ExoPlayerComponent.TAG, "Box()")
+        exoPlayer.value?.let {
+            PlayerScreen(exoPlayer = it, playerActions = playerViewModel::executeAction)
+        }
     }
 
-    lifecycleOwner.lifecycle.addObserver(observer)
+    DisposableEffect(lifecycleOwner) {
+        DLog.method(ExoPlayerComponent.TAG, "DisposableEffect()")
 
-    onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-  }
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_PAUSE ->
+                    playerViewModel.executeAction(PlayerAction(ActionType.PAUSE))
+                Lifecycle.Event.ON_RESUME ->
+                    playerViewModel.executeAction(PlayerAction(ActionType.PLAY))
+                else -> Unit
+            }
+        }
 
-  LaunchedEffect(Unit) {
-    DLog.method(ExoPlayerComponent.TAG, "LaunchedEffect()")
+        lifecycleOwner.lifecycle.addObserver(observer)
 
-    playerViewModel.createPlayerWithMediaItems(context)
-
-    while (true) {
-      exoPlayer.value?.currentMediaItem?.mediaId?.let {
-        playerViewModel.updateCurrentPosition(
-          it,
-          exoPlayer.value?.currentPosition ?: 0,
-          exoPlayer.value?.duration ?: 0,
-        )
-      }
-      delay(1000)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
-  }
+
+    LaunchedEffect(Unit) {
+        DLog.method(ExoPlayerComponent.TAG, "LaunchedEffect()")
+
+        playerViewModel.createPlayerWithMediaItems(context)
+
+        while (true) {
+            exoPlayer.value?.currentMediaItem?.mediaId?.let {
+                playerViewModel.updateCurrentPosition(
+                    it,
+                    exoPlayer.value?.currentPosition ?: 0,
+                    exoPlayer.value?.duration ?: 0,
+                )
+            }
+            delay(1000)
+        }
+    }
 }
 
 @androidx.media3.common.util.UnstableApi
 @Composable
 fun PlayerScreen(
-  modifier: Modifier = Modifier,
-  exoPlayer: ExoPlayer,
-  playerActions: (PlayerAction) -> Unit,
+    modifier: Modifier = Modifier,
+    exoPlayer: ExoPlayer,
+    playerActions: (PlayerAction) -> Unit,
 ) {
-  DLog.method(ExoPlayerComponent.TAG, "PlayerScreen(): $modifier, $exoPlayer, $playerActions")
+    DLog.method(ExoPlayerComponent.TAG, "PlayerScreen(): $modifier, $exoPlayer, $playerActions")
 
-  Box(modifier = modifier) {
-    PlayerSurface(
-      player = exoPlayer,
-      modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f).align(Alignment.Center),
-    )
-    VideoControls(exoPlayer, playerActions)
-  }
+    Box(modifier = modifier) {
+        PlayerSurface(
+            player = exoPlayer,
+            modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f).align(Alignment.Center),
+        )
+        VideoControls(exoPlayer, playerActions)
+    }
 }
 
 @Composable
 fun VideoControls(player: ExoPlayer, playerActions: (PlayerAction) -> Unit) {
-  DLog.method(ExoPlayerComponent.TAG, "VideoControls(): $player, $playerActions")
+    DLog.method(ExoPlayerComponent.TAG, "VideoControls(): $player, $playerActions")
 
-  var isPlaying by remember { mutableStateOf(player.isPlaying) }
-  var formatedTime by remember { mutableStateOf("") }
-  var isBuffering by remember { mutableStateOf(player.isLoading) }
-  var controlsVisible by remember { mutableStateOf(true) }
-  var position by remember { mutableLongStateOf(0L) }
-  var duration by remember { mutableLongStateOf(0L) }
-  var isSeeking by remember { mutableStateOf(false) }
+    var isPlaying by remember { mutableStateOf(player.isPlaying) }
+    var formatedTime by remember { mutableStateOf("") }
+    var isBuffering by remember { mutableStateOf(player.isLoading) }
+    var controlsVisible by remember { mutableStateOf(true) }
+    var position by remember { mutableLongStateOf(0L) }
+    var duration by remember { mutableLongStateOf(0L) }
+    var isSeeking by remember { mutableStateOf(false) }
 
-  Box(
-    modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.4f)),
-    contentAlignment = Alignment.Center,
-  ) {
-    ShowButtonControllers(
-      isPlaying = isPlaying,
-      isBuffering = isBuffering,
-      playerActions = playerActions,
-      isPlayerPlaying = { player.isPlaying },
-    )
-    TimelineControllers(
-      modifier = Modifier.align(Alignment.BottomStart),
-      duration = duration,
-      playerPosition = position,
-      formatedTime = formatedTime,
-      seeking = { isSeeking = it },
+    Box(
+        modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.4f)),
+        contentAlignment = Alignment.Center,
     ) {
-      playerActions(PlayerAction(ActionType.SEEK, it))
+        ShowButtonControllers(
+            isPlaying = isPlaying,
+            isBuffering = isBuffering,
+            playerActions = playerActions,
+            isPlayerPlaying = { player.isPlaying },
+        )
+        TimelineControllers(
+            modifier = Modifier.align(Alignment.BottomStart),
+            duration = duration,
+            playerPosition = position,
+            formatedTime = formatedTime,
+            seeking = { isSeeking = it },
+        ) {
+            playerActions(PlayerAction(ActionType.SEEK, it))
+        }
     }
-  }
 }
 
 @Composable
 fun ShowButtonControllers(
-  modifier: Modifier = Modifier,
-  isPlaying: Boolean,
-  isBuffering: Boolean,
-  isPlayerPlaying: () -> Boolean,
-  playerActions: (PlayerAction) -> Unit,
+    modifier: Modifier = Modifier,
+    isPlaying: Boolean,
+    isBuffering: Boolean,
+    isPlayerPlaying: () -> Boolean,
+    playerActions: (PlayerAction) -> Unit,
 ) {
-  DLog.method(
-    ExoPlayerComponent.TAG,
-    "ShowButtonControllers(): $modifier, $isPlaying, $isBuffering",
-  )
+    DLog.method(
+        ExoPlayerComponent.TAG,
+        "ShowButtonControllers(): $modifier, $isPlaying, $isBuffering",
+    )
 
-  Row(
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.SpaceEvenly,
-    modifier = modifier.fillMaxWidth(),
-  ) {
-    IconButton(onClick = { playerActions(PlayerAction(ActionType.PREVIOUS)) }) {
-      Icon(
-        Icons.Default.SkipPrevious,
-        "Previous",
-        tint = Color.White,
-        modifier = Modifier.size(48.dp),
-      )
-    }
-
-    IconButton(onClick = { playerActions(PlayerAction(ActionType.REWIND)) }) {
-      Icon(
-        Icons.Default.Replay10,
-        "Rewind 10 seconds",
-        tint = Color.White,
-        modifier = Modifier.size(48.dp),
-      )
-    }
-
-    Row(modifier = Modifier.size(48.dp)) {
-      AnimatedVisibility(visible = isBuffering) { CircularProgressIndicator(Modifier.size(48.dp)) }
-
-      AnimatedVisibility(isBuffering.not()) {
-        IconButton(
-          onClick = {
-            playerActions(
-              PlayerAction(if (isPlayerPlaying()) ActionType.PAUSE else ActionType.PLAY)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        IconButton(onClick = { playerActions(PlayerAction(ActionType.PREVIOUS)) }) {
+            Icon(
+                Icons.Default.SkipPrevious,
+                "Previous",
+                tint = Color.White,
+                modifier = Modifier.size(48.dp),
             )
-          }
-        ) {
-          Icon(
-            if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-            "Play/Pause",
-            tint = Color.White,
-            modifier = Modifier.size(64.dp),
-          )
         }
-      }
-    }
 
-    IconButton(onClick = { playerActions(PlayerAction(ActionType.FORWARD)) }) {
-      Icon(
-        Icons.Default.Forward10,
-        "Forward 10 seconds",
-        tint = Color.White,
-        modifier = Modifier.size(48.dp),
-      )
-    }
+        IconButton(onClick = { playerActions(PlayerAction(ActionType.REWIND)) }) {
+            Icon(
+                Icons.Default.Replay10,
+                "Rewind 10 seconds",
+                tint = Color.White,
+                modifier = Modifier.size(48.dp),
+            )
+        }
 
-    IconButton(onClick = { playerActions(PlayerAction(ActionType.NEXT)) }) {
-      Icon(Icons.Default.SkipNext, "Next", tint = Color.White, modifier = Modifier.size(48.dp))
+        Row(modifier = Modifier.size(48.dp)) {
+            AnimatedVisibility(visible = isBuffering) {
+                CircularProgressIndicator(Modifier.size(48.dp))
+            }
+
+            AnimatedVisibility(isBuffering.not()) {
+                IconButton(
+                    onClick = {
+                        playerActions(
+                            PlayerAction(
+                                if (isPlayerPlaying()) ActionType.PAUSE else ActionType.PLAY
+                            )
+                        )
+                    }
+                ) {
+                    Icon(
+                        if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                        "Play/Pause",
+                        tint = Color.White,
+                        modifier = Modifier.size(64.dp),
+                    )
+                }
+            }
+        }
+
+        IconButton(onClick = { playerActions(PlayerAction(ActionType.FORWARD)) }) {
+            Icon(
+                Icons.Default.Forward10,
+                "Forward 10 seconds",
+                tint = Color.White,
+                modifier = Modifier.size(48.dp),
+            )
+        }
+
+        IconButton(onClick = { playerActions(PlayerAction(ActionType.NEXT)) }) {
+            Icon(
+                Icons.Default.SkipNext,
+                "Next",
+                tint = Color.White,
+                modifier = Modifier.size(48.dp),
+            )
+        }
     }
-  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimelineControllers(
-  modifier: Modifier = Modifier,
-  playerPosition: Long,
-  duration: Long,
-  seeking: (Boolean) -> Unit,
-  formatedTime: String,
-  seekPlayerToPosition: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+    playerPosition: Long,
+    duration: Long,
+    seeking: (Boolean) -> Unit,
+    formatedTime: String,
+    seekPlayerToPosition: (Long) -> Unit,
 ) {
-  DLog.method(ExoPlayerComponent.TAG, "TimelineControllers()")
+    DLog.method(ExoPlayerComponent.TAG, "TimelineControllers()")
 
-  var position by remember { mutableLongStateOf(0L) }
+    var position by remember { mutableLongStateOf(0L) }
 
-  Row(
-    modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
-    verticalAlignment = Alignment.CenterVertically,
-  ) {
-    Slider(
-      value = position.toFloat().coerceAtMost(duration.toFloat()),
-      onValueChange = {
-        seeking(true)
-        position = it.toLong()
-      },
-      onValueChangeFinished = {
-        seekPlayerToPosition(position)
-        seeking(false)
-      },
-      valueRange = 0f..duration.toFloat(),
-      modifier =
-        Modifier.weight(1f) // Takes all the space except what Text needs
-          .padding(end = 8.dp),
-      // small space between slider and text
-      colors = SliderDefaults.colors(thumbColor = Color.Red, activeTrackColor = Color.Red),
-      thumb = { Box(modifier = Modifier.size(12.dp).background(Color.Red, shape = CircleShape)) },
-      track = {
-        val fraction =
-          if (duration == 0L) {
-            0f
-          } else {
-            (position.toFloat().coerceAtMost(duration.toFloat()) / duration).coerceIn(0f, 1f)
-          }
-        Box(
-          modifier =
-            Modifier.fillMaxWidth()
-              .height(3.dp)
-              .background(Color.Gray.copy(alpha = 0.3f), shape = RoundedCornerShape(1.5.dp))
-        ) {
-          Box(
+    Row(
+        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Slider(
+            value = position.toFloat().coerceAtMost(duration.toFloat()),
+            onValueChange = {
+                seeking(true)
+                position = it.toLong()
+            },
+            onValueChangeFinished = {
+                seekPlayerToPosition(position)
+                seeking(false)
+            },
+            valueRange = 0f..duration.toFloat(),
             modifier =
-              Modifier.fillMaxWidth(fraction)
-                .height(3.dp)
-                .background(Color.Red, shape = RoundedCornerShape(1.5.dp))
-          )
+                Modifier.weight(1f) // Takes all the space except what Text needs
+                    .padding(end = 8.dp),
+            // small space between slider and text
+            colors = SliderDefaults.colors(thumbColor = Color.Red, activeTrackColor = Color.Red),
+            thumb = {
+                Box(modifier = Modifier.size(12.dp).background(Color.Red, shape = CircleShape))
+            },
+            track = {
+                val fraction =
+                    if (duration == 0L) {
+                        0f
+                    } else {
+                        (position.toFloat().coerceAtMost(duration.toFloat()) / duration).coerceIn(
+                            0f,
+                            1f,
+                        )
+                    }
+                Box(
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .height(3.dp)
+                            .background(
+                                Color.Gray.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(1.5.dp),
+                            )
+                ) {
+                    Box(
+                        modifier =
+                            Modifier.fillMaxWidth(fraction)
+                                .height(3.dp)
+                                .background(Color.Red, shape = RoundedCornerShape(1.5.dp))
+                    )
+                }
+            },
+        )
+
+        AnimatedVisibility(visible = formatedTime.isNotEmpty()) {
+            Text(text = formatedTime, color = Color.White, fontSize = 15.sp)
         }
-      },
-    )
-
-    AnimatedVisibility(visible = formatedTime.isNotEmpty()) {
-      Text(text = formatedTime, color = Color.White, fontSize = 15.sp)
     }
-  }
 
-  LaunchedEffect(playerPosition) { position = playerPosition }
+    LaunchedEffect(playerPosition) { position = playerPosition }
 }
 
 fun formatTime(milliseconds: Long): String {
-  val totalSeconds = milliseconds / 1000
-  val minutes = totalSeconds / 60
-  val seconds = totalSeconds % 60
-  return String.format("%02d:%02d", minutes, seconds)
+    val totalSeconds = milliseconds / 1000
+    val minutes = totalSeconds / 60
+    val seconds = totalSeconds % 60
+    return String.format("%02d:%02d", minutes, seconds)
 }

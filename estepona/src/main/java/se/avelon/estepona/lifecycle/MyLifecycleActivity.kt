@@ -20,42 +20,42 @@ import android.os.Bundle
 import se.avelon.estepona.logging.DLog
 
 open class MyLifecycleActivity : Activity() {
-  companion object {
-    val TAG = DLog.forTag(MyLifecycleActivity::class.java)
-  }
+    companion object {
+        val TAG = DLog.forTag(MyLifecycleActivity::class.java)
+    }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    DLog.method(TAG, "onCreate(): $savedInstanceState")
-    super.onCreate(savedInstanceState)
-  }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        DLog.method(TAG, "onCreate(): $savedInstanceState")
+        super.onCreate(savedInstanceState)
+    }
 
-  override fun onDestroy() {
-    DLog.method(TAG, "onDestroy()")
-    super.onDestroy()
-  }
+    override fun onDestroy() {
+        DLog.method(TAG, "onDestroy()")
+        super.onDestroy()
+    }
 
-  override fun onStart() {
-    DLog.method(TAG, "onStart()")
-    super.onStart()
-  }
+    override fun onStart() {
+        DLog.method(TAG, "onStart()")
+        super.onStart()
+    }
 
-  override fun onResume() {
-    DLog.method(TAG, "onResume()")
-    super.onResume()
-  }
+    override fun onResume() {
+        DLog.method(TAG, "onResume()")
+        super.onResume()
+    }
 
-  override fun onPause() {
-    DLog.method(TAG, "onPause()")
-    super.onPause()
-  }
+    override fun onPause() {
+        DLog.method(TAG, "onPause()")
+        super.onPause()
+    }
 
-  override fun onStop() {
-    DLog.method(TAG, "onStop()")
-    super.onStop()
-  }
+    override fun onStop() {
+        DLog.method(TAG, "onStop()")
+        super.onStop()
+    }
 
-  override fun onRestart() {
-    DLog.method(TAG, "onRestart()")
-    super.onRestart()
-  }
+    override fun onRestart() {
+        DLog.method(TAG, "onRestart()")
+        super.onRestart()
+    }
 }

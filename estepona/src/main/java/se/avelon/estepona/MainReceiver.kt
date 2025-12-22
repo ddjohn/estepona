@@ -23,18 +23,18 @@ import android.os.UserManager
 import se.avelon.estepona.logging.DLog
 
 class MainReceiver : BroadcastReceiver() {
-  companion object {
-    val TAG = DLog.forTag(MainReceiver::class.java)
-  }
-
-  override fun onReceive(context: Context, intent: Intent) {
-    DLog.method(TAG, "onReceive($intent)")
-
-    val userManager = context.getSystemService(USER_SERVICE) as UserManager
-    if (userManager.isSystemUser) {
-      DLog.info(TAG, "Broadcast for user 0..")
-    } else {
-      DLog.info(TAG, "Broadcast for user 1x..")
+    companion object {
+        val TAG = DLog.forTag(MainReceiver::class.java)
     }
-  }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        DLog.method(TAG, "onReceive($intent)")
+
+        val userManager = context.getSystemService(USER_SERVICE) as UserManager
+        if (userManager.isSystemUser) {
+            DLog.info(TAG, "Broadcast for user 0..")
+        } else {
+            DLog.info(TAG, "Broadcast for user 1x..")
+        }
+    }
 }

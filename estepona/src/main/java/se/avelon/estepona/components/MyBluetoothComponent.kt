@@ -26,36 +26,36 @@ import androidx.compose.ui.platform.LocalContext
 import se.avelon.estepona.logging.DLog
 
 object MyBluetoothComponent {
-  val TAG = DLog.forTag(MyBluetoothComponent::class.java)
+    val TAG = DLog.forTag(MyBluetoothComponent::class.java)
 }
 
 @Composable
 fun MyBlutooth(modifier: Modifier) {
-  DLog.method(MyBluetoothComponent.TAG, "MyBluetooth")
+    DLog.method(MyBluetoothComponent.TAG, "MyBluetooth")
 
-  val context = LocalContext.current
+    val context = LocalContext.current
 
-  val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+    val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
-  if (
-    context.checkSelfPermission("android.permission.BLUETOOTH_CONNECT") !=
-      PackageManager.PERMISSION_GRANTED
-  ) {
-    return
-  }
-
-  if (
-    context.checkSelfPermission("android.permission.LOCAL_MAC_ADDRESS") !=
-      PackageManager.PERMISSION_GRANTED
-  ) {
-    return
-  }
-
-  Column(modifier) {
-    for (device in bluetoothAdapter.bondedDevices) {
-      Button(onClick = {}) { Text("device=${device.name}") }
+    if (
+        context.checkSelfPermission("android.permission.BLUETOOTH_CONNECT") !=
+            PackageManager.PERMISSION_GRANTED
+    ) {
+        return
     }
 
-    Button(onClick = {}) { Text("address=${bluetoothAdapter.address}") }
-  }
+    if (
+        context.checkSelfPermission("android.permission.LOCAL_MAC_ADDRESS") !=
+            PackageManager.PERMISSION_GRANTED
+    ) {
+        return
+    }
+
+    Column(modifier) {
+        for (device in bluetoothAdapter.bondedDevices) {
+            Button(onClick = {}) { Text("device=${device.name}") }
+        }
+
+        Button(onClick = {}) { Text("address=${bluetoothAdapter.address}") }
+    }
 }

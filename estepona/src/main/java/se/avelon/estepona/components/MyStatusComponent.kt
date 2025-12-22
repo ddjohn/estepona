@@ -39,76 +39,76 @@ import se.avelon.estepona.components.MyStatusComponent.TAG
 import se.avelon.estepona.logging.DLog
 
 object MyStatusComponent {
-  val TAG = DLog.forTag(MyStatusComponent::class.java)
+    val TAG = DLog.forTag(MyStatusComponent::class.java)
 }
 
 @Composable
 fun MyStatus(modifier: Modifier) {
-  DLog.method(MyStatusComponent.TAG, "MyStatus()")
+    DLog.method(MyStatusComponent.TAG, "MyStatus()")
 
-  val context = LocalContext.current
+    val context = LocalContext.current
 
-  Column(modifier.drawBehind { drawRect(Color.Gray) }) {
-    var myEnvironment by remember { mutableStateOf(false) }
-    var myBuild by remember { mutableStateOf(false) }
+    Column(modifier.drawBehind { drawRect(Color.Gray) }) {
+        var myEnvironment by remember { mutableStateOf(false) }
+        var myBuild by remember { mutableStateOf(false) }
 
-    Row {
-      Button(onClick = { myEnvironment = !myEnvironment }, content = { Text("ENVIRONMENT") })
-      Button(onClick = { myBuild = !myBuild }, content = { Text("BUILD") })
+        Row {
+            Button(onClick = { myEnvironment = !myEnvironment }, content = { Text("ENVIRONMENT") })
+            Button(onClick = { myBuild = !myBuild }, content = { Text("BUILD") })
+        }
+        AnimatedVisibility(
+            visible = myEnvironment,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically(),
+        ) {
+            val environments =
+                arrayOf(
+                    Environment.getExternalStorageState(),
+                    Environment.DIRECTORY_DOCUMENTS,
+                    Environment.getRootDirectory(),
+                    Environment.getDownloadCacheDirectory(),
+                    Environment.getDataDirectory(),
+                )
+
+            Column {
+                Text("getExternalStorageDirectory=${Environment.getExternalStorageDirectory()}")
+                Text("getDownloadCacheDirectory=${Environment.getDownloadCacheDirectory()}")
+                Text("getStorageDirectory=${Environment.getStorageDirectory()}")
+                Text("getRootDirectory=${Environment.getRootDirectory()}")
+                Text("getDataDirectory=${Environment.getDataDirectory()}")
+                Text("getDownloadCacheDirectory=${Environment.getDownloadCacheDirectory()}")
+                Text("getExternalStorageState=${Environment.getExternalStorageState()}")
+                Text("DIRECTORY_DOCUMENTS=${Environment.DIRECTORY_DOCUMENTS}")
+                Text("DIRECTORY_DCIM=${Environment.DIRECTORY_DCIM}")
+                Text("MEDIA_SHARED=${Environment.MEDIA_SHARED}")
+                Text("MEDIA_MOUNTED=${Environment.MEDIA_MOUNTED}")
+            }
+        }
+
+        AnimatedVisibility(
+            visible = myBuild,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically(),
+        ) {
+            Column {
+                Text("MANUFACTURER=${Build.MANUFACTURER}")
+                Text("DEVICE=${Build.DEVICE}")
+                Text("MODEL=${Build.MODEL}")
+                Text("BOARD=${Build.BOARD}")
+                Text("BOOTLOADER=${Build.BOOTLOADER}")
+                Text("BRAND=${Build.BRAND}")
+                Text("DISPLAY=${Build.DISPLAY}")
+                Text("FINGERPRINT=${Build.FINGERPRINT}")
+                Text("HARDWARE=${Build.HARDWARE}")
+                Text("HOST=${Build.HOST}")
+                Text("ID=${Build.ID}")
+                Text("PRODUCT=${Build.PRODUCT}")
+                Text("TAGS=${Build.TAGS}")
+                Text("TYPE=${Build.TYPE}")
+                Text("USER=${Build.USER}")
+                Text("TYPE=${Build.TYPE}")
+                Text("RELEASE=${Build.VERSION.RELEASE}")
+            }
+        }
     }
-    AnimatedVisibility(
-      visible = myEnvironment,
-      enter = fadeIn() + slideInVertically(),
-      exit = fadeOut() + slideOutVertically(),
-    ) {
-      val environments =
-        arrayOf(
-          Environment.getExternalStorageState(),
-          Environment.DIRECTORY_DOCUMENTS,
-          Environment.getRootDirectory(),
-          Environment.getDownloadCacheDirectory(),
-          Environment.getDataDirectory(),
-        )
-
-      Column {
-        Text("getExternalStorageDirectory=${Environment.getExternalStorageDirectory()}")
-        Text("getDownloadCacheDirectory=${Environment.getDownloadCacheDirectory()}")
-        Text("getStorageDirectory=${Environment.getStorageDirectory()}")
-        Text("getRootDirectory=${Environment.getRootDirectory()}")
-        Text("getDataDirectory=${Environment.getDataDirectory()}")
-        Text("getDownloadCacheDirectory=${Environment.getDownloadCacheDirectory()}")
-        Text("getExternalStorageState=${Environment.getExternalStorageState()}")
-        Text("DIRECTORY_DOCUMENTS=${Environment.DIRECTORY_DOCUMENTS}")
-        Text("DIRECTORY_DCIM=${Environment.DIRECTORY_DCIM}")
-        Text("MEDIA_SHARED=${Environment.MEDIA_SHARED}")
-        Text("MEDIA_MOUNTED=${Environment.MEDIA_MOUNTED}")
-      }
-    }
-
-    AnimatedVisibility(
-      visible = myBuild,
-      enter = fadeIn() + slideInVertically(),
-      exit = fadeOut() + slideOutVertically(),
-    ) {
-      Column {
-        Text("MANUFACTURER=${Build.MANUFACTURER}")
-        Text("DEVICE=${Build.DEVICE}")
-        Text("MODEL=${Build.MODEL}")
-        Text("BOARD=${Build.BOARD}")
-        Text("BOOTLOADER=${Build.BOOTLOADER}")
-        Text("BRAND=${Build.BRAND}")
-        Text("DISPLAY=${Build.DISPLAY}")
-        Text("FINGERPRINT=${Build.FINGERPRINT}")
-        Text("HARDWARE=${Build.HARDWARE}")
-        Text("HOST=${Build.HOST}")
-        Text("ID=${Build.ID}")
-        Text("PRODUCT=${Build.PRODUCT}")
-        Text("TAGS=${Build.TAGS}")
-        Text("TYPE=${Build.TYPE}")
-        Text("USER=${Build.USER}")
-        Text("TYPE=${Build.TYPE}")
-        Text("RELEASE=${Build.VERSION.RELEASE}")
-      }
-    }
-  }
 }

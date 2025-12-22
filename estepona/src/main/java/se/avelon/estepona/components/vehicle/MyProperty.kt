@@ -19,26 +19,26 @@ import android.car.VehiclePropertyIds
 import android.car.hardware.CarPropertyValue
 
 class MyProperty<T>(val value: CarPropertyValue<T>) {
-  fun getPropertyId(): Int = value.propertyId
+    fun getPropertyId(): Int = value.propertyId
 
-  override fun toString(): String {
-    val v =
-      when (value.value) {
-        is Boolean -> "${value.value} (bool)"
-        is Int -> "${value.value} (int)"
-        is Float -> "${value.value} (float)"
-        else -> "${value.value} (some kind of array)"
-      }
+    override fun toString(): String {
+        val v =
+            when (value.value) {
+                is Boolean -> "${value.value} (bool)"
+                is Int -> "${value.value} (int)"
+                is Float -> "${value.value} (float)"
+                else -> "${value.value} (some kind of array)"
+            }
 
-    val area =
-      when (value.areaId) {
-        0 -> {
-          "global"
-        }
-        else -> {
-          "unknown"
-        }
-      }
-    return "${value.propertyId} [area=${value.areaId}] ${VehiclePropertyIds.toString(value.propertyId)} = $v"
-  }
+        val area =
+            when (value.areaId) {
+                0 -> {
+                    "global"
+                }
+                else -> {
+                    "unknown"
+                }
+            }
+        return "${value.propertyId} [area=${value.areaId}] ${VehiclePropertyIds.toString(value.propertyId)} = $v"
+    }
 }

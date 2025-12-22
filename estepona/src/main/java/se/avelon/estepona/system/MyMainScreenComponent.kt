@@ -44,47 +44,47 @@ import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
 object MyScreenComponent {
-  val TAG = DLog.forTag(MyScreenComponent::class.java)
+    val TAG = DLog.forTag(MyScreenComponent::class.java)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyMainScreen() {
-  val navController = rememberNavController()
+    val navController = rememberNavController()
 
-  EsteponaTheme {
-    Scaffold(
-      modifier = Modifier.fillMaxSize(),
-      floatingActionButton = { MyFloatingButton() },
-      topBar = { MyTopBar() },
-      bottomBar = { MyBottomBar(navController) },
-    ) { innerPadding ->
-      DLog.method(TAG, "Scaffold(): $innerPadding")
+    EsteponaTheme {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            floatingActionButton = { MyFloatingButton() },
+            topBar = { MyTopBar() },
+            bottomBar = { MyBottomBar(navController) },
+        ) { innerPadding ->
+            DLog.method(TAG, "Scaffold(): $innerPadding")
 
-      val context = LocalContext.current
+            val context = LocalContext.current
 
-      Row {
-        DLog.method(TAG, "Row()")
+            Row {
+                DLog.method(TAG, "Row()")
 
-        MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f))
-        NavHost(
-          navController = navController,
-          startDestination = "Status",
-          modifier = Modifier.padding(innerPadding),
-        ) {
-          composable("Status") { MyStatus(modifier = Modifier.fillMaxSize()) }
-          composable("Audio") { MyAudio(modifier = Modifier.fillMaxSize()) }
-          composable("Bluetooth") { MyBlutooth(modifier = Modifier.fillMaxSize()) }
-          composable("Camera") { MyCamera(modifier = Modifier.fillMaxSize()) }
-          composable("Display") { MyDisplays(modifier = Modifier.fillMaxSize()) }
-          composable("Media") { MyMedia(modifier = Modifier.fillMaxSize()) }
-          composable("Navigation") { MyNavigation(modifier = Modifier.fillMaxSize()) }
-          composable("Package") { PackageGrid(modifier = Modifier.fillMaxSize()) }
-          composable("Sensor") { MySensor(modifier = Modifier.fillMaxSize()) }
-          composable("Speech") { MySpeech(modifier = Modifier.fillMaxSize()) }
-          composable("Vehicle") { MyVehicle(modifier = Modifier.fillMaxSize()) }
+                MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f))
+                NavHost(
+                    navController = navController,
+                    startDestination = "Status",
+                    modifier = Modifier.padding(innerPadding),
+                ) {
+                    composable("Status") { MyStatus(modifier = Modifier.fillMaxSize()) }
+                    composable("Audio") { MyAudio(modifier = Modifier.fillMaxSize()) }
+                    composable("Bluetooth") { MyBlutooth(modifier = Modifier.fillMaxSize()) }
+                    composable("Camera") { MyCamera(modifier = Modifier.fillMaxSize()) }
+                    composable("Display") { MyDisplays(modifier = Modifier.fillMaxSize()) }
+                    composable("Media") { MyMedia(modifier = Modifier.fillMaxSize()) }
+                    composable("Navigation") { MyNavigation(modifier = Modifier.fillMaxSize()) }
+                    composable("Package") { PackageGrid(modifier = Modifier.fillMaxSize()) }
+                    composable("Sensor") { MySensor(modifier = Modifier.fillMaxSize()) }
+                    composable("Speech") { MySpeech(modifier = Modifier.fillMaxSize()) }
+                    composable("Vehicle") { MyVehicle(modifier = Modifier.fillMaxSize()) }
+                }
+            }
         }
-      }
     }
-  }
 }

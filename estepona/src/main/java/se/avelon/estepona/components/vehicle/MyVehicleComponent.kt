@@ -33,88 +33,88 @@ import java.util.Calendar
 import se.avelon.estepona.logging.DLog
 
 class MyVehicleComponent(context: Context) : CarPropertyManager.CarPropertyEventCallback {
-  companion object {
-    val TAG = DLog.forTag(MyVehicleComponent::class.java)
-  }
+    companion object {
+        val TAG = DLog.forTag(MyVehicleComponent::class.java)
+    }
 
-  val printWriter: PrintWriter
-  private val listItems = arrayListOf<MyProperty<*>>()
-  private lateinit var arrayAdapter: ArrayAdapter<MyProperty<*>>
+    val printWriter: PrintWriter
+    private val listItems = arrayListOf<MyProperty<*>>()
+    private lateinit var arrayAdapter: ArrayAdapter<MyProperty<*>>
 
-  init {
-    DLog.method(TAG, "init()")
+    init {
+        DLog.method(TAG, "init()")
 
-    val file = File("${context.dataDir}/vehicle_${Calendar.getInstance().timeInMillis}.log")
-    DLog.info(TAG, "Logging to $file")
+        val file = File("${context.dataDir}/vehicle_${Calendar.getInstance().timeInMillis}.log")
+        DLog.info(TAG, "Logging to $file")
 
-    file.parentFile?.mkdirs()
-    printWriter = PrintWriter(file)
+        file.parentFile?.mkdirs()
+        printWriter = PrintWriter(file)
 
-    val car = Car.createCar(context)
-    val mgr = car.getCarManager(Car.PROPERTY_SERVICE) as CarPropertyManager
-    for (prop in mgr.propertyList) {
-      DLog.info(TAG, "prop=$prop")
+        val car = Car.createCar(context)
+        val mgr = car.getCarManager(Car.PROPERTY_SERVICE) as CarPropertyManager
+        for (prop in mgr.propertyList) {
+            DLog.info(TAG, "prop=$prop")
 
-      if (VehiclePropertyIds.PARKING_BRAKE_ON == prop.propertyId) {
-        try {
-          val obj = mgr.getProperty<Object>(prop.propertyId, 0)
-          DLog.error(TAG, "obj=$obj")
-        } catch (e: CarInternalErrorException) {
-          DLog.exception(TAG, "exception", e)
-        }
-      }
-
-      try {
-        mgr.registerSupportedValuesChangeCallback(
-          prop.propertyId,
-          object : CarPropertyManager.SupportedValuesChangeCallback {
-            override fun onSupportedValuesChange(p0: Int, p1: Int) {
-              DLog.method(TAG, "onSupportedValuesChange(): $p0, $p1")
+            if (VehiclePropertyIds.PARKING_BRAKE_ON == prop.propertyId) {
+                try {
+                    val obj = mgr.getProperty<Object>(prop.propertyId, 0)
+                    DLog.error(TAG, "obj=$obj")
+                } catch (e: CarInternalErrorException) {
+                    DLog.exception(TAG, "exception", e)
+                }
             }
-          },
-        )
 
-        mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_UI)
-        mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_ONCHANGE)
-      } catch (e: SecurityException) {
-        DLog.exception(TAG, "exception", e)
-      }
-    }
-  }
+            try {
+                mgr.registerSupportedValuesChangeCallback(
+                    prop.propertyId,
+                    object : CarPropertyManager.SupportedValuesChangeCallback {
+                        override fun onSupportedValuesChange(p0: Int, p1: Int) {
+                            DLog.method(TAG, "onSupportedValuesChange(): $p0, $p1")
+                        }
+                    },
+                )
 
-  override fun onChangeEvent(propertyValue: CarPropertyValue<*>?) {
-    DLog.method(TAG, "onChangeEvent(): $propertyValue")
-    printWriter.println("onChangeEvent(): $propertyValue")
-
-    if (propertyValue?.propertyId == null) {
-      return
-    }
-
-    for (prop in listItems) {
-      if (prop.getPropertyId() == propertyValue.propertyId) {
-        listItems.remove(prop)
-        break
-      }
+                mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_UI)
+                mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_ONCHANGE)
+            } catch (e: SecurityException) {
+                DLog.exception(TAG, "exception", e)
+            }
+        }
     }
 
-    listItems.addFirst(MyProperty(propertyValue))
-    arrayAdapter.notifyDataSetChanged()
-  }
+    override fun onChangeEvent(propertyValue: CarPropertyValue<*>?) {
+        DLog.method(TAG, "onChangeEvent(): $propertyValue")
+        printWriter.println("onChangeEvent(): $propertyValue")
 
-  override fun onErrorEvent(propertyValue: Int, p1: Int) {
-    DLog.error(TAG, "onErrorEvent:$propertyValue")
-  }
+        if (propertyValue?.propertyId == null) {
+            return
+        }
+
+        for (prop in listItems) {
+            if (prop.getPropertyId() == propertyValue.propertyId) {
+                listItems.remove(prop)
+                break
+            }
+        }
+
+        listItems.addFirst(MyProperty(propertyValue))
+        arrayAdapter.notifyDataSetChanged()
+    }
+
+    override fun onErrorEvent(propertyValue: Int, p1: Int) {
+        DLog.error(TAG, "onErrorEvent:$propertyValue")
+    }
 }
 
 @Composable
 fun MyVehicle(modifier: Modifier) {
-  DLog.method(MyVehicleComponent.TAG, "MyVehicle(): $modifier")
+    DLog.method(MyVehicleComponent.TAG, "MyVehicle(): $modifier")
 
-  val context = LocalContext.current
+    val context = LocalContext.current
 
-  if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
-    val vehicle = MyVehicleComponent(LocalContext.current)
-  } else {
-    Toast.makeText(context, "No auto feature", Toast.LENGTH_SHORT).show()
-  }
+    if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
+        val vehicle = MyVehicleComponent(LocalContext.current)
+    } else {
+        Toast.makeText(context, "No auto feature", Toast.LENGTH_SHORT).show()
+    }
 }

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 David Johansson
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package se.avelon.estepona.services
 
 import android.media.browse.MediaBrowser
@@ -5,7 +20,7 @@ import android.os.Bundle
 import android.service.media.MediaBrowserService
 import se.avelon.estepona.logging.DLog
 
-class MyMediaBrowserService: MediaBrowserService() {
+class MyMediaBrowserService : MediaBrowserService() {
     companion object {
         val TAG = DLog.forTag(MyMediaBrowserService::class.java)
     }
@@ -13,18 +28,14 @@ class MyMediaBrowserService: MediaBrowserService() {
     override fun onGetRoot(
         clientPackageName: String,
         clientUid: Int,
-        rootHints: Bundle?
+        rootHints: Bundle?,
     ): BrowserRoot? {
         DLog.method(TAG, "onGetRoot(): $clientPackageName, $clientUid, $rootHints")
-        TODO("Not yet implemented")
+        return BrowserRoot("root", null)
     }
 
-    override fun onLoadChildren(
-        parentId: String,
-        result: Result<List<MediaBrowser.MediaItem?>?>
-    ) {
+    override fun onLoadChildren(parentId: String, result: Result<List<MediaBrowser.MediaItem?>?>) {
         DLog.method(TAG, "onLoadChildren(): $parentId, $result")
-        TODO("Not yet implemented")
+        result.sendResult(null)
     }
-
 }

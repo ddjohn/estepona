@@ -15,10 +15,16 @@
  */
 package se.avelon.estepona.components
 
+import android.content.ComponentName
+import android.content.Intent
+import android.content.pm.PackageManager.GET_RESOLVED_FILTER
+import android.media.browse.MediaBrowser
+import android.service.media.MediaBrowserService
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -65,9 +71,11 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.compose.PlayerSurface
 import kotlinx.coroutines.delay
+import se.avelon.estepona.MainActivity.Companion.TAG
 import se.avelon.estepona.components.exoplayer.ActionType
 import se.avelon.estepona.components.exoplayer.PlayerAction
 import se.avelon.estepona.components.exoplayer.PlayerViewModel
+import se.avelon.estepona.compose.MyButton
 import se.avelon.estepona.logging.DLog
 
 class ExoPlayerComponent {
@@ -137,12 +145,15 @@ fun PlayerScreen(
 ) {
     DLog.method(ExoPlayerComponent.TAG, "PlayerScreen(): $modifier, $exoPlayer, $playerActions")
 
-    Box(modifier = modifier) {
-        PlayerSurface(
-            player = exoPlayer,
-            modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f).align(Alignment.Center),
-        )
-        VideoControls(exoPlayer, playerActions)
+    Row {
+        MediaSourceComponent()
+        Box(modifier = modifier) {
+            PlayerSurface(
+                player = exoPlayer,
+                modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f).align(Alignment.Center),
+            )
+            VideoControls(exoPlayer, playerActions)
+        }
     }
 }
 
@@ -176,6 +187,47 @@ fun VideoControls(player: ExoPlayer, playerActions: (PlayerAction) -> Unit) {
             seeking = { isSeeking = it },
         ) {
             playerActions(PlayerAction(ActionType.SEEK, it))
+        }
+    }
+}
+
+@Composable
+fun MediaSourceComponent() {
+    val context = LocalContext.current
+
+    Column {
+        val intent = Intent(MediaBrowserService.SERVICE_INTERFACE)
+        context.packageManager.queryIntentServices(intent, GET_RESOLVED_FILTER).forEach {
+            DLog.info(TAG, "Service: ${it.serviceInfo.name}")
+
+            MyButton(
+                text = it.serviceInfo.name,
+                onClick = {
+                    DLog.info(TAG, "onClick()")
+
+                    val mediaBrowser =
+                        MediaBrowser(
+                            context,
+                            ComponentName(context, it.serviceInfo.name),
+                            object : MediaBrowser.ConnectionCallback() {
+                                override fun onConnected() {
+                                    DLog.error(TAG, "onConnected()")
+                                }
+
+                                override fun onConnectionFailed() {
+                                    DLog.error(TAG, "onConnectionFailed()")
+                                }
+
+                                override fun onConnectionSuspended() {
+                                    DLog.error(TAG, "onConnectionSuspended()")
+                                    super.onConnectionSuspended()
+                                }
+                            },
+                            null,
+                        )
+                    mediaBrowser.connect()
+                },
+            )
         }
     }
 }

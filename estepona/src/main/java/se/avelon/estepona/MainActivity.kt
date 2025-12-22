@@ -17,9 +17,7 @@ package se.avelon.estepona
 
 import android.app.UiModeManager
 import android.content.Intent
-import android.content.pm.PackageManager.GET_RESOLVED_FILTER
 import android.os.Bundle
-import android.service.media.MediaBrowserService
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -42,14 +40,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         DLog.method(TAG, "onCreate(): $savedInstanceState")
         super.onCreate(savedInstanceState)
-
-        /* Medua sources */
-        val intent = Intent(MediaBrowserService.SERVICE_INTERFACE)
-        packageManager.queryIntentServices(intent, GET_RESOLVED_FILTER).forEach {
-            DLog.info(TAG, "Service: ${it.serviceInfo.name}")
-
-
-        }
 
         DLog.test()
         val notif = Notif(this)

@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona
+package se.avelon.estepona.compose
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import se.avelon.estepona.logging.DLog
 
 object MyComponents {
@@ -26,6 +32,18 @@ object MyComponents {
 }
 
 @Composable
-fun MyButton(modifier: Modifier, text: String, onClick: Unit) {
-    Button(onClick = { onClick }, content = { Text(text) })
+fun MyButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
+    Button(
+        modifier = modifier,
+        onClick = onClick,
+        content = { MyText(text = text) },
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(2.dp, Color.DarkGray),
+        colors = ButtonDefaults.outlinedButtonColors(),
+    )
+}
+
+@Composable
+fun MyText(modifier: Modifier = Modifier, text: String) {
+    Text(text, style = MaterialTheme.typography.titleMedium)
 }

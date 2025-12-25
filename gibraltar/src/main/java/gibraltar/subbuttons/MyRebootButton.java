@@ -10,7 +10,7 @@ import com.android.ddmlib.NullOutputReceiver;
 import com.android.ddmlib.ShellCommandUnresponsiveException;
 import com.android.ddmlib.TimeoutException;
 
-import gibraltar.DLog;
+import gibraltar.logs.DLog;
 
 public class MyRebootButton extends MyButton {
 	private static final long serialVersionUID = 1L;

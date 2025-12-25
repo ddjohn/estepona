@@ -9,7 +9,7 @@ import javax.swing.UIManager;
 
 import com.android.ddmlib.IShellOutputReceiver;
 
-import gibraltar.DLog;
+import gibraltar.logs.DLog;
 
 public abstract class MyButton extends JButton implements ActionListener, IShellOutputReceiver  {
 	private static final long serialVersionUID = 1L;

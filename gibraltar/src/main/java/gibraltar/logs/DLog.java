@@ -1,4 +1,4 @@
-package gibraltar;
+package gibraltar.logs;
 
 public class DLog {
 	public static String forTag(Class<?> clazz) {

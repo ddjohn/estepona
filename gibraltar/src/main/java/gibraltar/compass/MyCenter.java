@@ -1,22 +1,33 @@
-package gibraltar;
+package gibraltar.compass;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
 import com.android.ddmlib.AdbCommandRejectedException;
 import com.android.ddmlib.IDevice;
-import com.android.ddmlib.NullOutputReceiver;
 import com.android.ddmlib.RawImage;
-import com.android.ddmlib.ShellCommandUnresponsiveException;
 import com.android.ddmlib.TimeoutException;
-import gibraltar.Main.IMain;
+
+import gibraltar.Main;
+import gibraltar.helpers.MyAdbHelper;
+import gibraltar.iface.IMyMainListener;
 import gibraltar.logs.DLog;
 
-public class MyCenter extends JPanel implements MouseListener, Runnable, IMain {
+public class MyCenter extends JPanel implements MouseListener, KeyListener, Runnable, IMyMainListener {
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = DLog.forTag(MyCenter.class);
 
@@ -27,8 +38,45 @@ public class MyCenter extends JPanel implements MouseListener, Runnable, IMain {
 		DLog.method(TAG, "MyCenter()");
 		
 		main.register(this);
+	
+		try {
+			DLog.info(TAG, "=> " + getClass().getClassLoader().getResourceAsStream("adb.png"));
+			DLog.info(TAG, "=> " + getClass().getResourceAsStream("/resources/adb.png"));
+			DLog.info(TAG, "=> " + getClass().getClassLoader().getResource("adb.png"));
+			DLog.info(TAG, "=> " + getClass().getResource("/resources/adb.png"));
+
+			image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("adb.png"));
+			if(image == null) {
+				//ImageIcon imageIcon = new ImageIcon(getClass().getResourceAsStream("/resources/adb.png"));
+				//ImageIcon imageIcon = new ImageIcon(getClass().getResource("/resources/adb.png"));
+				//image = (BufferedImage)imageIcon.getImage();
+			}
+			
+			setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+			setSize(new Dimension(image.getWidth(), image.getHeight()));
+		} catch (IOException e) {
+			DLog.error(TAG, "adb.png", e);
+		}
 		
+		setFocusable(true);
 		addMouseListener(this);
+		addKeyListener(this);
+		
+		setFocusable(true);
+        getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("A"), "action");
+		setFocusable(true);
+
+		getActionMap().put("action",new AbstractAction() {
+            private static final long serialVersionUID = 1L;
+
+			@Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("A is pressed");
+                //now it works
+            }
+        });
+		setFocusable(true);
+		
 		new Thread(this).start();
 	}
 
@@ -64,19 +112,9 @@ public class MyCenter extends JPanel implements MouseListener, Runnable, IMain {
 		
 		int x = me.getX();
 	    int y = me.getY();
-
 	    
-	    tap(x, y);
+	    MyAdbHelper.tap(device, x, y);
 	}
-
-    public void tap(int x, int y) {
-        String cmd = String.format("input tap %d %d", x, y);
-        try {
-			device.executeShellCommand(cmd, new NullOutputReceiver());
-		} catch (TimeoutException | AdbCommandRejectedException | ShellCommandUnresponsiveException | IOException e) {
-			DLog.error(TAG,  "tap", e);
-		}
-    }
     
 	@Override
 	public void mousePressed(MouseEvent me) {}
@@ -104,5 +142,20 @@ public class MyCenter extends JPanel implements MouseListener, Runnable, IMain {
 			DLog.error(TAG, "screenshot", e);
 			this.setPreferredSize(new Dimension(800, 600));
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent ke) {
+		DLog.method(TAG, "keyPressed(): " + ke);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent ke) {
+		DLog.method(TAG, "keyReleased(): " + ke);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent ke) {
+		DLog.method(TAG, "keyTyped(): " + ke);
 	}
 }

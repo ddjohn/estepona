@@ -1,4 +1,4 @@
-package gibraltar;
+package gibraltar.components;
 
 import java.awt.Font;
 import javax.swing.JButton;

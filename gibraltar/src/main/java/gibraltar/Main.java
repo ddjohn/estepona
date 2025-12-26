@@ -2,20 +2,28 @@ package gibraltar;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.IDevice;
 
+import gibraltar.compass.MyCenter;
+import gibraltar.compass.MyNorth;
+import gibraltar.compass.MySouth;
+import gibraltar.compass.MyWest;
+import gibraltar.components.MyFontButton;
+import gibraltar.iface.IMyMainListener;
 import gibraltar.logs.DLog;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = DLog.forTag(Main.class);
 	
-	private List<IMain> listeners = new ArrayList<IMain>();
+	private List<IMyMainListener> listeners = new ArrayList<IMyMainListener>();
 
 	public Main() {
 		DLog.method(TAG, "Main()");
@@ -26,19 +34,20 @@ public class Main extends JFrame {
 		add(new MySouth(this), BorderLayout.SOUTH);
 		add(new MyWest(this), BorderLayout.WEST);
 		add(new MyFontButton("EAST"), BorderLayout.EAST);
-		add(new MyFontButton("NORTH"), BorderLayout.NORTH);
+		add(new MyNorth(this), BorderLayout.NORTH);
 		
 		setTitle("ADB screencopy");
+		setIconImage(Toolkit.getDefaultToolkit().createImage(getClass().getClassLoader().getResource("adb.png")));
 		setLocationRelativeTo(null);
 		setMinimumSize(new Dimension(800, 600));
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);	
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
 		DLog.method(TAG, "main()");
 
-		DLog.init(false);
+		//DLog.init(false);
 		
 		AndroidDebugBridge.init(false);
 		
@@ -46,20 +55,16 @@ public class Main extends JFrame {
 		AndroidDebugBridge adb = AndroidDebugBridge.createBridge();
 	
 		while(!adb.hasInitialDeviceList()) {
-			System.err.println("Retry...");
+			DLog.debug(TAG, "Retry...");
 			Thread.sleep(1000);
 		}
 
-		System.out.println("connected=" + adb.isConnected());
+		DLog.info(TAG, "connected=" + adb.isConnected());
 		
 		new Main();
 	}
 
-	public interface IMain {
-		void deviceChange(IDevice device);
-	}
-	
-	public void register(IMain main) {
+	public void register(IMyMainListener main) {
 		DLog.method(TAG, "register(): " + main);
 
 		listeners.add(main);
@@ -69,7 +74,7 @@ public class Main extends JFrame {
 		DLog.method(TAG, "setDevice(): " + device);
 
 		DLog.debug(TAG, "Updating " + listeners.size() + " subscribers...");
-		for(IMain listener : listeners) {
+		for(IMyMainListener listener : listeners) {
 			listener.deviceChange(device);
 		}
 		

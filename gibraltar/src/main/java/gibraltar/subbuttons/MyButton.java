@@ -2,14 +2,10 @@ package gibraltar.subbuttons;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-
-import javax.swing.JButton;
 import javax.swing.UIManager;
-
 import com.android.ddmlib.IShellOutputReceiver;
 
-import gibraltar.MyFontButton;
+import gibraltar.components.MyFontButton;
 import gibraltar.logs.DLog;
 
 public abstract class MyButton extends MyFontButton implements ActionListener, IShellOutputReceiver  {

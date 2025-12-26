@@ -1,4 +1,4 @@
-package gibraltar;
+package gibraltar.compass;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,10 +16,11 @@ import com.android.ddmlib.IDevice;
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.AndroidDebugBridge.IDeviceChangeListener;
 
-import gibraltar.Main.IMain;
+import gibraltar.Main;
+import gibraltar.iface.IMyMainListener;
 import gibraltar.logs.DLog;
 
-public class MyWest extends JPanel implements IDeviceChangeListener, ListSelectionListener, ListDataListener, IMain {
+public class MyWest extends JPanel implements IDeviceChangeListener, ListSelectionListener, ListDataListener, IMyMainListener {
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = DLog.forTag(MyWest.class);
 	

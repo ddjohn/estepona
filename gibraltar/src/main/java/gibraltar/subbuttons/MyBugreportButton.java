@@ -1,14 +1,10 @@
 package gibraltar.subbuttons;
 
-
 import java.io.IOException;
-
 import com.android.ddmlib.AdbCommandRejectedException;
 import com.android.ddmlib.IDevice;
-import com.android.ddmlib.NullOutputReceiver;
 import com.android.ddmlib.ShellCommandUnresponsiveException;
 import com.android.ddmlib.TimeoutException;
-
 import gibraltar.logs.DLog;
 
 public class MyBugreportButton extends MyButton {

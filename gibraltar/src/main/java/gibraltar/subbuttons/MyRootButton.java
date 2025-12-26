@@ -1,7 +1,6 @@
 package gibraltar.subbuttons;
 
 import java.io.IOException;
-
 import com.android.ddmlib.AdbCommandRejectedException;
 import com.android.ddmlib.IDevice;
 import com.android.ddmlib.NullOutputReceiver;

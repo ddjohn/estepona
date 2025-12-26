@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import com.android.ddmlib.AdbCommandRejectedException;
 import com.android.ddmlib.IDevice;
@@ -14,20 +13,20 @@ import com.android.ddmlib.NullOutputReceiver;
 import com.android.ddmlib.RawImage;
 import com.android.ddmlib.ShellCommandUnresponsiveException;
 import com.android.ddmlib.TimeoutException;
+import gibraltar.Main.IMain;
 import gibraltar.logs.DLog;
 
-public class MyCenter extends JPanel implements MouseListener, Runnable {
+public class MyCenter extends JPanel implements MouseListener, Runnable, IMain {
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = DLog.forTag(MyCenter.class);
 
 	private IDevice device = null;
 	private BufferedImage image;
-	private JFrame jFrame;
 
-	public MyCenter(JFrame jFrame) {
+	public MyCenter(Main main) {
 		DLog.method(TAG, "MyCenter()");
 		
-		this.jFrame = jFrame;
+		main.register(this);
 		
 		addMouseListener(this);
 		new Thread(this).start();
@@ -45,7 +44,7 @@ public class MyCenter extends JPanel implements MouseListener, Runnable {
 					screenshot = device.getScreenshot();
 					image = screenshot.asBufferedImage();
 					repaint();
-					DLog.info(TAG, "Redraw...");
+					DLog.debug(TAG, "Redraw...");
 				}
 			} catch (TimeoutException | AdbCommandRejectedException | IOException | InterruptedException e) {
 				DLog.error(TAG,  "run", e);
@@ -91,7 +90,10 @@ public class MyCenter extends JPanel implements MouseListener, Runnable {
 	@Override
 	public void mouseExited(MouseEvent me) {}
 
-	public void setDevice(IDevice device) {
+	@Override
+	public void deviceChange(IDevice device) {
+		DLog.method(TAG, "deviceChange(): " + device);
+		
 		this.device = device;
 		
 		try {
@@ -102,7 +104,5 @@ public class MyCenter extends JPanel implements MouseListener, Runnable {
 			DLog.error(TAG, "screenshot", e);
 			this.setPreferredSize(new Dimension(800, 600));
 		}
-		jFrame.setLocationRelativeTo(null);
-		jFrame.pack();
 	}
 }

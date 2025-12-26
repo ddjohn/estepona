@@ -15,22 +15,24 @@ import javax.swing.event.ListSelectionListener;
 import com.android.ddmlib.IDevice;
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.AndroidDebugBridge.IDeviceChangeListener;
+
+import gibraltar.Main.IMain;
 import gibraltar.logs.DLog;
 
-public class MyWest extends JPanel implements IDeviceChangeListener, ListSelectionListener, ListDataListener {
+public class MyWest extends JPanel implements IDeviceChangeListener, ListSelectionListener, ListDataListener, IMain {
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = DLog.forTag(MyWest.class);
 	
 	private DefaultListModel<IDevice> model;
-	private MyCenter center;
-	private MySouth south;
+	private Main main;
 
-	public MyWest(MyCenter center, MySouth south) {
+	public MyWest(Main main) {
 		DLog.method(TAG, "MyWest()");
 
-		this.center = center;
-		this.south = south;
+		this.main = main;
+		main.register(this);
 		
+		@SuppressWarnings("deprecation")
 		AndroidDebugBridge adb = AndroidDebugBridge.createBridge();
 
 		adb.addDeviceChangeListener(this);
@@ -94,8 +96,7 @@ public class MyWest extends JPanel implements IDeviceChangeListener, ListSelecti
 		IDevice device =  model.get(lsm.getSelectedIndices()[0]);
 		
 		DLog.info(TAG, "Device selected: " + device);
-		center.setDevice(device);
-		south.setDevice(device);
+		main.setDevice(device); 	
 	}
 
 	@Override
@@ -114,5 +115,10 @@ public class MyWest extends JPanel implements IDeviceChangeListener, ListSelecti
 	public void intervalRemoved(ListDataEvent event) {
 		DLog.method(TAG, "intervalRemoved(): " + event);	
 		
+	}
+
+	@Override
+	public void deviceChange(IDevice device) {
+		DLog.method(TAG, "deviceChange(): " + device);		
 	}
 }

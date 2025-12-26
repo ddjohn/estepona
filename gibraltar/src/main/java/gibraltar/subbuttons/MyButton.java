@@ -9,17 +9,18 @@ import javax.swing.UIManager;
 
 import com.android.ddmlib.IShellOutputReceiver;
 
+import gibraltar.MyFontButton;
 import gibraltar.logs.DLog;
 
-public abstract class MyButton extends JButton implements ActionListener, IShellOutputReceiver  {
+public abstract class MyButton extends MyFontButton implements ActionListener, IShellOutputReceiver  {
 	private static final long serialVersionUID = 1L;
 	private static String TAG = DLog.forTag(MyButton.class);
 
 	public MyButton(String title, String iconName) {
 		super(title);
 
-		this.addActionListener(this);
-		this.setIcon(UIManager.getIcon(iconName));
+		addActionListener(this);
+		setIcon(UIManager.getIcon(iconName));
 	}
 
 	public abstract void action();

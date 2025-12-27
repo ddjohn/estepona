@@ -2,7 +2,6 @@ package gibraltar.compass;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
@@ -24,6 +22,7 @@ import com.android.ddmlib.TimeoutException;
 
 import gibraltar.Main;
 import gibraltar.helpers.MyAdbHelper;
+import gibraltar.helpers.MyUtils;
 import gibraltar.iface.IMyMainListener;
 import gibraltar.logs.DLog;
 
@@ -86,17 +85,19 @@ public class MyCenter extends JPanel implements MouseListener, KeyListener, Runn
 		
 		RawImage screenshot;
 		while(true) {
-			try {
-				Thread.sleep(100);
-				if(device != null) {
+			MyUtils.sleep(100);
+			
+			if(device != null) {
+				try {
 					screenshot = device.getScreenshot();
 					image = screenshot.asBufferedImage();
-					repaint();
-					DLog.debug(TAG, "Redraw...");
+				} catch (TimeoutException | AdbCommandRejectedException | IOException e) {
+					DLog.error(TAG, "screenshot", e);
 				}
-			} catch (TimeoutException | AdbCommandRejectedException | IOException | InterruptedException e) {
-				DLog.error(TAG,  "run", e);
-			}		
+				
+				DLog.debug(TAG, "Redraw...");
+				repaint();
+			}
 		}		
 	}
     

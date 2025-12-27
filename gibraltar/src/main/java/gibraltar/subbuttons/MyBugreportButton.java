@@ -14,7 +14,7 @@ public class MyBugreportButton extends MyButton {
 	private IDevice device;
 
 	public MyBugreportButton(IDevice device) {
-		super("Bugreport", "OptionPane.questionIcon");
+		super("Bugreport", "FileView.computerIcon");
 
 		this.device = device;
 	}

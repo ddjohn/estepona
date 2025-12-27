@@ -15,7 +15,7 @@ import gibraltar.compass.MyCenter;
 import gibraltar.compass.MyNorth;
 import gibraltar.compass.MySouth;
 import gibraltar.compass.MyWest;
-import gibraltar.components.MyFontButton;
+import gibraltar.helpers.MyUtils;
 import gibraltar.iface.IMyMainListener;
 import gibraltar.logs.DLog;
 
@@ -28,13 +28,15 @@ public class Main extends JFrame {
 	public Main() {
 		DLog.method(TAG, "Main()");
 		
+		MyUtils.lookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+
 		setLayout(new BorderLayout());
 		
-		add(new MyCenter(this), BorderLayout.CENTER);
-		add(new MySouth(this), BorderLayout.SOUTH);
-		add(new MyWest(this), BorderLayout.WEST);
-		add(new MyFontButton("EAST"), BorderLayout.EAST);
-		add(new MyNorth(this), BorderLayout.NORTH);
+		getContentPane().add(new MyCenter(this), BorderLayout.CENTER);
+		getContentPane().add(new MySouth(this), BorderLayout.SOUTH);
+		getContentPane().add(new MyWest(this), BorderLayout.WEST);
+		getContentPane().add(new MyEast(this), BorderLayout.EAST);
+		getContentPane().add(new MyNorth(this), BorderLayout.NORTH);
 		
 		setTitle("ADB screencopy");
 		setIconImage(Toolkit.getDefaultToolkit().createImage(getClass().getClassLoader().getResource("adb.png")));
@@ -45,10 +47,10 @@ public class Main extends JFrame {
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
+		DLog.init(args.length == 0);
+
 		DLog.method(TAG, "main()");
 
-		//DLog.init(false);
-		
 		AndroidDebugBridge.init(false);
 		
 		@SuppressWarnings("deprecation")

@@ -1,11 +1,13 @@
 package gibraltar.compass;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.AndroidDebugBridge.IClientChangeListener;
@@ -13,12 +15,8 @@ import com.android.ddmlib.AndroidDebugBridge.IDebugBridgeChangeListener;
 import com.android.ddmlib.AndroidDebugBridge.IDeviceChangeListener;
 import com.android.ddmlib.Client;
 import com.android.ddmlib.IDevice;
-import com.android.ddmlib.clientmanager.DeviceClientManager;
-import com.android.ddmlib.clientmanager.DeviceClientManagerListener;
 
 import gibraltar.Main;
-import gibraltar.components.MyFontCheckBox;
-import gibraltar.components.MyFontTextField;
 import gibraltar.iface.IMyMainListener;
 import gibraltar.logs.DLog;
 
@@ -27,24 +25,29 @@ public class MyNorth extends JPanel implements IClientChangeListener, IDeviceCha
 	private static final String TAG = DLog.forTag(MyNorth.class);
 	
 	private JCheckBox isConnected;
-	AndroidDebugBridge adb;
-	private MyFontCheckBox isManaged;
-	JTextField deviceName;
-	private MyFontTextField adbVersion;
+	private AndroidDebugBridge adb;
+	private JCheckBox isManaged;
+	private JTextField deviceName;
+	private JTextField adbVersion;
 	
 	public MyNorth(Main main) {
 		DLog.method(TAG, "MyNorth()");
 		
 		main.register(this);
 		
+		TitledBorder border = BorderFactory.createTitledBorder("Status");
+		border.setTitleFont(new Font("Arial", Font.PLAIN, 32));
+		setFont(new Font("Arial", Font.PLAIN, 48));
+		setBorder(border);
+		
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		isConnected = new MyFontCheckBox("Connected...");
-		isManaged = new MyFontCheckBox("Managed...");
-		deviceName = new MyFontTextField("device:<none>");
+		isConnected = new JCheckBox("Connected...");
+		isManaged = new JCheckBox("Managed...");
+		deviceName = new JTextField("device:<none>");
 		//deviceName.setPreferredSize(new Dimension(200, 32));
 		//deviceName.setSize(new Dimension(200, 32));
-		adbVersion = new MyFontTextField("adb:<unknown>");
+		adbVersion = new JTextField("adb:<unknown>");
 
 		add(isConnected);
 		add(isManaged);

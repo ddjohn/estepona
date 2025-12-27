@@ -38,10 +38,10 @@ public class MyWest extends JPanel implements IDeviceChangeListener, ListSelecti
 
 		adb.addDeviceChangeListener(this);
 		
-		TitledBorder border = BorderFactory.createTitledBorder("Device List");
+		TitledBorder border = BorderFactory.createTitledBorder("Toolbar");
 		border.setTitleFont(new Font("Arial", Font.PLAIN, 32));
-		setBorder(border);
 		setFont(new Font("Arial", Font.PLAIN, 48));
+		setBorder(border);
 
 		model = new DefaultListModel<>();
 

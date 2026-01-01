@@ -23,6 +23,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import se.avelon.estepona.components.MyNavigationComponent
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.os.notification.Notif
@@ -42,6 +45,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         DLog.test()
+
+        val windowInsetsController =
+            WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView())
+        windowInsetsController.setSystemBarsBehavior(
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        )
+        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
+        windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+
         val notif = Notif(this)
         notif.default(666, "title", "content")
 

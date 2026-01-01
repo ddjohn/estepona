@@ -78,6 +78,9 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.accompanist.permissions)
 
+    // Charting
+    implementation(libs.mpandroidchart)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

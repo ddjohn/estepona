@@ -37,6 +37,7 @@ import se.avelon.estepona.components.MyMedia
 import se.avelon.estepona.components.MyNavigation
 import se.avelon.estepona.components.MySensor
 import se.avelon.estepona.components.MySpeech
+import se.avelon.estepona.components.MyStatistics
 import se.avelon.estepona.components.MyStatus
 import se.avelon.estepona.components.PackageGrid
 import se.avelon.estepona.components.vehicle.MyVehicle
@@ -83,6 +84,7 @@ fun MyMainScreen() {
                     composable("Sensor") { MySensor(modifier = Modifier.fillMaxSize()) }
                     composable("Speech") { MySpeech(modifier = Modifier.fillMaxSize()) }
                     composable("Vehicle") { MyVehicle(modifier = Modifier.fillMaxSize()) }
+                    composable("Statistics") { MyStatistics(modifier = Modifier.fillMaxSize()) }
                 }
             }
         }

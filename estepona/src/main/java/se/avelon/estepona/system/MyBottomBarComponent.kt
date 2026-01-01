@@ -49,6 +49,7 @@ fun MyBottomBar(
 
     NavigationBar(modifier = modifier) {
         // MyBarItem2(viewModel, navController, "Test", Icons.Default.Battery0Bar, 9)
+        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 10)
 
         MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 0)
         MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 1)
@@ -62,7 +63,6 @@ fun MyBottomBar(
         MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 8)
         MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 9)
 
-        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 10)
         MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 11)
         MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 12)
     }

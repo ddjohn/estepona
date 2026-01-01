@@ -29,7 +29,7 @@ object DLog {
     }
 
     fun warning(tag: String, msg: Any) {
-        Log.i(tag, "\uD83D\uDFE7$msg") // orange ball
+        Log.w(tag, "\uD83D\uDFE7$msg") // orange ball
     }
 
     fun error(tag: String, msg: Any) {

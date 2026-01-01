@@ -68,17 +68,22 @@ class MyCameraComponent : ViewModel() {
 
     suspend fun bindToCamera(appContext: Context, lifecycleOwner: LifecycleOwner) {
         val processCameraProvider = ProcessCameraProvider.awaitInstance(appContext)
-        processCameraProvider.bindToLifecycle(
-            lifecycleOwner,
-            DEFAULT_FRONT_CAMERA,
-            cameraPreviewUseCase,
-        )
 
-        // Cancellation signals we're done with the camera
-        try {
-            awaitCancellation()
-        } finally {
-            processCameraProvider.unbindAll()
+        if(processCameraProvider.hasCamera(DEFAULT_FRONT_CAMERA)) {
+            processCameraProvider.bindToLifecycle(
+                lifecycleOwner,
+                DEFAULT_FRONT_CAMERA,
+                cameraPreviewUseCase,
+            )
+
+            // Cancellation signals we're done with the camera
+            try {
+                awaitCancellation()
+            } finally {
+                processCameraProvider.unbindAll()
+            }
+        } else {
+            DLog.warning(TAG, "No front camera found")
         }
     }
 

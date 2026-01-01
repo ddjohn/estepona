@@ -40,7 +40,7 @@ fun MySpeech(modifier: Modifier) {
             context,
             object : TextToSpeech.OnInitListener {
                 override fun onInit(status: Int) {
-                    DLog.method(MySpeechComponents.TAG, "onInit(); $status")
+                    DLog.method(MySpeechComponents.TAG, "onInit(): $status")
                     val result = textToSpeech.setLanguage(Locale.US)
                     if (
                         result == TextToSpeech.LANG_MISSING_DATA ||

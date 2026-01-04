@@ -4,78 +4,76 @@
 
     <permission android:name="se.avelon.estepona.permission.testpermission" />
 
-    <uses-permission android:name="android.car.permission.ADJUST_RANGE_REMAINING"/>
-    <uses-permission android:name="android.car.permission.CAR_CONTROL_AUDIO_SETTINGS"/>
-    <uses-permission android:name="android.car.permission.CAR_CONTROL_AUDIO_VOLUME"/>
-    <uses-permission android:name="android.car.permission.CAR_DRIVING_STATE"/>
-    <uses-permission android:name="android.car.permission.CAR_DRIVING_STATE_3P"/>
-    <uses-permission android:name="android.car.permission.CAR_DYNAMICS_STATE"/>
-    <uses-permission android:name="android.car.permission.CAR_ENGINE_DETAILED"/>
-    <uses-permission android:name="android.car.permission.CAR_ENGINE_DETAILED_3P"/>
-    <uses-permission android:name="android.car.permission.CAR_EPOCH_TIME"/>
-    <uses-permission android:name="android.car.permission.CAR_INFO"/>
-    <uses-permission android:name="android.car.permission.CAR_NAVIGATION_MANAGER"/>
-    <uses-permission android:name="android.car.permission.CONTROL_ADAS_SETTINGS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_ADAS_STATES"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_AIRBAGS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_CLIMATE"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_DOORS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_DYNAMICS_STATE"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_ENERGY"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_HORN"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_MIRRORS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_SEATS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_WINDOWS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_DISPLAY_UNITS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_DRIVER_MONITORING_SETTINGS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_ENERGY_PORTS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_EXTERIOR_LIGHTS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_GLOVE_BOX"/>
-    <uses-permission android:name="android.car.permission.CONTROL_HEAD_UP_DISPLAY"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_INTERIOR_LIGHTS"/>
-    <uses-permission android:name="android.car.permission.CONTROL_CAR_POWERTRAIN"/>
-    <uses-permission android:name="android.car.permission.CONTROL_STEERING_WHEEL"/>
-    <uses-permission android:name="android.car.permission.CONTROL_VALET_MODE"/>
-    <uses-permission android:name="android.car.permission.CONTROL_WINDSHIELD_WIPERS"/>
-    <uses-permission android:name="android.car.permission.CAR_ENERGY"/>
-    <uses-permission android:name="android.car.permission.CAR_ENERGY_PORTS"/>
-    <uses-permission android:name="android.car.permission.CAR_EXTERIOR_ENVIRONMENT"/>
-    <uses-permission android:name="android.car.permission.CAR_EXTERIOR_LIGHTS"/>
-    <uses-permission android:name="android.car.permission.CAR_IDENTIFICATION"/>
-    <uses-permission android:name="android.car.permission.CAR_MILEAGE"/>
-    <uses-permission android:name="android.car.permission.CAR_MILEAGE_3P"/>
-    <uses-permission android:name="android.car.permission.CAR_POWERTRAIN"/>
-    <uses-permission android:name="android.car.permission.PRIVILEGED_CAR_INFO"/>
-    <uses-permission android:name="android.car.permission.READ_ADAS_SETTINGS"/>
-    <uses-permission android:name="android.car.permission.READ_ADAS_STATES"/>
-    <uses-permission android:name="android.car.permission.READ_BRAKE_INFO"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_AIRBAGS"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_HORN"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_PEDALS"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_POWER_POLICY"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_SEATS"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_SEAT_BELTS"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_DISPLAY_UNITS"/>
-    <uses-permission android:name="android.car.permission.READ_DRIVER_MONITORING_SETTINGS"/>
-    <uses-permission android:name="android.car.permission.READ_DRIVER_MONITORING_STATES"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_EXTERIOR_LIGHTS"/>
-    <uses-permission android:name="android.car.permission.READ_HEAD_UP_DISPLAY_STATUS"/>
-    <uses-permission android:name="android.car.permission.READ_IMPACT_SENSORS"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_INTERIOR_LIGHTS"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_STEERING"/>
-    <uses-permission android:name="android.car.permission.READ_CAR_STEERING_3P"/>
-    <uses-permission android:name="android.car.permission.READ_ULTRASONICS_SENSOR_DATA"/>
-    <uses-permission android:name="android.car.permission.READ_VALET_MODE"/>
-    <uses-permission android:name="android.car.permission.READ_WINDSHIELD_WIPERS"/>
-    <uses-permission android:name="android.car.permission.READ_WINDSHIELD_WIPERS_3P"/>
-    <uses-permission android:name="android.car.permission.CAR_SPEED"/>
-    <uses-permission android:name="android.car.permission.CAR_TIRES"/>
-    <uses-permission android:name="android.car.permission.CAR_TIRES_3P"/>
-
-    <!-- Features -->
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
-
-    <!-- Dangerous and Normal Permissions -->
+    <uses-permission android:name="android.car.permission.ADJUST_RANGE_REMAINING" />
+    <uses-permission android:name="android.car.permission.CAR_CONTROL_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.car.permission.CAR_CONTROL_AUDIO_VOLUME" />
+    <uses-permission android:name="android.car.permission.CAR_DRIVING_STATE" />
+    <uses-permission android:name="android.car.permission.CAR_DRIVING_STATE_3P" />
+    <uses-permission android:name="android.car.permission.CAR_DYNAMICS_STATE" />
+    <uses-permission android:name="android.car.permission.CAR_ENGINE_DETAILED" />
+    <uses-permission android:name="android.car.permission.CAR_ENGINE_DETAILED_3P" />
+    <uses-permission android:name="android.car.permission.CAR_EPOCH_TIME" />
+    <uses-permission android:name="android.car.permission.CAR_INFO" />
+    <uses-permission android:name="android.car.permission.CAR_NAVIGATION_MANAGER" />
+    <uses-permission android:name="android.car.permission.CONTROL_ADAS_SETTINGS" />
+    <uses-permission android:name="android.car.permission.CONTROL_ADAS_STATES" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_AIRBAGS" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_CLIMATE" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_DOORS" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_DYNAMICS_STATE" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_ENERGY" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_HORN" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_MIRRORS" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_SEATS" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_WINDOWS" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_DISPLAY_UNITS" />
+    <uses-permission android:name="android.car.permission.CONTROL_DRIVER_MONITORING_SETTINGS" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_ENERGY_PORTS" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_EXTERIOR_LIGHTS" />
+    <uses-permission android:name="android.car.permission.CONTROL_GLOVE_BOX" />
+    <uses-permission android:name="android.car.permission.CONTROL_HEAD_UP_DISPLAY" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_INTERIOR_LIGHTS" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_POWERTRAIN" />
+    <uses-permission android:name="android.car.permission.CONTROL_STEERING_WHEEL" />
+    <uses-permission android:name="android.car.permission.CONTROL_VALET_MODE" />
+    <uses-permission android:name="android.car.permission.CONTROL_WINDSHIELD_WIPERS" />
+    <uses-permission android:name="android.car.permission.CAR_ENERGY" />
+    <uses-permission android:name="android.car.permission.CAR_ENERGY_PORTS" />
+    <uses-permission android:name="android.car.permission.CAR_EXTERIOR_ENVIRONMENT" />
+    <uses-permission android:name="android.car.permission.CAR_EXTERIOR_LIGHTS" />
+    <uses-permission android:name="android.car.permission.CAR_IDENTIFICATION" />
+    <uses-permission android:name="android.car.permission.CAR_MILEAGE" />
+    <uses-permission android:name="android.car.permission.CAR_MILEAGE_3P" />
+    <uses-permission android:name="android.car.permission.CAR_POWERTRAIN" />
+    <uses-permission android:name="android.car.permission.PRIVILEGED_CAR_INFO" />
+    <uses-permission android:name="android.car.permission.READ_ADAS_SETTINGS" />
+    <uses-permission android:name="android.car.permission.READ_ADAS_STATES" />
+    <uses-permission android:name="android.car.permission.READ_BRAKE_INFO" />
+    <uses-permission android:name="android.car.permission.READ_CAR_AIRBAGS" />
+    <uses-permission android:name="android.car.permission.READ_CAR_HORN" />
+    <uses-permission android:name="android.car.permission.READ_CAR_PEDALS" />
+    <uses-permission android:name="android.car.permission.READ_CAR_POWER_POLICY" />
+    <uses-permission android:name="android.car.permission.READ_CAR_SEATS" />
+    <uses-permission android:name="android.car.permission.READ_CAR_SEAT_BELTS" />
+    <uses-permission android:name="android.car.permission.READ_CAR_DISPLAY_UNITS" />
+    <uses-permission android:name="android.car.permission.READ_DRIVER_MONITORING_SETTINGS" />
+    <uses-permission android:name="android.car.permission.READ_DRIVER_MONITORING_STATES" />
+    <uses-permission android:name="android.car.permission.READ_CAR_EXTERIOR_LIGHTS" />
+    <uses-permission android:name="android.car.permission.READ_HEAD_UP_DISPLAY_STATUS" />
+    <uses-permission android:name="android.car.permission.READ_IMPACT_SENSORS" />
+    <uses-permission android:name="android.car.permission.READ_CAR_INTERIOR_LIGHTS" />
+    <uses-permission android:name="android.car.permission.READ_CAR_STEERING" />
+    <uses-permission android:name="android.car.permission.READ_CAR_STEERING_3P" />
+    <uses-permission android:name="android.car.permission.READ_ULTRASONICS_SENSOR_DATA" />
+    <uses-permission android:name="android.car.permission.READ_VALET_MODE" />
+    <uses-permission android:name="android.car.permission.READ_WINDSHIELD_WIPERS" />
+    <uses-permission android:name="android.car.permission.READ_WINDSHIELD_WIPERS_3P" />
+    <uses-permission android:name="android.car.permission.CAR_SPEED" />
+    <uses-permission android:name="android.car.permission.CAR_TIRES" />
+    <uses-permission android:name="android.car.permission.CAR_TIRES_3P" /> <!-- Features -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" /> <!-- Dangerous and Normal Permissions -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -84,14 +82,14 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-    <!-- Signature or Privileged Permissions -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- Signature or Privileged Permissions -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="PackageVisibilityPolicy,QueryAllPackagesPermission" />
-    <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS"
+    <uses-permission
+        android:name="android.permission.LOCAL_MAC_ADDRESS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <queries>
         <intent>
@@ -108,14 +106,26 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Estepona">
+        android:theme="@style/Theme.Estepona"
+        android:usesCleartextTraffic="true">
 
+        <activity
+            android:name=".TestActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Estepona">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Estepona">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -138,6 +148,6 @@
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
     </application>
+
 </manifest>

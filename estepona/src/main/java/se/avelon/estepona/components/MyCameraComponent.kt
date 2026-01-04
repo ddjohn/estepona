@@ -69,7 +69,7 @@ class MyCameraComponent : ViewModel() {
     suspend fun bindToCamera(appContext: Context, lifecycleOwner: LifecycleOwner) {
         val processCameraProvider = ProcessCameraProvider.awaitInstance(appContext)
 
-        if(processCameraProvider.hasCamera(DEFAULT_FRONT_CAMERA)) {
+        if (processCameraProvider.hasCamera(DEFAULT_FRONT_CAMERA)) {
             processCameraProvider.bindToLifecycle(
                 lifecycleOwner,
                 DEFAULT_FRONT_CAMERA,

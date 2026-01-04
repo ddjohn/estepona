@@ -37,18 +37,28 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import okhttp3.Cache
 import okhttp3.OkHttpClient
-import se.avelon.estepona.Constants
+import se.avelon.estepona.Constants.stocks_omx30
 import se.avelon.estepona.MyUtils
 import se.avelon.estepona.components.statistics.OMX
+import se.avelon.estepona.compose.MyButton
 import se.avelon.estepona.logging.DLog
 
-class MyStatisticsComponent(val context: Context, val chart: BubbleChart) :
-    OnChartValueSelectedListener, Runnable {
+class MyStatisticsComponent(val context: Context) : OnChartValueSelectedListener, Runnable {
     companion object {
         val TAG = DLog.forTag(MyStatisticsComponent::class.java)
     }
 
     private lateinit var client: OkHttpClient
+    private lateinit var chart: BubbleChart
+    private var thread: Thread
+    private var stocks = arrayListOf<String>()
+
+    enum class Market {
+        OMX30,
+        HIGH_CAP,
+        MID_CAP,
+        LOW_CAP,
+    }
 
     init {
         client =
@@ -60,7 +70,33 @@ class MyStatisticsComponent(val context: Context, val chart: BubbleChart) :
                 .build()
         DLog.info(TAG, "client: $client")
 
-        Thread(this).start()
+        thread = Thread(this)
+    }
+
+    fun setChart(chart: BubbleChart) {
+        this.chart = chart
+    }
+
+    fun scan(market: Market) {
+        thread.interrupt()
+        stocks = arrayListOf<String>()
+        for (i in 0 until chart.data.dataSetCount) {
+            chart.data.removeDataSet(i)
+        }
+        chart.data = BubbleData()
+
+        when (market) {
+            Market.OMX30 -> {
+                stocks = stocks_omx30
+            }
+            Market.HIGH_CAP -> {}
+            Market.MID_CAP -> {}
+            Market.LOW_CAP -> {}
+            else -> {}
+        }
+
+        thread = Thread(this)
+        thread.start()
     }
 
     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -75,7 +111,7 @@ class MyStatisticsComponent(val context: Context, val chart: BubbleChart) :
 
     override fun run() {
         DLog.info(MyStatusComponent.TAG, "run()")
-        for (stock in Constants.stocks) {
+        for (stock in stocks) {
             DLog.info(MyStatusComponent.TAG, "stock=$stock")
 
             val latch = CountDownLatch(1)
@@ -101,12 +137,24 @@ class MyStatisticsComponent(val context: Context, val chart: BubbleChart) :
 
                         val donchian = 100.0f * (data.price - low) / (high - low)
                         val vol = 100.0f * data.volume / avgvol
-                        val trend = 100.0 * data.price / avg
+                        val trend = 100.0 * (data.price - avg) / avg
 
                         val d =
-                            BubbleEntry(donchian.toFloat(), vol, (trend / 100.0).toFloat(), data.id)
-                        DLog.info(MyStatusComponent.TAG, "dd=$d ${d.size}")
+                            BubbleEntry(
+                                donchian.toFloat(),
+                                vol,
+                                10.0f * (1.0 + Math.tanh(trend)).toFloat(),
+                                data.id,
+                            )
+                        DLog.info(TAG, "dd=$d ${d.size}")
                         val ds = BubbleDataSet(arrayListOf(d), data.id)
+                        ds.valueTextSize = 0.0f
+
+                        if (trend > 0) {
+                            ds.setColor(Color.GREEN)
+                        } else {
+                            ds.setColor(Color.RED)
+                        }
 
                         chart.data.addDataSet(ds)
                         chart.notifyDataSetChanged()
@@ -131,15 +179,25 @@ class MyStatisticsComponent(val context: Context, val chart: BubbleChart) :
 fun MyStatistics(modifier: Modifier) {
     DLog.method(MyStatisticsComponent.TAG, "MyStatistics()")
 
+    val context = LocalContext.current
+
+    val component = MyStatisticsComponent(context)
+
     Row {
         Column(Modifier.weight(1f).fillMaxHeight()) {
-            BubbleChartComponent(modifier = Modifier.fillMaxSize())
+            BubbleChartComponent(modifier = Modifier.fillMaxSize(), component)
+        }
+        Column {
+            MyButton(Modifier, "OMX30") { component.scan(MyStatisticsComponent.Market.OMX30) }
+            MyButton(Modifier, "HighCap") { component.scan(MyStatisticsComponent.Market.HIGH_CAP) }
+            MyButton(Modifier, "MidCap") { component.scan(MyStatisticsComponent.Market.MID_CAP) }
+            MyButton(Modifier, "LowCap") { component.scan(MyStatisticsComponent.Market.LOW_CAP) }
         }
     }
 }
 
 @Composable
-fun BubbleChartComponent(modifier: Modifier = Modifier) {
+fun BubbleChartComponent(modifier: Modifier = Modifier, component: MyStatisticsComponent) {
     val context = LocalContext.current
 
     val chart =
@@ -149,12 +207,13 @@ fun BubbleChartComponent(modifier: Modifier = Modifier) {
             description.text = "x = Donchian, y = Volume pct"
         }
 
+    component.setChart(chart)
+
     AndroidView(
         modifier = modifier,
         factory = { context -> chart },
         update = { view -> }, // Add animation here
     )
 
-    val comp = MyStatisticsComponent(context, chart)
-    chart.setOnChartValueSelectedListener(comp)
+    chart.setOnChartValueSelectedListener(component)
 }

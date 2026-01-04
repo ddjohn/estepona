@@ -39,7 +39,7 @@ import okhttp3.Cache
 import okhttp3.OkHttpClient
 import se.avelon.estepona.Constants
 import se.avelon.estepona.MyUtils
-import se.avelon.estepona.OMX
+import se.avelon.estepona.components.statistics.OMX
 import se.avelon.estepona.logging.DLog
 
 class MyStatisticsComponent(val context: Context, val chart: BubbleChart) :

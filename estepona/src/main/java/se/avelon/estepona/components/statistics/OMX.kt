@@ -1,22 +1,8 @@
-/*
- * Copyright 2025 David Johansson
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package se.avelon.estepona
+package se.avelon.estepona.components.statistics
 
 import okhttp3.Call
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.Response
 import okio.IOException
 import org.json.JSONException
@@ -55,12 +41,12 @@ class OMX {
         val url_v8 = "https://query2.finance.yahoo.com/v8/finance"
 
         // https://query2.finance.yahoo.com/v8/finance/chart/ERIC-B.ST
-        fun chart(client: OkHttpClient, stock: String, callback: OMX.Callback) {
+        fun chart(client: OkHttpClient, stock: String, callback: Callback) {
             val end = System.currentTimeMillis() / 1000
             val start = end - 3 * 30 * 24 * 60 * 60
 
             val request =
-                okhttp3.Request.Builder()
+                Request.Builder()
                     .url("$url_v8/chart/$stock?period1=$start&period2=$end&interval=1d")
                     .get()
                     .build()

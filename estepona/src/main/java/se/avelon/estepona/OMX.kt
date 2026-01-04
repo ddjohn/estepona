@@ -21,7 +21,6 @@ import okhttp3.Response
 import okio.IOException
 import org.json.JSONException
 import org.json.JSONObject
-import se.avelon.estepona.TestActivity.Companion.TAG
 import se.avelon.estepona.logging.DLog
 
 class OMX {
@@ -51,6 +50,8 @@ class OMX {
     )
 
     companion object {
+        val TAG = DLog.forTag(OMX::class.java)
+
         val url_v8 = "https://query2.finance.yahoo.com/v8/finance"
 
         // https://query2.finance.yahoo.com/v8/finance/chart/ERIC-B.ST

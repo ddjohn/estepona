@@ -40,7 +40,6 @@ import okhttp3.OkHttpClient
 import se.avelon.estepona.Constants
 import se.avelon.estepona.MyUtils
 import se.avelon.estepona.OMX
-import se.avelon.estepona.TestActivity
 import se.avelon.estepona.logging.DLog
 
 class MyStatisticsComponent(val context: Context, val chart: BubbleChart) :
@@ -59,7 +58,7 @@ class MyStatisticsComponent(val context: Context, val chart: BubbleChart) :
                 .readTimeout(1000, TimeUnit.MILLISECONDS)
                 .writeTimeout(1000, TimeUnit.MILLISECONDS)
                 .build()
-        DLog.info(TestActivity.Companion.TAG, "client: $client")
+        DLog.info(TAG, "client: $client")
 
         Thread(this).start()
     }

@@ -206,7 +206,7 @@ fun BubbleChartComponent(modifier: Modifier = Modifier, component: MyStatisticsC
             data = BubbleData().apply {}
             description.text = "x = Donchian, y = Volume pct"
         }
-
+chart.legend.isEnabled = false
     component.setChart(chart)
 
     AndroidView(

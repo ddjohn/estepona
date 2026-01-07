@@ -37,6 +37,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import se.avelon.estepona.Constants.stocks_markets
 import se.avelon.estepona.Constants.stocks_omx30
 import se.avelon.estepona.MyUtils
 import se.avelon.estepona.components.statistics.OMX
@@ -54,6 +55,7 @@ class MyStatisticsComponent(val context: Context) : OnChartValueSelectedListener
     private var stocks = arrayListOf<String>()
 
     enum class Market {
+        MARKETS,
         OMX30,
         HIGH_CAP,
         MID_CAP,
@@ -86,6 +88,9 @@ class MyStatisticsComponent(val context: Context) : OnChartValueSelectedListener
         chart.data = BubbleData()
 
         when (market) {
+            Market.MARKETS -> {
+                stocks = stocks_markets
+            }
             Market.OMX30 -> {
                 stocks = stocks_omx30
             }
@@ -102,7 +107,7 @@ class MyStatisticsComponent(val context: Context) : OnChartValueSelectedListener
     override fun onValueSelected(e: Entry?, h: Highlight?) {
         DLog.info(MyStatusComponent.TAG, "onValueSelected():  $e $h")
 
-        Toast.makeText(context, "onValueSelected():  ${e?.data}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "${e?.data}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onNothingSelected() {
@@ -144,10 +149,10 @@ class MyStatisticsComponent(val context: Context) : OnChartValueSelectedListener
                                 donchian.toFloat(),
                                 vol,
                                 10.0f * (1.0 + Math.tanh(trend)).toFloat(),
-                                data.id,
+                                "${data.name} (${data.id})",
                             )
                         DLog.info(TAG, "dd=$d ${d.size}")
-                        val ds = BubbleDataSet(arrayListOf(d), data.id)
+                        val ds = BubbleDataSet(arrayListOf(d), "${data.name} ${data.id}")
                         ds.valueTextSize = 0.0f
 
                         if (trend > 0) {
@@ -188,6 +193,7 @@ fun MyStatistics(modifier: Modifier) {
             BubbleChartComponent(modifier = Modifier.fillMaxSize(), component)
         }
         Column {
+            MyButton(Modifier, "Markets") { component.scan(MyStatisticsComponent.Market.MARKETS) }
             MyButton(Modifier, "OMX30") { component.scan(MyStatisticsComponent.Market.OMX30) }
             MyButton(Modifier, "HighCap") { component.scan(MyStatisticsComponent.Market.HIGH_CAP) }
             MyButton(Modifier, "MidCap") { component.scan(MyStatisticsComponent.Market.MID_CAP) }
@@ -206,7 +212,7 @@ fun BubbleChartComponent(modifier: Modifier = Modifier, component: MyStatisticsC
             data = BubbleData().apply {}
             description.text = "x = Donchian, y = Volume pct"
         }
-chart.legend.isEnabled = false
+    chart.legend.isEnabled = false
     component.setChart(chart)
 
     AndroidView(

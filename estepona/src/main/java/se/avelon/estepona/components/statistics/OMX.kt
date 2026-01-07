@@ -104,6 +104,7 @@ class OMX {
                                         .getJSONArray("timestamp")
 
                                 val days = ArrayList<DayData>()
+                                DLog.info(TAG, "timestamps.length()=${timestamps.length()}")
                                 for (i in timestamps.length() - 20 until timestamps.length()) {
                                     days.add(
                                         DayData(

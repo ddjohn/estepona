@@ -39,6 +39,7 @@ import se.avelon.estepona.components.MySensor
 import se.avelon.estepona.components.MySpeech
 import se.avelon.estepona.components.MyStatistics
 import se.avelon.estepona.components.MyStatus
+import se.avelon.estepona.components.MyTime
 import se.avelon.estepona.components.PackageGrid
 import se.avelon.estepona.components.vehicle.MyVehicle
 import se.avelon.estepona.logging.DLog
@@ -74,6 +75,7 @@ fun MyMainScreen() {
                     modifier = Modifier.padding(innerPadding),
                 ) {
                     composable("Status") { MyStatus(modifier = Modifier.fillMaxSize()) }
+                    composable("Time") { MyTime(modifier = Modifier.fillMaxSize()) }
                     composable("Audio") { MyAudio(modifier = Modifier.fillMaxSize()) }
                     composable("Bluetooth") { MyBlutooth(modifier = Modifier.fillMaxSize()) }
                     composable("Camera") { MyCamera(modifier = Modifier.fillMaxSize()) }

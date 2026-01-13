@@ -36,7 +36,7 @@ class MyBottomBarComponent : ViewModel() {
         val TAG = DLog.forTag(MyBottomBarComponent::class.java)
     }
 
-    var selected by mutableStateOf(1)
+    var selected by mutableStateOf(0)
 }
 
 @Composable
@@ -48,24 +48,24 @@ fun MyBottomBar(
     DLog.method(MyBottomBarComponent.TAG, "MyBottomBar()")
 
     NavigationBar(modifier = modifier) {
-        // MyBarItem2(viewModel, navController, "Test", Icons.Default.Battery0Bar, 9)
-        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 10)
-        MyBarItem(viewModel, navController, "Time", R.drawable.navigation_time, 17)
-
-        MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 0)
+        MyBarItem(viewModel, navController, "Account", R.drawable.navigation_account, 0)
         MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 1)
         MyBarItem(viewModel, navController, "Bluetooth", R.drawable.navigation_bluetooth, 2)
         MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 3)
         MyBarItem(viewModel, navController, "Display", R.drawable.navigation_display, 4)
-        MyBarItem(viewModel, navController, "Media", R.drawable.navigtion_movie, 5)
-        MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 6)
-        MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 7)
-        MyBarItem(viewModel, navController, "Sensor", R.drawable.navigation_sensor, 8)
-        MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 8)
-        MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 9)
+        MyBarItem(viewModel, navController, "Input", R.drawable.navigation_input, 5)
+        MyBarItem(viewModel, navController, "Media", R.drawable.navigtion_movie, 6)
+        MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 7)
+        MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 8)
+        MyBarItem(viewModel, navController, "Sensor", R.drawable.navigation_sensor, 9)
+        MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 10)
+        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 11)
+        MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 12)
+        MyBarItem(viewModel, navController, "Time", R.drawable.navigation_time, 13)
+        MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 14)
 
-        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 11)
-        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 12)
+        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 15)
+        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 16)
     }
 }
 
@@ -77,13 +77,14 @@ fun MyBarItem(
     res: Int,
     index: Int,
 ) {
-    DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index")
+    DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index, ${viewModel.selected}")
 
     ShortNavigationBarItem(
         selected = viewModel.selected == index,
         onClick = {
             DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
             navController.navigate(text)
+            viewModel.selected = index
         },
         icon = { Icon(painter = painterResource(res), null) },
         label = { Text(text) },

@@ -19,9 +19,15 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -47,3 +53,33 @@ fun MyButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
 fun MyText(modifier: Modifier = Modifier, text: String) {
     Text(text, style = MaterialTheme.typography.titleMedium)
 }
+
+@Composable
+fun <T> MyDropMenu(label: String, list: List<T>) {
+    var expanded by remember { mutableStateOf(false) }
+    MyButton(Modifier, label) { expanded = true }
+    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        for (item in list) {
+            DropdownMenuItem(
+                text = { MyText(Modifier, text = "${(item as T)?.text()}") },
+                onClick = {},
+            )
+        }
+    }
+}
+
+@Composable
+fun <T> MyDropMenu(label: String, list: Array<T>) {
+    var expanded by remember { mutableStateOf(false) }
+    MyButton(Modifier, label) { expanded = true }
+    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        for (item in list) {
+            DropdownMenuItem(
+                text = { MyText(Modifier, text = "${(item as T)?.text()}") },
+                onClick = {},
+            )
+        }
+    }
+}
+
+fun <T> T.text(): String = "<$this>"

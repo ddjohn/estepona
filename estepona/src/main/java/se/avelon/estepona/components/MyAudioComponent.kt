@@ -18,6 +18,7 @@ package se.avelon.estepona.components
 import android.car.Car
 import android.car.CarOccupantZoneManager
 import android.content.Context.AUDIO_SERVICE
+import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,11 +28,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.logging.DLog
 
 object MyAudioComponent {
     val TAG = DLog.forTag(MyAudioComponent::class.java)
 }
+
+fun AudioDeviceInfo.text(): String = "ddddd $this"
+
+fun CarOccupantZoneManager.OccupantZoneInfo.text(): String =
+    "eeeee ${this.zoneId} ${this.occupantType}"
 
 @Composable
 fun MyAudio(modifier: Modifier) {
@@ -46,21 +53,15 @@ fun MyAudio(modifier: Modifier) {
 
     Row(modifier = modifier) {
         Column(modifier = Modifier.weight(1f)) {
-            for (device in audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {},
-                    content = {
-                        Text("${device.id} - ${device.address} (${deviceType(device.type)})")
-                    },
-                )
-                DLog.info(MyAudioComponent.TAG, "---")
-                DLog.info(MyAudioComponent.TAG, "input device: ${device.id}")
-                DLog.info(MyAudioComponent.TAG, "input device: ${device.type}")
-                DLog.info(MyAudioComponent.TAG, "input device: ${device.isSink}")
-                DLog.info(MyAudioComponent.TAG, "input device: ${device.isSource}")
-                DLog.info(MyAudioComponent.TAG, "input device: ${device.address}")
-            }
+            MyDropMenu(
+                "Audio Input Devices:",
+                audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS).asList(),
+            )
+            MyDropMenu(
+                "Audio output Devices:",
+                audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS).asList(),
+            )
+            MyDropMenu("Occupancy Zones:", occupantZoneManager.allOccupantZones)
 
             for (device in audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)) {
                 Button(

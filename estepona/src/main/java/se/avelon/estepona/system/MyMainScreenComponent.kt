@@ -28,11 +28,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import se.avelon.estepona.MainActivity.Companion.TAG
+import se.avelon.estepona.components.MyAccount
 import se.avelon.estepona.components.MyAudio
 import se.avelon.estepona.components.MyBlutooth
 import se.avelon.estepona.components.MyCamera
 import se.avelon.estepona.components.MyDisplays
 import se.avelon.estepona.components.MyDragAndDropBoxes
+import se.avelon.estepona.components.MyInput
 import se.avelon.estepona.components.MyMedia
 import se.avelon.estepona.components.MyNavigation
 import se.avelon.estepona.components.MySensor
@@ -74,19 +76,21 @@ fun MyMainScreen() {
                     startDestination = "Status",
                     modifier = Modifier.padding(innerPadding),
                 ) {
-                    composable("Status") { MyStatus(modifier = Modifier.fillMaxSize()) }
-                    composable("Time") { MyTime(modifier = Modifier.fillMaxSize()) }
+                    composable("Account") { MyAccount(modifier = Modifier.fillMaxSize()) }
                     composable("Audio") { MyAudio(modifier = Modifier.fillMaxSize()) }
                     composable("Bluetooth") { MyBlutooth(modifier = Modifier.fillMaxSize()) }
                     composable("Camera") { MyCamera(modifier = Modifier.fillMaxSize()) }
                     composable("Display") { MyDisplays(modifier = Modifier.fillMaxSize()) }
+                    composable("Input") { MyInput(modifier = Modifier.fillMaxSize()) }
                     composable("Media") { MyMedia(modifier = Modifier.fillMaxSize()) }
                     composable("Navigation") { MyNavigation(modifier = Modifier.fillMaxSize()) }
                     composable("Package") { PackageGrid(modifier = Modifier.fillMaxSize()) }
                     composable("Sensor") { MySensor(modifier = Modifier.fillMaxSize()) }
                     composable("Speech") { MySpeech(modifier = Modifier.fillMaxSize()) }
-                    composable("Vehicle") { MyVehicle(modifier = Modifier.fillMaxSize()) }
                     composable("Statistics") { MyStatistics(modifier = Modifier.fillMaxSize()) }
+                    composable("Status") { MyStatus(modifier = Modifier.fillMaxSize()) }
+                    composable("Time") { MyTime(modifier = Modifier.fillMaxSize()) }
+                    composable("Vehicle") { MyVehicle(modifier = Modifier.fillMaxSize()) }
                 }
             }
         }

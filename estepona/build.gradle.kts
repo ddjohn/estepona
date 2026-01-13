@@ -11,7 +11,7 @@ android {
         getByName("debug") {
             storeFile = file("../etc/keystore.jks")
             storePassword = "android"
-            keyAlias = "testkey"
+            keyAlias = "platform"
             keyPassword = "android"
         }
     }

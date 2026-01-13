@@ -24,7 +24,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import se.avelon.estepona.components.MyStatusComponent.TAG
+import se.avelon.estepona.compose.MyButton
 import se.avelon.estepona.logging.DLog
 
 object MyStatusComponent {
@@ -48,13 +48,13 @@ fun MyStatus(modifier: Modifier) {
 
     val context = LocalContext.current
 
-    Column(modifier.drawBehind { drawRect(Color.Gray) }) {
+    Column(modifier.drawBehind { drawRect(Color.Black) }) {
         var myEnvironment by remember { mutableStateOf(false) }
         var myBuild by remember { mutableStateOf(false) }
 
         Row {
-            Button(onClick = { myEnvironment = !myEnvironment }, content = { Text("ENVIRONMENT") })
-            Button(onClick = { myBuild = !myBuild }, content = { Text("BUILD") })
+            MyButton(Modifier, "Environment") { myEnvironment = !myEnvironment }
+            MyButton(Modifier, "Build") { myBuild = !myBuild }
         }
         AnimatedVisibility(
             visible = myEnvironment,

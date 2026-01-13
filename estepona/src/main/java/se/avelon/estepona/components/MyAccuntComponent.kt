@@ -15,18 +15,31 @@
  */
 package se.avelon.estepona.components
 
+import android.accounts.AccountManager
+import android.content.Context.ACCOUNT_SERVICE
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.logging.DLog
 
-object MyTemplateComponents {
-    val TAG = DLog.forTag(MyTemplateComponents::class.java)
+object MyAccountComponent {
+    val TAG = DLog.forTag(MyAccountComponent::class.java)
 }
 
 @Composable
-fun MyTemplate(modifier: Modifier) {
+fun MyAccount(modifier: Modifier) {
     DLog.method(MyTemplateComponents.TAG, "MyTemplate()")
 
     val context = LocalContext.current
+    val accountManager = context.getSystemService(ACCOUNT_SERVICE) as AccountManager
+
+    val account = accountManager.addAccount("account", "token", arrayOf(), null, null, null, null)
+    DLog.info(MyAccountComponent.TAG, "account=$account")
+
+    Row {
+        MyDropMenu("Accounts", accountManager.accounts)
+        MyDropMenu("Authentication Types", accountManager.authenticatorTypes)
+    }
 }

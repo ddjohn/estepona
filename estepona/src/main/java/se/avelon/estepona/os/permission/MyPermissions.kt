@@ -40,6 +40,7 @@ class MyPermissions(val activity: Activity) {
                 Manifest.permission.BIND_ACCESSIBILITY_SERVICE,
                 Manifest.permission.FOREGROUND_SERVICE,
                 Manifest.permission.POST_NOTIFICATIONS,
+                "android.permission.INJECT_EVENTS", // Manifest.permission.INJECT_EVENTS,
                 Manifest.permission.MEDIA_CONTENT_CONTROL,
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.READ_LOGS,
@@ -56,7 +57,7 @@ class MyPermissions(val activity: Activity) {
     }
 
     fun request() {
-        DLog.method(TAG, "request()")
+        DLog.method(TAG, "request(): $permissions")
         activity.requestPermissions(permissions, REQUEST_CODE)
     }
 
@@ -66,7 +67,7 @@ class MyPermissions(val activity: Activity) {
             DLog.info(TAG, "Checking permission: $permission")
             if (activity.checkSelfPermission(permission!!) != PackageManager.PERMISSION_GRANTED) {
                 DLog.error(TAG, "Permission not approved: $permission")
-                return false
+                // return false
             }
         }
         return true

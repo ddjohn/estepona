@@ -21,12 +21,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.BATTERY_SERVICE
 import android.content.Context.BLUETOOTH_SERVICE
+import android.content.Context.DISPLAY_SERVICE
 import android.content.Context.WIFI_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
+import android.hardware.display.DisplayManager
 import android.net.wifi.SupplicantState
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
+import android.view.Surface
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -84,10 +87,31 @@ fun MyTopBar(modifier: Modifier = Modifier) {
                 BluetoothIcon()
                 WifiIcon()
                 ChargingIcon()
+                Orientation()
                 ClockText()
             }
         }
     )
+}
+
+@Composable
+fun Orientation() {
+    var orientation by remember { mutableStateOf("unknown") }
+
+    val context = LocalContext.current
+
+    val displayManager = context.getSystemService(DISPLAY_SERVICE) as DisplayManager
+    val rotation = displayManager.getDisplay(0).orientation
+    orientation =
+        when (rotation) {
+            Surface.ROTATION_0 -> "Portrait"
+            Surface.ROTATION_90 -> "Landscape"
+            Surface.ROTATION_180 -> "Reverse portrait"
+            else -> "Reverse landscape"
+        }
+    DLog.info(MyTopBarComponent.TAG, "orientation=$orientation")
+
+    Text(text = orientation)
 }
 
 @Composable

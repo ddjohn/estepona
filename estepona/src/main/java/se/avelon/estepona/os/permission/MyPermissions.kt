@@ -48,7 +48,6 @@ class MyPermissions(val activity: Activity) {
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.SYSTEM_ALERT_WINDOW,
                 Manifest.permission.WRITE_CONTACTS,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_SETTINGS,
                 Car.PERMISSION_ENERGY,
                 Car.PERMISSION_SPEED,

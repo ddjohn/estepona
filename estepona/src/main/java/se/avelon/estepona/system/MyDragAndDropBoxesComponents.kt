@@ -27,10 +27,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,9 +48,11 @@ import androidx.compose.ui.draganddrop.DragAndDropTarget
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draganddrop.mimeTypes
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.random.Random
 import se.avelon.estepona.logging.DLog
@@ -72,7 +77,7 @@ fun MyDragAndDropBoxes(modifier: Modifier = Modifier) {
         repeat(boxCount) { index ->
             DLog.info(MyDragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $index")
 
-            Box(
+            MyBox(
                 modifier =
                     Modifier.weight(1f)
                         .fillMaxWidth()
@@ -149,4 +154,10 @@ fun MyDragAndDropBoxes(modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+@Composable
+fun MyBox(modifier: Modifier, contentAlignment: Alignment, content: @Composable BoxScope.() -> Unit) {
+    Box(modifier = modifier.clip(shape = RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp)),
+        contentAlignment = contentAlignment, content = content)
 }

@@ -45,6 +45,7 @@ class MySensorComponent : ViewModel(), SensorEventListener {
     val mutableAccelerometerValue: MutableState<String> = _mutableAccelerometerValue
 
     fun init(context: Context) {
+        DLog.method(TAG, "init()")
         val sensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
         for (sensor in sensorManager.getSensorList(Sensor.TYPE_ALL)) {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_STATUS_ACCURACY_LOW)

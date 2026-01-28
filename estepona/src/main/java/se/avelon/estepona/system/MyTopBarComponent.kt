@@ -88,6 +88,8 @@ fun MyTopBar(modifier: Modifier = Modifier) {
                 WifiIcon()
                 ChargingIcon()
                 Orientation()
+
+                Spacer(Modifier.weight(1f))
                 ClockText()
             }
         }

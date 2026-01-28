@@ -18,11 +18,13 @@ package se.avelon.estepona.components
 import android.bluetooth.BluetoothAdapter
 import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.logging.DLog
 
 object MyBluetoothComponent {
@@ -51,11 +53,22 @@ fun MyBlutooth(modifier: Modifier) {
         return
     }
 
-    Column(modifier) {
-        for (device in bluetoothAdapter.bondedDevices) {
-            Button(onClick = {}) { Text("device=${device.name}") }
+    Row(modifier) {
+        Column {
+            MyDropMenu("Bounded Devices", arrayOf(bluetoothAdapter.bondedDevices))
+
+            for (device in bluetoothAdapter.bondedDevices) {
+                Button(onClick = {}) { Text("device=${device.name}") }
+            }
         }
 
-        Button(onClick = {}) { Text("address=${bluetoothAdapter.address}") }
+        Column {
+            Text("address=${bluetoothAdapter.address}")
+            Text("name=${bluetoothAdapter.name}")
+            Text("state=${bluetoothAdapter.state}")
+            Text("enabled=${bluetoothAdapter.isEnabled}")
+            Text("disccovering=${bluetoothAdapter.isDiscovering}")
+            Text("state=${bluetoothAdapter.state}")
+        }
     }
 }

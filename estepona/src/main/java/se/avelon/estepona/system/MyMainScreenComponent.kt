@@ -33,7 +33,6 @@ import se.avelon.estepona.components.MyAudio
 import se.avelon.estepona.components.MyBlutooth
 import se.avelon.estepona.components.MyCamera
 import se.avelon.estepona.components.MyDisplays
-import se.avelon.estepona.components.MyDragAndDropBoxes
 import se.avelon.estepona.components.MyInput
 import se.avelon.estepona.components.MyMedia
 import se.avelon.estepona.components.MyNavigation
@@ -70,10 +69,10 @@ fun MyMainScreen() {
             Row {
                 DLog.method(TAG, "Row()")
 
-                MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.2f))
+                MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.15f))
                 NavHost(
                     navController = navController,
-                    startDestination = "Status",
+                    startDestination = "Account",
                     modifier = Modifier.padding(innerPadding),
                 ) {
                     composable("Account") { MyAccount(modifier = Modifier.fillMaxSize()) }

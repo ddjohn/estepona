@@ -60,6 +60,14 @@ fun <T> MyDropMenu(label: String, list: List<T>) {
     MyButton(Modifier, label) { expanded = true }
     DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
         for (item in list) {
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                for (item in list) {
+                    DropdownMenuItem(
+                        text = { MyText(Modifier, text = "${(item as T)?.text()}") },
+                        onClick = {},
+                    )
+                }
+            }
             DropdownMenuItem(
                 text = { MyText(Modifier, text = "${(item as T)?.text()}") },
                 onClick = {},

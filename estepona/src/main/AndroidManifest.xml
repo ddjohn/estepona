@@ -123,6 +123,8 @@
         tools:ignore="ProtectedPermissions" />
 
 
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+
 
     <queries>
         <intent>

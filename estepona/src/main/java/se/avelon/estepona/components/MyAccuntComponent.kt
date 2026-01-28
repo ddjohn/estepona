@@ -16,7 +16,10 @@
 package se.avelon.estepona.components
 
 import android.accounts.AccountManager
+import android.accounts.OnAccountsUpdateListener
 import android.content.Context.ACCOUNT_SERVICE
+import android.os.Handler
+import android.widget.Toast
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,10 +33,19 @@ object MyAccountComponent {
 
 @Composable
 fun MyAccount(modifier: Modifier) {
-    DLog.method(MyTemplateComponents.TAG, "MyTemplate()")
+    DLog.method(MyTemplateComponents.TAG, "MyAccount()")
 
     val context = LocalContext.current
     val accountManager = context.getSystemService(ACCOUNT_SERVICE) as AccountManager
+
+    accountManager.addOnAccountsUpdatedListener(
+        OnAccountsUpdateListener {
+            DLog.method(MyAccountComponent.TAG, "OnAccountsUpdatedListener(): $it")
+            Toast.makeText(context, "OnAccountsUpdatedListener(): $it", Toast.LENGTH_SHORT).show()
+        },
+        Handler.createAsync(context.mainLooper),
+        true,
+    )
 
     val account = accountManager.addAccount("account", "token", arrayOf(), null, null, null, null)
     DLog.info(MyAccountComponent.TAG, "account=$account")

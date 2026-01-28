@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.components
+package se.avelon.estepona.system
 
 import android.content.ClipData
 import android.content.ClipDescription
@@ -27,7 +27,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -157,7 +156,14 @@ fun MyDragAndDropBoxes(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MyBox(modifier: Modifier, contentAlignment: Alignment, content: @Composable BoxScope.() -> Unit) {
-    Box(modifier = modifier.clip(shape = RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp)),
-        contentAlignment = contentAlignment, content = content)
+fun MyBox(
+    modifier: Modifier,
+    contentAlignment: Alignment,
+    content: @Composable BoxScope.() -> Unit,
+) {
+    Box(
+        modifier = modifier.clip(shape = RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp)),
+        contentAlignment = contentAlignment,
+        content = content,
+    )
 }

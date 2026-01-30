@@ -16,11 +16,17 @@
 package se.avelon.estepona.components
 
 import android.content.Context
+import android.content.Context.LOCATION_SERVICE
 import android.content.Context.SENSOR_SERVICE
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.location.GpsStatus
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.location.OnNmeaMessageListener
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
@@ -33,8 +39,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.compose.MyText
 import se.avelon.estepona.logging.DLog
+import java.util.StringTokenizer
 
-class MySensorComponent : ViewModel(), SensorEventListener {
+class MySensorComponent : ViewModel(), SensorEventListener, OnNmeaMessageListener,
+    LocationListener {
     companion object {
         val TAG = DLog.forTag(MySensorComponent::class.java)
     }
@@ -43,6 +51,32 @@ class MySensorComponent : ViewModel(), SensorEventListener {
     val mutableGyroscopeValue: MutableState<String> = _mutableGyroscopeValue
     private val _mutableAccelerometerValue = mutableStateOf("")
     val mutableAccelerometerValue: MutableState<String> = _mutableAccelerometerValue
+    private val _mutableRotationVectorValue = mutableStateOf("")
+    val mutableRotationVectorValue: MutableState<String> = _mutableRotationVectorValue
+    private val _mutableGyroscopeLimitedAxesValue = mutableStateOf("")
+    val mutableGyroscopeLimitedAxesValue: MutableState<String> = _mutableGyroscopeLimitedAxesValue
+    private val _mutableAccelerometerLimitedAxesValue = mutableStateOf("")
+    val mutableAccelerometerLimitedAxesValue: MutableState<String> = _mutableAccelerometerLimitedAxesValue
+    private val _mutableGameRotationVectorValue = mutableStateOf("")
+    val mutableGameRotationVectorValue: MutableState<String> = _mutableGameRotationVectorValue
+    private val _mutableGravityValue = mutableStateOf("")
+    val mutableGravityValue: MutableState<String> = _mutableGravityValue
+    private val _mutableLinearAccelerationValue = mutableStateOf("")
+    val mutableLinearAccelerationValue: MutableState<String> = _mutableLinearAccelerationValue
+
+    private val _mutableLocationValue = mutableStateOf("")
+    val mutableLocationValue: MutableState<String> = _mutableLocationValue
+
+    private val _mutableGNGLLValue = mutableStateOf("")
+    val mutableGNGLLValue: MutableState<String> = _mutableGNGLLValue
+    private val _mutableGNRMCValue = mutableStateOf("")
+    val mutableGNRMCValue: MutableState<String> = _mutableGNRMCValue
+    private val _mutableGNGSAValue = mutableStateOf("")
+    val mutableGNGSAValue: MutableState<String> = _mutableGNGSAValue
+    private val _mutableGLGSVValue = mutableStateOf("")
+    val mutableGLGSVValue: MutableState<String> = _mutableGLGSVValue
+    private val _mutableGAGSVValue = mutableStateOf("")
+    val mutableGAGSVValue: MutableState<String> = _mutableGAGSVValue
 
     fun init(context: Context) {
         DLog.method(TAG, "init()")
@@ -50,6 +84,10 @@ class MySensorComponent : ViewModel(), SensorEventListener {
         for (sensor in sensorManager.getSensorList(Sensor.TYPE_ALL)) {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_STATUS_ACCURACY_LOW)
         }
+
+        val locationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager
+        locationManager.addNmeaListener(context.mainExecutor,this)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 1f, this)
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -66,6 +104,30 @@ class MySensorComponent : ViewModel(), SensorEventListener {
                 mutableAccelerometerValue.value =
                     "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
+            Sensor.TYPE_ROTATION_VECTOR -> {
+                mutableRotationVectorValue.value =
+                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+            }
+            Sensor.TYPE_ACCELEROMETER_LIMITED_AXES -> {
+                mutableAccelerometerLimitedAxesValue.value =
+                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+            }
+            Sensor.TYPE_GYROSCOPE_LIMITED_AXES -> {
+                mutableGyroscopeLimitedAxesValue.value =
+                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+            }
+            Sensor.TYPE_GAME_ROTATION_VECTOR -> {
+                mutableGameRotationVectorValue.value =
+                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+            }
+            Sensor.TYPE_GRAVITY -> {
+                mutableGravityValue.value =
+                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+            }
+            Sensor.TYPE_LINEAR_ACCELERATION -> {
+                mutableLinearAccelerationValue.value =
+                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+            }
             else -> {
                 DLog.method(
                     TAG,
@@ -73,6 +135,27 @@ class MySensorComponent : ViewModel(), SensorEventListener {
                 )
             }
         }
+    }
+
+    override fun onNmeaMessage(message: String?, timestamp: Long) {
+        val tokenizer = StringTokenizer(message, ",")
+        val type = tokenizer.nextElement()
+
+        if (type == "${'$'}GNGLL") {
+            mutableGNGLLValue.value = "${message},"
+        } else if (type == "${'$'}GNRMC") {
+            mutableGNRMCValue.value = "${message},"
+        } else if (type == "${'$'}GNGSA") {
+            mutableGNGSAValue.value = "${message},"
+        } else if (type == "${'$'}GLGSV") {
+            mutableGLGSVValue.value = "${message},"
+        } else if (type == "${'$'}GAGSV") {
+            mutableGAGSVValue.value = "${message},"
+        }
+    }
+
+    override fun onLocationChanged(location: Location) {
+        mutableLocationValue.value = "$location"
     }
 }
 
@@ -91,6 +174,21 @@ fun MySensor(modifier: Modifier, viewModel: MySensorComponent = viewModel()) {
         Column {
             MyText(Modifier, "Gyroscope: ${viewModel.mutableGyroscopeValue.value}")
             MyText(Modifier, "Accelerometer: ${viewModel.mutableAccelerometerValue.value}")
+            MyText(Modifier, "Rotation Vector: ${viewModel.mutableRotationVectorValue.value}")
+            MyText(Modifier, "Accelerometer Limit Axes: ${viewModel.mutableAccelerometerLimitedAxesValue.value}")
+            MyText(Modifier, "Gyroscope Limit xes: ${viewModel.mutableGyroscopeLimitedAxesValue.value}")
+            MyText(Modifier, "Game Rotation Vector: ${viewModel.mutableGameRotationVectorValue.value}")
+            MyText(Modifier, "Gravity: ${viewModel.mutableGravityValue.value}")
+            MyText(Modifier, "Linear Acceleration: ${viewModel.mutableLinearAccelerationValue.value}")
+        }
+        Column {
+            MyText(Modifier, "Location: ${viewModel.mutableLocationValue.value}")
+
+            MyText(Modifier, "GNGLL: ${viewModel.mutableGNGLLValue.value}")
+            MyText(Modifier, "GNRMC: ${viewModel.mutableGNRMCValue.value}")
+            MyText(Modifier, "GNGSA: ${viewModel.mutableGNGSAValue.value}")
+            MyText(Modifier, "GLGSV: ${viewModel.mutableGLGSVValue.value}")
+            MyText(Modifier, "GAGSV: ${viewModel.mutableGAGSVValue.value}")
         }
     }
 }

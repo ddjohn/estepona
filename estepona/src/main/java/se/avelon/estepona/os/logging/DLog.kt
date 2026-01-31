@@ -15,12 +15,17 @@
  */
 package se.avelon.estepona.logging
 
+import android.os.Bundle
 import android.util.Log
 
 object DLog {
     fun forTag(clazz: Class<*>): String = "@@.${clazz.simpleName}"
 
     fun method(tag: String, msg: Any) {
+        Log.d(tag, "\uD83D\uDFE6$msg") // Blue box
+    }
+
+    fun debug(tag: String, msg: Any) {
         Log.d(tag, "\uD83D\uDFE6$msg") // Blue box
     }
 
@@ -46,5 +51,11 @@ object DLog {
         warning("@@.DLog", "warning")
         error("@@.DLog", "error")
         exception("@@.DLog", "exception", RuntimeException("exception"))
+    }
+
+    fun bundle(tag: String, bundle: Bundle?) {
+        for (key in bundle?.keySet()!!) {
+            debug(tag, "$key = " + bundle.get(key))
+        }
     }
 }

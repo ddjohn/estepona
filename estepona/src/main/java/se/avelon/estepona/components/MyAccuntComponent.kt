@@ -21,7 +21,6 @@ import android.accounts.OnAccountsUpdateListener
 import android.content.Context
 import android.content.Context.ACCOUNT_SERVICE
 import android.os.Handler
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
@@ -35,7 +34,7 @@ import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.compose.MyText
 import se.avelon.estepona.logging.DLog
 
-class MyAccountComponent: ViewModel(), OnAccountsUpdateListener {
+class MyAccountComponent : ViewModel(), OnAccountsUpdateListener {
     companion object {
         val TAG = DLog.forTag(MyAccountComponent::class.java)
         var initialized = false
@@ -46,11 +45,16 @@ class MyAccountComponent: ViewModel(), OnAccountsUpdateListener {
 
     fun init(context: Context) {
         DLog.method(TAG, "init()")
-        if(initialized)
+        if (initialized) {
             return
+        }
 
         val accountManager = context.getSystemService(ACCOUNT_SERVICE) as AccountManager
-        accountManager.addOnAccountsUpdatedListener(this, Handler.createAsync(context.mainLooper), true,)
+        accountManager.addOnAccountsUpdatedListener(
+            this,
+            Handler.createAsync(context.mainLooper),
+            true,
+        )
         initialized = true
     }
 
@@ -59,9 +63,7 @@ class MyAccountComponent: ViewModel(), OnAccountsUpdateListener {
 
         val str = StringBuilder()
         str.append(accounts?.size)
-        accounts?.forEach {
-            str.append("\n- " + it?.name)
-        }
+        accounts?.forEach { str.append("\n- " + it?.name) }
         _mutableValue.value = str.toString()
     }
 }
@@ -81,8 +83,6 @@ fun MyAccount(modifier: Modifier, viewModel: MyAccountComponent = viewModel()) {
             MyDropMenu("Accounts", accountManager.accounts)
             MyDropMenu("Authentication Types", accountManager.authenticatorTypes)
         }
-        Column {
-            MyText(Modifier, "Account: ${viewModel.mutableValue.value}")
-        }
+        Column { MyText(Modifier, "Account: ${viewModel.mutableValue.value}") }
     }
 }

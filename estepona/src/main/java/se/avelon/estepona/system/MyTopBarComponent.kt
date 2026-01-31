@@ -26,18 +26,13 @@ import android.content.Context.WIFI_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.hardware.display.DisplayManager
-import android.net.wifi.SupplicantState
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.view.Surface
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.ChargingStation
@@ -45,10 +40,10 @@ import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,6 +53,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -65,32 +62,146 @@ import kotlin.concurrent.thread
 import se.avelon.estepona.R
 import se.avelon.estepona.logging.DLog
 
-class MyTopBarComponent {
+class MyTopBarComponent : ViewModel() {
     companion object {
         val TAG = DLog.forTag(MyTopBarComponent::class.java)
+    }
+
+    val wifi: MutableState<Boolean> = mutableStateOf(false)
+    val ssid: MutableState<String> = mutableStateOf("")
+    val time: MutableState<String> = mutableStateOf("")
+    val charging: MutableState<Boolean> = mutableStateOf(false)
+    val percent: MutableState<String> = mutableStateOf("")
+    val bluetooth: MutableState<Boolean> = mutableStateOf(false)
+
+    fun init(context: Context) {
+        val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
+        wifi.value = false
+        ssid.value = wifiManager.connectionInfo.ssid
+
+        context.registerReceiver(
+            object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    DLog.method(TAG, "Wifi::onReceive()")
+                    DLog.bundle(TAG, intent?.extras)
+
+                    val wifiState =
+                        intent!!.getIntExtra(
+                            WifiManager.EXTRA_WIFI_STATE,
+                            WifiManager.WIFI_STATE_UNKNOWN,
+                        )
+
+                    wifi.value = wifiState == WifiManager.WIFI_STATE_ENABLED
+                    ssid.value = wifiManager.connectionInfo.ssid
+                }
+            },
+            IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION),
+        )
+
+        val batteryManager = context.getSystemService(BATTERY_SERVICE) as BatteryManager
+        charging.value = batteryManager.isCharging
+        percent.value = "" + batteryManager.computeChargeTimeRemaining()
+        context.registerReceiver(
+            object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    DLog.method(TAG, "Charging::Receive()")
+                    DLog.bundle(TAG, intent?.extras)
+
+                    val state =
+                        intent!!.getIntExtra(
+                            BatteryManager.EXTRA_STATUS,
+                            BatteryManager.BATTERY_STATUS_UNKNOWN,
+                        )
+
+                    charging.value = state == BatteryManager.BATTERY_STATUS_CHARGING
+                    percent.value = "" + batteryManager.computeChargeTimeRemaining()
+                }
+            },
+            IntentFilter(BatteryManager.ACTION_CHARGING),
+        )
+
+        val bluetoothManager = context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
+        bluetooth.value = bluetoothManager.adapter.isEnabled
+        context.registerReceiver(
+            object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    DLog.method(TAG, "Bluetooth:onReceive()")
+                    val state =
+                        intent!!.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
+
+                    bluetooth.value = state == BluetoothAdapter.STATE_ON
+                }
+            },
+            IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED),
+        )
+
+        thread(true) {
+            val calendar = Calendar.getInstance()
+            while (true) {
+                DLog.method(TAG, "Time::thread()")
+                val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                time.value = dateFormat.format(calendar.time)
+
+                Thread.sleep(2000)
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopBar(modifier: Modifier = Modifier) {
+fun MyTopBar(modifier: Modifier = Modifier, viewModel: MyTopBarComponent = viewModel()) {
+    DLog.method(MyTopBarComponent.TAG, "MyTopBar()")
+
+    viewModel.init(LocalContext.current)
+
     TopAppBar(
         title = {
             Row {
                 Badge {
                     Icon(contentDescription = "Email", painter = painterResource(R.drawable.logo))
+                    Text(" ")
+                    Text("Estepona")
                 }
-                Text("Estepona")
 
                 Spacer(modifier)
 
-                BluetoothIcon()
-                WifiIcon()
-                ChargingIcon()
+                // BluetoothIcon()
+
+                Spacer(modifier = Modifier.width(20.dp))
+                Icon(
+                    Icons.Default.Wifi,
+                    "Wifi",
+                    tint = if (viewModel.wifi.value) Color.White else Color.Gray,
+                    modifier = Modifier.size(24.dp),
+                )
+                Text(" ")
+                Text(viewModel.ssid.value)
+
+                Spacer(modifier = Modifier.width(32.dp))
+                Icon(
+                    Icons.Default.Bluetooth,
+                    "Bluetooth",
+                    tint = if (viewModel.bluetooth.value) Color.White else Color.Gray,
+                    modifier = Modifier.size(24.dp),
+                )
+
+                Spacer(modifier = Modifier.width(32.dp))
+                Icon(
+                    Icons.Default.ChargingStation,
+                    "Charging",
+                    tint = if (viewModel.charging.value) Color.White else Color.Gray,
+                    modifier = Modifier.size(24.dp),
+                )
+                Text(" ")
+                Text(viewModel.percent.value)
+
+                Spacer(modifier = Modifier.width(32.dp))
                 Orientation()
 
-                Spacer(Modifier.weight(1f))
-                ClockText()
+                Spacer(Modifier.weight(2f, true))
+                Text(viewModel.time.value)
+                Text(" ")
             }
         }
     )
@@ -114,175 +225,4 @@ fun Orientation() {
     DLog.info(MyTopBarComponent.TAG, "orientation=$orientation")
 
     Text(text = orientation)
-}
-
-@Composable
-fun BluetoothIcon() {
-    val context = LocalContext.current
-
-    val bluetoothManager = context.getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
-    var bluetooth by remember { mutableStateOf(bluetoothManager.adapter.isEnabled) }
-
-    AnimatedVisibility(
-        visible = bluetooth,
-        enter = fadeIn() + slideInVertically(),
-        exit = fadeOut() + slideOutVertically(),
-    ) {
-        IconButton(onClick = {}) {
-            Icon(
-                Icons.Default.Bluetooth,
-                "Bluetooth",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp),
-            )
-        }
-    }
-    AnimatedVisibility(
-        visible = !bluetooth,
-        enter = fadeIn() + slideInVertically(),
-        exit = fadeOut() + slideOutVertically(),
-    ) {
-        IconButton(onClick = {}) {
-            Icon(
-                Icons.Default.Bluetooth,
-                "Bluetooth",
-                tint = Color.DarkGray,
-                modifier = Modifier.size(24.dp),
-            )
-        }
-    }
-
-    context.registerReceiver(
-        object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                DLog.method(MyTopBarComponent.TAG, "Bluetooth:onReceive()")
-                val state =
-                    intent!!.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
-                if (state == BluetoothAdapter.STATE_ON) {
-                    bluetooth = true
-                } else {
-                    bluetooth = false
-                }
-            }
-        },
-        IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED),
-    )
-}
-
-@Composable
-fun WifiIcon() {
-    val context = LocalContext.current
-
-    val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
-    var wifi by remember { mutableStateOf(wifiManager.isWifiEnabled) }
-
-    AnimatedVisibility(
-        visible = wifi,
-        enter = fadeIn() + slideInVertically(),
-        exit = fadeOut() + slideOutVertically(),
-    ) {
-        IconButton(onClick = {}) {
-            Icon(Icons.Default.Wifi, "Wifi", tint = Color.White, modifier = Modifier.size(24.dp))
-        }
-    }
-    AnimatedVisibility(
-        visible = !wifi,
-        enter = fadeIn() + slideInVertically(),
-        exit = fadeOut() + slideOutVertically(),
-    ) {
-        IconButton(onClick = {}) {
-            Icon(Icons.Default.Wifi, "Wifi", tint = Color.DarkGray, modifier = Modifier.size(24.dp))
-        }
-    }
-
-    context.registerReceiver(
-        object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                DLog.method(MyTopBarComponent.TAG, "Wifi:onReceive()")
-                val state: SupplicantState? =
-                    intent?.getParcelableExtra(WifiManager.EXTRA_NEW_STATE)
-
-                if (state == SupplicantState.ASSOCIATED) {
-                    wifi = true
-                } else {
-                    wifi = false
-                }
-            }
-        },
-        IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION),
-    )
-}
-
-@Composable
-fun ChargingIcon() {
-    val context = LocalContext.current
-
-    val batteryManager = context.getSystemService(BATTERY_SERVICE) as BatteryManager
-    var charging by remember { mutableStateOf(batteryManager.isCharging) }
-
-    AnimatedVisibility(
-        visible = charging,
-        enter = fadeIn() + slideInVertically(),
-        exit = fadeOut() + slideOutVertically(),
-    ) {
-        IconButton(onClick = {}) {
-            Icon(
-                Icons.Default.ChargingStation,
-                "Charging",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp),
-            )
-        }
-    }
-    AnimatedVisibility(
-        visible = !charging,
-        enter = fadeIn() + slideInVertically(),
-        exit = fadeOut() + slideOutVertically(),
-    ) {
-        IconButton(onClick = {}) {
-            Icon(
-                Icons.Default.ChargingStation,
-                "Charging",
-                tint = Color.DarkGray,
-                modifier = Modifier.size(24.dp),
-            )
-        }
-    }
-
-    context.registerReceiver(
-        object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                DLog.method(MyTopBarComponent.TAG, "Charging::Receive()")
-                val state =
-                    intent!!.getIntExtra(
-                        BatteryManager.EXTRA_STATUS,
-                        BatteryManager.BATTERY_STATUS_UNKNOWN,
-                    )
-
-                if (state == BatteryManager.BATTERY_STATUS_CHARGING) {
-                    charging = true
-                } else {
-                    charging = false
-                }
-            }
-        },
-        IntentFilter(BatteryManager.ACTION_CHARGING),
-    )
-}
-
-@Composable
-fun ClockText() {
-    var time by remember { mutableStateOf("00:00") }
-
-    Text(text = time)
-
-    thread(true) {
-        val calendar = Calendar.getInstance()
-        while (true) {
-            Thread.sleep(2000)
-
-            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            time = dateFormat.format(calendar.time)
-        }
-    }
 }

@@ -114,9 +114,6 @@ fun MyNavigation(modifier: Modifier = Modifier) {
                 } else if (type == "${'$'}GNRMC") {
                     DLog.info(MyNavigationComponent.TAG, "GNRMC")
                     val checksum = tokenizer.nextElement()
-                } else if (type == "${'$'}GNGLL") {
-                    DLog.info(MyNavigationComponent.TAG, "GNGLL")
-                    val checksum = tokenizer.nextElement()
                 } else if (type == "${'$'}GNGSA") {
                     DLog.info(MyNavigationComponent.TAG, "GNGSA")
                     val checksum = tokenizer.nextElement()

@@ -22,7 +22,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.location.GpsStatus
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -36,13 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.StringTokenizer
 import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.compose.MyText
 import se.avelon.estepona.logging.DLog
-import java.util.StringTokenizer
 
-class MySensorComponent : ViewModel(), SensorEventListener, OnNmeaMessageListener,
-    LocationListener {
+class MySensorComponent :
+    ViewModel(), SensorEventListener, OnNmeaMessageListener, LocationListener {
     companion object {
         val TAG = DLog.forTag(MySensorComponent::class.java)
     }
@@ -56,7 +55,8 @@ class MySensorComponent : ViewModel(), SensorEventListener, OnNmeaMessageListene
     private val _mutableGyroscopeLimitedAxesValue = mutableStateOf("")
     val mutableGyroscopeLimitedAxesValue: MutableState<String> = _mutableGyroscopeLimitedAxesValue
     private val _mutableAccelerometerLimitedAxesValue = mutableStateOf("")
-    val mutableAccelerometerLimitedAxesValue: MutableState<String> = _mutableAccelerometerLimitedAxesValue
+    val mutableAccelerometerLimitedAxesValue: MutableState<String> =
+        _mutableAccelerometerLimitedAxesValue
     private val _mutableGameRotationVectorValue = mutableStateOf("")
     val mutableGameRotationVectorValue: MutableState<String> = _mutableGameRotationVectorValue
     private val _mutableGravityValue = mutableStateOf("")
@@ -86,7 +86,7 @@ class MySensorComponent : ViewModel(), SensorEventListener, OnNmeaMessageListene
         }
 
         val locationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager
-        locationManager.addNmeaListener(context.mainExecutor,this)
+        locationManager.addNmeaListener(context.mainExecutor, this)
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 1f, this)
     }
 
@@ -142,15 +142,15 @@ class MySensorComponent : ViewModel(), SensorEventListener, OnNmeaMessageListene
         val type = tokenizer.nextElement()
 
         if (type == "${'$'}GNGLL") {
-            mutableGNGLLValue.value = "${message},"
+            mutableGNGLLValue.value = "$message,"
         } else if (type == "${'$'}GNRMC") {
-            mutableGNRMCValue.value = "${message},"
+            mutableGNRMCValue.value = "$message,"
         } else if (type == "${'$'}GNGSA") {
-            mutableGNGSAValue.value = "${message},"
+            mutableGNGSAValue.value = "$message,"
         } else if (type == "${'$'}GLGSV") {
-            mutableGLGSVValue.value = "${message},"
+            mutableGLGSVValue.value = "$message,"
         } else if (type == "${'$'}GAGSV") {
-            mutableGAGSVValue.value = "${message},"
+            mutableGAGSVValue.value = "$message,"
         }
     }
 
@@ -166,7 +166,6 @@ fun MySensor(modifier: Modifier, viewModel: MySensorComponent = viewModel()) {
     val context = LocalContext.current
 
     viewModel.init(context)
-
     val sensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
 
     Row {
@@ -175,11 +174,23 @@ fun MySensor(modifier: Modifier, viewModel: MySensorComponent = viewModel()) {
             MyText(Modifier, "Gyroscope: ${viewModel.mutableGyroscopeValue.value}")
             MyText(Modifier, "Accelerometer: ${viewModel.mutableAccelerometerValue.value}")
             MyText(Modifier, "Rotation Vector: ${viewModel.mutableRotationVectorValue.value}")
-            MyText(Modifier, "Accelerometer Limit Axes: ${viewModel.mutableAccelerometerLimitedAxesValue.value}")
-            MyText(Modifier, "Gyroscope Limit xes: ${viewModel.mutableGyroscopeLimitedAxesValue.value}")
-            MyText(Modifier, "Game Rotation Vector: ${viewModel.mutableGameRotationVectorValue.value}")
+            MyText(
+                Modifier,
+                "Accelerometer Limit Axes: ${viewModel.mutableAccelerometerLimitedAxesValue.value}",
+            )
+            MyText(
+                Modifier,
+                "Gyroscope Limit xes: ${viewModel.mutableGyroscopeLimitedAxesValue.value}",
+            )
+            MyText(
+                Modifier,
+                "Game Rotation Vector: ${viewModel.mutableGameRotationVectorValue.value}",
+            )
             MyText(Modifier, "Gravity: ${viewModel.mutableGravityValue.value}")
-            MyText(Modifier, "Linear Acceleration: ${viewModel.mutableLinearAccelerationValue.value}")
+            MyText(
+                Modifier,
+                "Linear Acceleration: ${viewModel.mutableLinearAccelerationValue.value}",
+            )
         }
         Column {
             MyText(Modifier, "Location: ${viewModel.mutableLocationValue.value}")

@@ -90,24 +90,3 @@ fun MyBarItem(
         label = { Text(text) },
     )
 }
-
-@Composable
-fun MyBarItem2(
-    viewModel: MyBottomBarComponent,
-    navController: NavController,
-    text: String,
-    image: ImageVector,
-    index: Int,
-) {
-    DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index")
-
-    ShortNavigationBarItem(
-        selected = viewModel.selected == index,
-        onClick = {
-            DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
-            navController.navigate(text)
-        },
-        icon = { Icon(painter = painterResource(image.hashCode()), null) },
-        label = { Text(text) },
-    )
-}

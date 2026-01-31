@@ -136,10 +136,10 @@ class MyTopBarComponent : ViewModel() {
         )
 
         thread(true) {
-            val calendar = Calendar.getInstance()
+            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
             while (true) {
                 DLog.method(TAG, "Time::thread()")
-                val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                val calendar = Calendar.getInstance()
                 time.value = dateFormat.format(calendar.time)
 
                 Thread.sleep(2000)
@@ -163,10 +163,6 @@ fun MyTopBar(modifier: Modifier = Modifier, viewModel: MyTopBarComponent = viewM
                     Text(" ")
                     Text("Estepona")
                 }
-
-                Spacer(modifier)
-
-                // BluetoothIcon()
 
                 Spacer(modifier = Modifier.width(20.dp))
                 Icon(

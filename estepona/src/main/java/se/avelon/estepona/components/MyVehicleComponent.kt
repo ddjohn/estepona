@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.components.vehicle
+package se.avelon.estepona.components
 
 import android.car.Car
 import android.car.VehiclePropertyIds
@@ -27,6 +27,7 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import se.avelon.estepona.components.vehicle.MyProperty
 import java.io.File
 import java.io.PrintWriter
 import java.util.Calendar

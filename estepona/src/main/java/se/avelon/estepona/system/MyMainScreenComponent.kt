@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -42,7 +41,7 @@ import se.avelon.estepona.components.MyStatistics
 import se.avelon.estepona.components.MyStatus
 import se.avelon.estepona.components.MyTime
 import se.avelon.estepona.components.PackageGrid
-import se.avelon.estepona.components.vehicle.MyVehicle
+import se.avelon.estepona.components.MyVehicle
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
@@ -64,8 +63,6 @@ fun MyMainScreen() {
         ) { innerPadding ->
             DLog.method(TAG, "Scaffold(): $innerPadding")
 
-            val context = LocalContext.current
-
             Row {
                 DLog.method(TAG, "Row()")
 
@@ -73,7 +70,7 @@ fun MyMainScreen() {
                 NavHost(
                     navController = navController,
                     startDestination = "Account",
-                    modifier = Modifier.padding(innerPadding),
+                    modifier = Modifier.padding(innerPadding)
                 ) {
                     composable("Account") { MyAccount(modifier = Modifier.fillMaxSize()) }
                     composable("Audio") { MyAudio(modifier = Modifier.fillMaxSize()) }

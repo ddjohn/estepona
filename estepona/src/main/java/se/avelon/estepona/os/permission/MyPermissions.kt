@@ -18,8 +18,10 @@ package se.avelon.estepona.os.permission
 import android.Manifest
 import android.app.Activity
 import android.car.Car
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat.checkSelfPermission
 import se.avelon.estepona.logging.DLog
 
 class MyPermissions(val activity: Activity) {
@@ -54,6 +56,14 @@ class MyPermissions(val activity: Activity) {
                 Car.PERMISSION_SPEED,
                 // Car.PERMISSION_VENDOR_EXTENSION,
             )
+
+        fun checkSelfPermissions(context: Context, permissions: Array<String>): Boolean {
+            for(permission in permissions) {
+                if (checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED)
+                    return false
+            }
+            return true
+        }
     }
 
     fun request() {

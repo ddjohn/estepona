@@ -162,6 +162,9 @@ fun MyNavigation(modifier: Modifier = Modifier) {
                 } else if (type == "${'$'}TEST") {
                     DLog.info(MyNavigationComponent.TAG, "TEST")
                     val checksum = tokenizer.nextElement()
+                } else if (type == "${'$'}SCFI") {
+                    DLog.info(MyNavigationComponent.TAG, "SCFI")
+                    val checksum = tokenizer.nextElement()
                 } else {
                     throw RuntimeException("david")
                 }

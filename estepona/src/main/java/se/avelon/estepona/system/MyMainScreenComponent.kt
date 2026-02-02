@@ -15,6 +15,7 @@
  */
 package se.avelon.estepona.system
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,6 +50,7 @@ object MyScreenComponent {
     val TAG = DLog.forTag(MyScreenComponent::class.java)
 }
 
+@SuppressLint("MissingPermission")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyMainScreen() {

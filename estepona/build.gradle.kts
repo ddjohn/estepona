@@ -57,9 +57,6 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
-    // Media3
-    implementation(libs.androidx.media3.ui.compose.v180)
-
     implementation(libs.androidx.compose.material.icons.extended)
 
     // ExoPlayer

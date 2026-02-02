@@ -61,7 +61,7 @@ fun MyMainScreen() {
             modifier = Modifier.fillMaxSize(),
             floatingActionButton = { MyFloatingButton() },
             topBar = { MyTopBar() },
-            bottomBar = { MyBottomBar(navController) },
+            bottomBar = { MyBottomBar(navController = navController) },
         ) { innerPadding ->
             DLog.method(TAG, "Scaffold(): $innerPadding")
 

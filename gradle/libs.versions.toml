@@ -32,7 +32,6 @@ constraintlayout = "2.2.1"
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-media3-ui-compose-v180 = { module = "androidx.media3:media3-ui-compose", version.ref = "media3UiCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -55,15 +54,11 @@ maps-ndk27 = { group = "com.mapbox.maps", name="android-ndk27", version.ref = "m
 maps-compose-ndk27 = { group = "com.mapbox.extension", name = "maps-compose-ndk27", version.ref = "mapsComposeNdk27" }
 
 # Exo Player
-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3ExoplayerDash" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3ExoplayerDash" }
 androidx-media3-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "media3ExoplayerDash" }
-media3-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "media3ExoplayerDash" }
 
 # Media Compose
 androidx-media3-ui-compose = { module = "androidx.media3:media3-ui-compose", version.ref = "media3ExoplayerDash" }
-media3-ui-compose = { module = "androidx.media3:media3-ui-compose", version.ref = "media3ExoplayerDash" }
-media3-datasource = { module = "androidx.media3:media3-datasource", version.ref = "media3ExoplayerDash" }
 media3-datasource-okhttp = { module = "androidx.media3:media3-datasource-okhttp", version.ref = "media3ExoplayerDash" }
 
 # Camera

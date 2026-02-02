@@ -21,7 +21,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.ShortNavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,14 +38,14 @@ class MyBottomBarComponent : ViewModel() {
         val TAG = DLog.forTag(MyBottomBarComponent::class.java)
     }
 
-    var selected by mutableStateOf(0)
+    val selected = mutableIntStateOf(0)
 }
 
 @Composable
 fun MyBottomBar(
+    modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: MyBottomBarComponent = MyBottomBarComponent(),
-    modifier: Modifier = Modifier,
 ) {
     DLog.method(MyBottomBarComponent.TAG, "MyBottomBar()")
 
@@ -84,11 +86,11 @@ fun MyBarItem(
     DLog.method(MyBottomBarComponent.TAG, "MyBarItem(): $index, ${viewModel.selected}")
 
     ShortNavigationBarItem(
-        selected = viewModel.selected == index,
+        selected = viewModel.selected.intValue == index,
         onClick = {
             DLog.method(MyBottomBarComponent.TAG, "onClick(): $index")
             navController.navigate(text)
-            viewModel.selected = index
+            viewModel.selected.intValue = index
         },
         icon = { Icon(painter = painterResource(res), null) },
         label = { Text(text) },

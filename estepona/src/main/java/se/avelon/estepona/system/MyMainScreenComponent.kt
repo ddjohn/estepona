@@ -40,8 +40,8 @@ import se.avelon.estepona.components.MySpeech
 import se.avelon.estepona.components.MyStatistics
 import se.avelon.estepona.components.MyStatus
 import se.avelon.estepona.components.MyTime
-import se.avelon.estepona.components.PackageGrid
 import se.avelon.estepona.components.MyVehicle
+import se.avelon.estepona.components.PackageGrid
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
@@ -70,7 +70,7 @@ fun MyMainScreen() {
                 NavHost(
                     navController = navController,
                     startDestination = "Account",
-                    modifier = Modifier.padding(innerPadding)
+                    modifier = Modifier.padding(innerPadding),
                 ) {
                     composable("Account") { MyAccount(modifier = Modifier.fillMaxSize()) }
                     composable("Audio") { MyAudio(modifier = Modifier.fillMaxSize()) }

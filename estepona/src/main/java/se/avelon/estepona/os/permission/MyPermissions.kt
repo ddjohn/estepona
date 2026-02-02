@@ -58,9 +58,10 @@ class MyPermissions(val activity: Activity) {
             )
 
         fun checkSelfPermissions(context: Context, permissions: Array<String>): Boolean {
-            for(permission in permissions) {
-                if (checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED)
+            for (permission in permissions) {
+                if (checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     return false
+                }
             }
             return true
         }

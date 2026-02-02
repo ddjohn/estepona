@@ -27,27 +27,28 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import se.avelon.estepona.components.vehicle.MyProperty
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import java.io.File
 import java.io.PrintWriter
 import java.util.Calendar
+import se.avelon.estepona.components.vehicle.MyProperty
 import se.avelon.estepona.logging.DLog
 
-class MyVehicleComponent(context: Context) : CarPropertyManager.CarPropertyEventCallback {
+class MyVehicleComponent : ViewModel(), CarPropertyManager.CarPropertyEventCallback {
     companion object {
         val TAG = DLog.forTag(MyVehicleComponent::class.java)
     }
 
-    val printWriter: PrintWriter
+    lateinit var printWriter: PrintWriter
     private val listItems = arrayListOf<MyProperty<*>>()
     private lateinit var arrayAdapter: ArrayAdapter<MyProperty<*>>
 
-    init {
+    fun init(context: Context) {
         DLog.method(TAG, "init()")
 
         val file = File("${context.dataDir}/vehicle_${Calendar.getInstance().timeInMillis}.log")
         DLog.info(TAG, "Logging to $file")
-
         file.parentFile?.mkdirs()
         printWriter = PrintWriter(file)
 
@@ -108,14 +109,14 @@ class MyVehicleComponent(context: Context) : CarPropertyManager.CarPropertyEvent
 }
 
 @Composable
-fun MyVehicle(modifier: Modifier) {
+fun MyVehicle(modifier: Modifier, viewModel: MyVehicleComponent = viewModel()) {
     DLog.method(MyVehicleComponent.TAG, "MyVehicle(): $modifier")
 
     val context = LocalContext.current
+    viewModel.init(context)
 
-    if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
-        val vehicle = MyVehicleComponent(LocalContext.current)
-    } else {
+    if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
         Toast.makeText(context, "No auto feature", Toast.LENGTH_SHORT).show()
+        return
     }
 }

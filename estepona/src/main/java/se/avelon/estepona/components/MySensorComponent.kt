@@ -19,8 +19,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.Context.SENSOR_SERVICE
-import android.content.pm.PackageManager
-import se.avelon.estepona.os.permission.MyPermissions
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -29,6 +27,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.location.OnNmeaMessageListener
+import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,13 +36,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.StringTokenizer
 import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.compose.MyText
 import se.avelon.estepona.logging.DLog
+import se.avelon.estepona.os.permission.MyPermissions
 
 class MySensorComponent :
     ViewModel(), SensorEventListener, OnNmeaMessageListener, LocationListener {
@@ -54,7 +53,7 @@ class MySensorComponent :
     val gyroscope: MutableState<String> = mutableStateOf("")
     val accelerometer: MutableState<String> = mutableStateOf("")
     val rotationVector: MutableState<String> = mutableStateOf("")
-    val gyroscopeLimitedAxes: MutableState<String>  = mutableStateOf("")
+    val gyroscopeLimitedAxes: MutableState<String> = mutableStateOf("")
     val accelerometerLimitedAxes: MutableState<String> = mutableStateOf("")
     val gameRotationVector: MutableState<String> = mutableStateOf("")
     val gravity: MutableState<String> = mutableStateOf("")
@@ -89,16 +88,13 @@ class MySensorComponent :
     override fun onSensorChanged(event: SensorEvent?) {
         when (event?.sensor?.type) {
             Sensor.TYPE_GYROSCOPE -> {
-                gyroscope.value =
-                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+                gyroscope.value = "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
             Sensor.TYPE_ACCELEROMETER -> {
-                accelerometer.value =
-                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+                accelerometer.value = "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
             Sensor.TYPE_ROTATION_VECTOR -> {
-                rotationVector.value =
-                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+                rotationVector.value = "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
             Sensor.TYPE_ACCELEROMETER_LIMITED_AXES -> {
                 accelerometerLimitedAxes.value =
@@ -113,8 +109,7 @@ class MySensorComponent :
                     "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
             Sensor.TYPE_GRAVITY -> {
-                gravity.value =
-                    "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
+                gravity.value = "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
             Sensor.TYPE_LINEAR_ACCELERATION -> {
                 linearAcceleration.value =
@@ -158,10 +153,15 @@ fun MySensor(modifier: Modifier, viewModel: MySensorComponent = viewModel()) {
 
     val context = LocalContext.current
 
-    if(!MyPermissions.checkSelfPermissions(context,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
-    )
+    if (
+        !MyPermissions.checkSelfPermissions(
+            context,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+        )
+    ) {
+        Toast.makeText(context, "No location", Toast.LENGTH_SHORT).show()
         return
+    }
 
     viewModel.init(context)
 
@@ -177,19 +177,10 @@ fun MySensor(modifier: Modifier, viewModel: MySensorComponent = viewModel()) {
                 Modifier,
                 "Accelerometer Limit Axes: ${viewModel.accelerometerLimitedAxes.value}",
             )
-            MyText(
-                Modifier,
-                "Gyroscope Limit xes: ${viewModel.gyroscopeLimitedAxes.value}",
-            )
-            MyText(
-                Modifier,
-                "Game Rotation Vector: ${viewModel.gameRotationVector.value}",
-            )
+            MyText(Modifier, "Gyroscope Limit xes: ${viewModel.gyroscopeLimitedAxes.value}")
+            MyText(Modifier, "Game Rotation Vector: ${viewModel.gameRotationVector.value}")
             MyText(Modifier, "Gravity: ${viewModel.gravity.value}")
-            MyText(
-                Modifier,
-                "Linear Acceleration: ${viewModel.linearAcceleration.value}",
-            )
+            MyText(Modifier, "Linear Acceleration: ${viewModel.linearAcceleration.value}")
         }
         Column {
             MyText(Modifier, "Location: ${viewModel.location.value}")

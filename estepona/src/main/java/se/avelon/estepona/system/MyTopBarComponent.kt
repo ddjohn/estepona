@@ -22,12 +22,14 @@ import android.content.Context
 import android.content.Context.BATTERY_SERVICE
 import android.content.Context.BLUETOOTH_SERVICE
 import android.content.Context.DISPLAY_SERVICE
+import android.content.Context.USER_SERVICE
 import android.content.Context.WIFI_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.hardware.display.DisplayManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
+import android.os.UserManager
 import android.view.Surface
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,8 +42,10 @@ import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -73,6 +77,7 @@ class MyTopBarComponent : ViewModel() {
     val charging: MutableState<Boolean> = mutableStateOf(false)
     val percent: MutableState<String> = mutableStateOf("")
     val bluetooth: MutableState<Boolean> = mutableStateOf(false)
+    val user: MutableState<String> = mutableStateOf("")
 
     fun init(context: Context) {
         val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
@@ -135,6 +140,9 @@ class MyTopBarComponent : ViewModel() {
             IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED),
         )
 
+        val userManager = context.getSystemService(USER_SERVICE) as UserManager
+        user.value = userManager.userName
+
         thread(true) {
             val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
             while (true) {
@@ -156,6 +164,11 @@ fun MyTopBar(modifier: Modifier = Modifier, viewModel: MyTopBarComponent = viewM
     viewModel.init(LocalContext.current)
 
     TopAppBar(
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.primary,
+            ),
         title = {
             Row {
                 Badge {
@@ -195,11 +208,14 @@ fun MyTopBar(modifier: Modifier = Modifier, viewModel: MyTopBarComponent = viewM
                 Spacer(modifier = Modifier.width(32.dp))
                 Orientation()
 
+                Spacer(modifier = Modifier.width(32.dp))
+                Text(viewModel.user.value)
+
                 Spacer(Modifier.weight(2f, true))
                 Text(viewModel.time.value)
                 Text(" ")
             }
-        }
+        },
     )
 }
 

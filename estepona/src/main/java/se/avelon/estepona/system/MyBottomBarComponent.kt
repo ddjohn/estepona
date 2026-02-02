@@ -16,6 +16,7 @@
 package se.avelon.estepona.system
 
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.ShortNavigationBarItem
 import androidx.compose.material3.Text
@@ -24,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
@@ -47,7 +47,11 @@ fun MyBottomBar(
 ) {
     DLog.method(MyBottomBarComponent.TAG, "MyBottomBar()")
 
-    NavigationBar(modifier = modifier) {
+    NavigationBar(
+        modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.primary,
+    ) {
         MyBarItem(viewModel, navController, "Account", R.drawable.navigation_account, 0)
         MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 1)
         MyBarItem(viewModel, navController, "Bluetooth", R.drawable.navigation_bluetooth, 2)

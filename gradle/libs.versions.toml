@@ -1,5 +1,6 @@
 [versions]
 spotless = "8.2.1"
+devtools-ksp = "2.3.4"
 
 agp = "9.0.0"
 firebaseBom = "34.9.0"
@@ -87,3 +88,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "devtools-ksp" }
+

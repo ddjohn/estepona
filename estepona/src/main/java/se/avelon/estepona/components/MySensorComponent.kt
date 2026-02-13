@@ -90,31 +90,39 @@ class MySensorComponent :
             Sensor.TYPE_GYROSCOPE -> {
                 gyroscope.value = "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
+
             Sensor.TYPE_ACCELEROMETER -> {
                 accelerometer.value = "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
+
             Sensor.TYPE_ROTATION_VECTOR -> {
                 rotationVector.value = "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
+
             Sensor.TYPE_ACCELEROMETER_LIMITED_AXES -> {
                 accelerometerLimitedAxes.value =
                     "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
+
             Sensor.TYPE_GYROSCOPE_LIMITED_AXES -> {
                 gyroscopeLimitedAxes.value =
                     "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
+
             Sensor.TYPE_GAME_ROTATION_VECTOR -> {
                 gameRotationVector.value =
                     "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
+
             Sensor.TYPE_GRAVITY -> {
                 gravity.value = "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
+
             Sensor.TYPE_LINEAR_ACCELERATION -> {
                 linearAcceleration.value =
                     "${event.values[0]}, ${event.values[1]}, ${event.values[2]}"
             }
+
             else -> {
                 DLog.method(
                     TAG,

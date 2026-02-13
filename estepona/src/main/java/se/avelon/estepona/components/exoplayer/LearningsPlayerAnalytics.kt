@@ -43,14 +43,21 @@ class LearningsPlayerAnalytics(private val exoPlayer: ExoPlayer?) : AnalyticsLis
         val itemId = currentMediaItemTag()
 
         when (state) {
-            Player.STATE_READY ->
+            Player.STATE_READY -> {
                 DLog.info(TAG, "Playback Ready time = ${eventTime.realtimeMs} and itemId = $itemId")
-            Player.STATE_ENDED ->
+            }
+
+            Player.STATE_ENDED -> {
                 DLog.info(TAG, "Playback Ended time = ${eventTime.realtimeMs} and itemId = $itemId")
-            Player.STATE_BUFFERING ->
+            }
+
+            Player.STATE_BUFFERING -> {
                 DLog.info(TAG, "Buffering time = ${eventTime.realtimeMs} and itemId = $itemId")
-            Player.STATE_IDLE ->
+            }
+
+            Player.STATE_IDLE -> {
                 DLog.info(TAG, "Player Idle time = ${eventTime.realtimeMs} and itemId = $itemId")
+            }
         }
     }
 

@@ -35,6 +35,7 @@ class MyProperty<T>(val value: CarPropertyValue<T>) {
                 0 -> {
                     "global"
                 }
+
                 else -> {
                     "unknown"
                 }

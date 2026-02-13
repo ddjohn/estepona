@@ -106,11 +106,17 @@ fun MyMedia(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel = vi
 
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
-                Lifecycle.Event.ON_PAUSE ->
+                Lifecycle.Event.ON_PAUSE -> {
                     playerViewModel.executeAction(PlayerAction(ActionType.PAUSE))
-                Lifecycle.Event.ON_RESUME ->
+                }
+
+                Lifecycle.Event.ON_RESUME -> {
                     playerViewModel.executeAction(PlayerAction(ActionType.PLAY))
-                else -> Unit
+                }
+
+                else -> {
+                    Unit
+                }
             }
         }
 

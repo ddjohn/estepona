@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
 
         val notif = Notif(this)
-        notif.default(666, "title", "content")
+        notif.default(666, "Estepona", "Running...")
 
         permissions = MyPermissions(this)
 

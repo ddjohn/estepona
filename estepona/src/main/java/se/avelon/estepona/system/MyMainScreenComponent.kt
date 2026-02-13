@@ -16,14 +16,19 @@
 package se.avelon.estepona.system
 
 import android.annotation.SuppressLint
+import android.content.Context.DISPLAY_SERVICE
+import android.hardware.display.DisplayManager
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -56,6 +61,15 @@ object MyScreenComponent {
 fun MyMainScreen() {
     val navController = rememberNavController()
 
+    val context = LocalContext.current
+
+    val displayManager = context.getSystemService(DISPLAY_SERVICE) as DisplayManager
+    val w = displayManager.getDisplay(0).width
+    val h = displayManager.getDisplay(0).height
+
+    val min = if (w < h) w else h
+    DLog.error(MyScreenComponent.TAG, "==> w=$w, h=$h, min=$min")
+
     EsteponaTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -73,6 +87,7 @@ fun MyMainScreen() {
                     navController = navController,
                     startDestination = "Account",
                     modifier = Modifier.padding(innerPadding),
+                    // .width(Dp(min.toFloat())).height(Dp(min.toFloat())),
                 ) {
                     composable("Account") { MyAccount(modifier = Modifier.fillMaxSize()) }
                     composable("Audio") { MyAudio(modifier = Modifier.fillMaxSize()) }

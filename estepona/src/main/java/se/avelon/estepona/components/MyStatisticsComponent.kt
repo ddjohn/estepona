@@ -63,6 +63,8 @@ class MyStatisticsComponent(val context: Context) : OnChartValueSelectedListener
     }
 
     init {
+        DLog.method(TAG, "init()")
+
         client =
             OkHttpClient.Builder()
                 // .addInterceptor(HttpLoggingInterceptor())
@@ -73,6 +75,10 @@ class MyStatisticsComponent(val context: Context) : OnChartValueSelectedListener
         DLog.info(TAG, "client: $client")
 
         thread = Thread(this)
+    }
+
+    fun resultMethod(result: Integer?) {
+        DLog.info(TAG, "result=$result")
     }
 
     fun setChart(chart: BubbleChart) {
@@ -91,13 +97,16 @@ class MyStatisticsComponent(val context: Context) : OnChartValueSelectedListener
             Market.MARKETS -> {
                 stocks = stocks_markets
             }
+
             Market.OMX30 -> {
                 stocks = stocks_omx30
             }
+
             Market.HIGH_CAP -> {}
+
             Market.MID_CAP -> {}
+
             Market.LOW_CAP -> {}
-            else -> {}
         }
 
         thread = Thread(this)
@@ -105,19 +114,19 @@ class MyStatisticsComponent(val context: Context) : OnChartValueSelectedListener
     }
 
     override fun onValueSelected(e: Entry?, h: Highlight?) {
-        DLog.info(MyStatusComponent.TAG, "onValueSelected():  $e $h")
+        DLog.info(TAG, "onValueSelected():  $e $h")
 
         Toast.makeText(context, "${e?.data}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onNothingSelected() {
-        DLog.info(MyStatusComponent.TAG, "onNothingSelected()")
+        DLog.info(TAG, "onNothingSelected()")
     }
 
     override fun run() {
-        DLog.info(MyStatusComponent.TAG, "run()")
+        DLog.info(TAG, "run()")
         for (stock in stocks) {
-            DLog.info(MyStatusComponent.TAG, "stock=$stock")
+            DLog.info(TAG, "stock=$stock")
 
             val latch = CountDownLatch(1)
 
@@ -185,7 +194,6 @@ fun MyStatistics(modifier: Modifier) {
     DLog.method(MyStatisticsComponent.TAG, "MyStatistics()")
 
     val context = LocalContext.current
-
     val component = MyStatisticsComponent(context)
 
     Row {

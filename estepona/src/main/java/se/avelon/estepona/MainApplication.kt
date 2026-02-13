@@ -16,6 +16,11 @@
 package se.avelon.estepona
 
 import android.app.Application
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import kotlin.concurrent.thread
+import se.avelon.estepona.jobs.MyJobService
 import se.avelon.estepona.logging.DLog
 
 class MainApplication : Application() {
@@ -26,5 +31,23 @@ class MainApplication : Application() {
     override fun onCreate() {
         DLog.method(TAG, "onCreate()")
         super.onCreate()
+
+        val jobInfo =
+            JobInfo.Builder(666, ComponentName(this, MyJobService::class.java))
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+                .setTraceTag("FromMain")
+                .setPeriodic((15 * 60 * 1000).toLong())
+                .build()
+
+        val jobScheduler =
+            applicationContext.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
+        jobScheduler.schedule(jobInfo)
+
+        thread(true) {
+            while (true) {
+                jobScheduler.allPendingJobs.forEach { DLog.debug(TAG, "job: $it") }
+                Thread.sleep(10000)
+            }
+        }
     }
 }

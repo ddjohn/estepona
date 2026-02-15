@@ -16,12 +16,17 @@
 package se.avelon.estepona.components
 
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.content.pm.PackageManager.GET_PERMISSIONS
 import android.content.pm.PackageManager.GET_SIGNATURES
 import android.content.pm.PackageManager.MATCH_ALL
 import android.content.pm.PermissionInfo.PROTECTION_DANGEROUS
 import android.content.pm.PermissionInfo.PROTECTION_FLAG_PRIVILEGED
+import android.content.pm.PermissionInfo.PROTECTION_NORMAL
+import android.content.pm.PermissionInfo.PROTECTION_SIGNATURE
 import android.content.pm.Signature
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -29,6 +34,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -43,9 +49,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import java.util.StringTokenizer
 import se.avelon.estepona.components.packages.PackageItemData
+import se.avelon.estepona.compose.MyButton
 import se.avelon.estepona.logging.DLog
+
 
 class MyPackageComponent {
     companion object {
@@ -54,11 +61,27 @@ class MyPackageComponent {
 }
 
 @Composable
+fun MyPackage(modifier: Modifier = Modifier) {
+    DLog.method(MyPackageComponent.TAG, "MyPackage()")
+
+    Column {
+        Row {
+            PackageGrid2(modifier)
+        }
+        Row {
+            //PackageGrid2(modifier)
+        }
+    }
+}
+
+@Composable
 fun PackageButton(modifier: Modifier = Modifier, item: PackageItemData, onClick: () -> Unit) {
     DLog.method(MyPackageComponent.TAG, "PackageButton()")
 
     Card(
-        modifier = Modifier.size(64.dp, 64.dp).padding(8.dp),
+        modifier = Modifier
+            .size(64.dp, 64.dp)
+            .padding(8.dp),
         onClick = onClick,
         border = BorderStroke(2.dp, Color.Red),
     ) {
@@ -76,8 +99,11 @@ fun PackageButton(modifier: Modifier = Modifier, item: PackageItemData, onClick:
 @Composable
 fun PackageGrid(modifier: Modifier = Modifier) {
     DLog.method(MyPackageComponent.TAG, "PackageGrid()")
+
     LazyColumn(
-        modifier = modifier.fillMaxSize().padding(16.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center,
     ) {
         DLog.method(MyPackageComponent.TAG, "LazyColumn()")
@@ -95,13 +121,15 @@ fun PackageGrid(modifier: Modifier = Modifier) {
                 DLog.method(MyPackageComponent.TAG, "FlowRow()")
 
                 val context = LocalContext.current
+
                 val packageManager = context.packageManager
                 for (pkg in packageManager.getInstalledPackages(MATCH_ALL)) {
                     val item =
                         PackageItemData(
                             pkg.packageName,
                             pkg.applicationInfo?.loadIcon(context?.packageManager),
-                            packageManager?.getApplicationLabel(pkg.applicationInfo!!).toString(),
+                            packageManager?.getApplicationLabel(pkg.applicationInfo!!)
+                                .toString(),
                         )
 
                     if (
@@ -116,7 +144,7 @@ fun PackageGrid(modifier: Modifier = Modifier) {
                                 intent.addCategory(Intent.CATEGORY_LAUNCHER)
                                 intent.setFlags(
                                     Intent.FLAG_ACTIVITY_NEW_TASK or
-                                        Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                                            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
                                 )
                                 intent.setPackage(item.pkg)
                                 context.startActivity(
@@ -124,52 +152,110 @@ fun PackageGrid(modifier: Modifier = Modifier) {
                                 )
                             },
                         )
+
                     }
                 }
             }
         }
     }
+}
 
-    val packageManager = LocalContext.current.packageManager
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun PackageGrid2(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val packageManager = context.packageManager
 
-    DLog.info(MyPackageComponent.TAG, "Scanning...")
-    for (pkgInfo in
-        packageManager.getInstalledPackages(MATCH_ALL or GET_PERMISSIONS or GET_SIGNATURES)) {
-        DLog.info(MyPackageComponent.TAG, "Scanning: ${pkgInfo.packageName}")
+    DLog.error(MyPackageComponent.TAG, "Scanning...")
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+    ) {
+        item {
+            Text(
+                modifier = Modifier.padding(bottom = 16.dp),
+                text = "Analysis",
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+        item {
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {}
+            //val apps: MutableList<ApplicationInfo?>? = packageManager
+              //  .getPersistentApplications(STOCK_PM_FLAGS or matchFlags).getList()
+            for (pkgInfo in
+            packageManager.getInstalledPackages(MATCH_ALL or GET_PERMISSIONS or GET_SIGNATURES)) {
+                if (pkgInfo.packageName.contains("mungo") == false) {
+                    MyButton(Modifier, text = pkgInfo.packageName) {
 
-        val myPackageName = pkgInfo.packageName
-        val mySignature = getSignatures(pkgInfo)
-        val path = StringTokenizer(pkgInfo.applicationInfo?.publicSourceDir, "/")
-
-        val partition = path.nextElement()
-        val privApp = path.nextElement()
-        val sys = if (pkgInfo.applicationInfo?.uid == 1001000) "===SYSTEM===" else ""
-
-        DLog.info(
-            MyPackageComponent.TAG,
-            "=== $myPackageName:$partition:$privApp:$mySignature:$sys: ",
-        )
-
-        if (pkgInfo.permissions != null) {
-            for (permission in pkgInfo.permissions) {
-                if (permission.name.contains("DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION")) {
-                    continue
-                }
-
-                if (
-                    permission.protectionFlags.and(
-                        PROTECTION_FLAG_PRIVILEGED.or(PROTECTION_DANGEROUS)
-                    ) == 0
-                ) {
+                    }
+                    DLog.error(MyPackageComponent.TAG, "--------- >8 --------")
+                    DLog.error(MyPackageComponent.TAG, "Package: ${pkgInfo.packageName}")
+                    DLog.error(MyPackageComponent.TAG, "Signature: ${getSignatures(pkgInfo)}")
                     DLog.error(
                         MyPackageComponent.TAG,
-                        "--- Permission: No,  ${permission.name}, flags=${permission.protectionFlags}",
+                        "Path: ${pkgInfo.applicationInfo?.publicSourceDir}"
                     )
-                } else {
-                    DLog.info(
-                        MyPackageComponent.TAG,
-                        "--- Permission: Yes, ${permission.name}, flags=${permission.protectionFlags}",
-                    )
+                    DLog.error(MyPackageComponent.TAG, "SharedUID: ${pkgInfo.sharedUserId}")
+                    if (context.applicationInfo.flags.and(FLAG_DEBUGGABLE) != 0)
+                        DLog.error(MyPackageComponent.TAG, "Version: debug")
+                    else
+                        DLog.error(MyPackageComponent.TAG, "Version: release")
+
+                    // Shared permissions
+                    if (pkgInfo.permissions != null) {
+                        for (permission in pkgInfo.permissions) {
+                            if (permission.name.contains("DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"))
+                                continue
+
+                            DLog.error(MyPackageComponent.TAG, "Permission: $permission")
+                        }
+                    }
+
+                    // Used Permissions
+                    if (pkgInfo.requestedPermissions != null) {
+                        for (permission in pkgInfo.requestedPermissions) {
+
+                            try {
+                                val permissionInfo =
+                                    packageManager.getPermissionInfo(permission, 0)
+                                //DLog.error(MyPackageComponent.TAG, "Permission info: ${permissionInfo.protection} ${permissionInfo.protectionFlags} $PROTECTION_DANGEROUS")
+
+                                if (permissionInfo.protection.and(PROTECTION_DANGEROUS) != 0) {
+                                    DLog.error(
+                                        MyPackageComponent.TAG,
+                                        "Dangerous Permission: $permission"
+                                    )
+                                }
+                                if (permissionInfo.protection.and(PROTECTION_NORMAL) != 0) {
+                                    DLog.error(
+                                        MyPackageComponent.TAG,
+                                        "Normal Permission: $permission"
+                                    )
+                                }
+
+                                for (flag in arrayOf(
+                                    PROTECTION_DANGEROUS,
+                                    PROTECTION_FLAG_PRIVILEGED,
+                                    PROTECTION_SIGNATURE,
+                                    PROTECTION_NORMAL
+                                )) {
+                                    if (permissionInfo.protection.and(flag) != 0) {
+                                        //DLog.error(MyPackageComponent.TAG, "Used $flag Permission: $permission")
+                                    }
+                                }
+                            } catch (e: PackageManager.NameNotFoundException) {
+                                DLog.error(
+                                    MyPackageComponent.TAG,
+                                    "Not available Permission: $e"
+                                )
+                            }
+                        }
+                    }
+
+                    DLog.error(MyPackageComponent.TAG, "--------- >8 --------")
+                    DLog.error(MyPackageComponent.TAG, "")
                 }
             }
         }

@@ -146,7 +146,7 @@ class MyTopBarComponent : ViewModel() {
         thread(true) {
             val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
             while (true) {
-                DLog.method(TAG, "Time::thread()")
+                //DLog.method(TAG, "Time::thread()")
                 val calendar = Calendar.getInstance()
                 time.value = dateFormat.format(calendar.time)
 
@@ -210,6 +210,7 @@ fun MyTopBar(modifier: Modifier = Modifier, viewModel: MyTopBarComponent = viewM
 
                 Spacer(modifier = Modifier.width(32.dp))
                 Text(viewModel.user.value)
+                Text("Version 1.15")
 
                 Spacer(Modifier.weight(2f, true))
                 Text(viewModel.time.value)

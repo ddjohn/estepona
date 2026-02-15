@@ -2,10 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <permission android:name="se.avelon.estepona.permission.testpermission" />
-
-
-    <!-- Features -->
+    <permission android:name="se.avelon.estepona.permission.testpermission" /> <!-- Features -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -81,7 +78,8 @@
     <uses-permission android:name="android.car.permission.CAR_TIRES" />
     <uses-permission android:name="android.car.permission.CAR_TIRES_3P" /> <!-- Normal permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- Dangerous Permissions -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
+        tools:ignore="ForegroundServicesPolicy" /> <!-- Dangerous Permissions -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -143,6 +141,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Estepona"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".LicenseActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Estepona">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.myapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <activity
             android:name=".MainActivity"
@@ -154,6 +170,9 @@
             </intent-filter>
         </activity>
 
+        <!--
+        android:permission="se.avelon.permissin.testpermission"
+        -->
         <service
             android:name=".jobs.MyJobService"
             android:enabled="true"
@@ -162,8 +181,7 @@
 
         <service
             android:name=".services.MyMediaBrowserService"
-            android:exported="true"
-            android:permission="se.avelon.permissin.testpermission">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>

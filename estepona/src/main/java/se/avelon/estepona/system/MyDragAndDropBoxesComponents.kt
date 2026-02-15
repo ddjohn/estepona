@@ -74,7 +74,7 @@ fun MyDragAndDropBoxes(modifier: Modifier = Modifier) {
         var dragBoxIndex by remember { mutableIntStateOf(0) }
         var color = remember { (1..boxCount).map { Color(Random.nextLong()).copy(alpha = 1f) } }
         repeat(boxCount) { index ->
-            DLog.info(MyDragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $index")
+            DLog.debug(MyDragAndDropBoxesComponents.TAG, "DragAndDropBoxes(): $index")
 
             MyBox(
                 modifier =

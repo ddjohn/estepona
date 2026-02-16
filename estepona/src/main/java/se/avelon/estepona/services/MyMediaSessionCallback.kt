@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 David Johansson
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package se.avelon.estepona.services
 
 import android.content.Intent
@@ -15,6 +30,7 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
         DLog.method(TAG, "onPrepare()")
         super.onPrepare()
     }
+
     override fun onPlay() {
         DLog.method(TAG, "onPlay()")
         super.onPlay()
@@ -34,9 +50,9 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
         DLog.method(TAG, "onPlayFromMediaId(): $mediaId, $extras")
         super.onPlayFromMediaId(mediaId, extras)
 
-        mediaSession.setPlaybackState(PlaybackState.Builder()
-            .setState(PlaybackState.STATE_PLAYING, 1200, 1f)
-            .build())
+        mediaSession.setPlaybackState(
+            PlaybackState.Builder().setState(PlaybackState.STATE_PLAYING, 1200, 1f).build()
+        )
     }
 
     override fun onPlayFromSearch(query: String?, extras: Bundle?) {

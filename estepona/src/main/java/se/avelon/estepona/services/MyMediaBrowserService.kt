@@ -24,7 +24,6 @@ import android.service.media.MediaBrowserService
 import se.avelon.estepona.logging.DLog
 
 class MyMediaBrowserService : MediaBrowserService() {
-
     companion object {
         val TAG = DLog.forTag(MyMediaBrowserService::class.java)
     }
@@ -33,26 +32,33 @@ class MyMediaBrowserService : MediaBrowserService() {
         DLog.method(TAG, "onCreate()")
         super.onCreate()
 
-        val mediaSession = MediaSession(this, TAG).apply {
-            setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS or MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS)
-            setPlaybackState(PlaybackState.Builder()
-                .setActions(PlaybackState.ACTION_PLAY
-                        or PlaybackState.ACTION_PAUSE
-                        or PlaybackState.ACTION_STOP
-                        or PlaybackState.ACTION_PLAY_FROM_MEDIA_ID
-                        or PlaybackState.ACTION_PLAY_FROM_SEARCH
-                        or PlaybackState.ACTION_SKIP_TO_PREVIOUS
-                        or PlaybackState.ACTION_SKIP_TO_NEXT)
-                .build())
-            setSessionToken(sessionToken)
-            setPlaybackState(PlaybackState.Builder()
-                .setState(PlaybackState.STATE_STOPPED, 3200, 1f)
-                .build())
-            isActive = true
-        }
+        val mediaSession =
+            MediaSession(this, TAG).apply {
+                setFlags(
+                    MediaSession.FLAG_HANDLES_MEDIA_BUTTONS or
+                        MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS
+                )
+                setPlaybackState(
+                    PlaybackState.Builder()
+                        .setActions(
+                            PlaybackState.ACTION_PLAY or
+                                PlaybackState.ACTION_PAUSE or
+                                PlaybackState.ACTION_STOP or
+                                PlaybackState.ACTION_PLAY_FROM_MEDIA_ID or
+                                PlaybackState.ACTION_PLAY_FROM_SEARCH or
+                                PlaybackState.ACTION_SKIP_TO_PREVIOUS or
+                                PlaybackState.ACTION_SKIP_TO_NEXT
+                        )
+                        .build()
+                )
+                setSessionToken(sessionToken)
+                setPlaybackState(
+                    PlaybackState.Builder().setState(PlaybackState.STATE_STOPPED, 3200, 1f).build()
+                )
+                isActive = true
+            }
 
         mediaSession.setCallback(MyMediaSessionCallback(mediaSession))
-
     }
 
     override fun onGetRoot(
@@ -69,73 +75,113 @@ class MyMediaBrowserService : MediaBrowserService() {
 
         val mediaItems = ArrayList<MediaBrowser.MediaItem>()
 
-        var mediaItem:  MediaBrowser.MediaItem
-        var mediaItem2:  MediaBrowser.MediaItem
-        if(parentId == "root") {
-            mediaItem = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("disk")
-                .setTitle("Davids Songs")
-                .setSubtitle("Led Zeppelin, Pink Floyd, ...")
-                .setDescription("Some Disk Description")
-                .build(), MediaBrowser.MediaItem.FLAG_BROWSABLE)
-            mediaItem2 = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("disk2")
-                .setTitle("Pias Songs")
-                .setSubtitle("Thomas Stenström, ...")
-                .setDescription("Some Disk Description")
-                .build(), MediaBrowser.MediaItem.FLAG_BROWSABLE)
-        } else if(parentId == "disk") {
-            mediaItem = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("album")
-                .setTitle("Songs From An Empty Chair")
-                .setSubtitle("Tears For Fears")
-                .setDescription("Some Album Description")
-                .build(), MediaBrowser.MediaItem.FLAG_BROWSABLE)
-            mediaItem2 = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("album2")
-                .setTitle("Hanky Panky")
-                .setSubtitle("David Bowie")
-                .setDescription("Some Album Description")
-                .build(), MediaBrowser.MediaItem.FLAG_BROWSABLE)
-        } else if(parentId == "disk2") {
-            mediaItem = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("album3")
-                .setTitle("Songs From An Empty Chair")
-                .setSubtitle("1984")
-                .setDescription("Some Album Description")
-                .build(), MediaBrowser.MediaItem.FLAG_BROWSABLE)
-            mediaItem2 = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("album4")
-                .setTitle("Final Cut")
-                .setSubtitle("Pink Floyd")
-                .setDescription("Some Album Description")
-                .build(), MediaBrowser.MediaItem.FLAG_BROWSABLE)
-        } else if(parentId == "album") {
-            mediaItem = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("song")
-                .setTitle("Led Zeppelin IV")
-                .setSubtitle("Led Zeppelin")
-                .setDescription("Some Song Description")
-                .build(), MediaBrowser.MediaItem.FLAG_PLAYABLE)
-            mediaItem2 = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("song2")
-                .setTitle("Seeds of Love")
-                .setSubtitle("1984")
-                .setDescription("Some Song Description")
-                .build(), MediaBrowser.MediaItem.FLAG_PLAYABLE)
+        var mediaItem: MediaBrowser.MediaItem
+        var mediaItem2: MediaBrowser.MediaItem
+        if (parentId == "root") {
+            mediaItem =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("disk")
+                        .setTitle("Davids Songs")
+                        .setSubtitle("Led Zeppelin, Pink Floyd, ...")
+                        .setDescription("Some Disk Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_BROWSABLE,
+                )
+            mediaItem2 =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("disk2")
+                        .setTitle("Pias Songs")
+                        .setSubtitle("Thomas Stenström, ...")
+                        .setDescription("Some Disk Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_BROWSABLE,
+                )
+        } else if (parentId == "disk") {
+            mediaItem =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("album")
+                        .setTitle("Songs From An Empty Chair")
+                        .setSubtitle("Tears For Fears")
+                        .setDescription("Some Album Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_BROWSABLE,
+                )
+            mediaItem2 =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("album2")
+                        .setTitle("Hanky Panky")
+                        .setSubtitle("David Bowie")
+                        .setDescription("Some Album Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_BROWSABLE,
+                )
+        } else if (parentId == "disk2") {
+            mediaItem =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("album3")
+                        .setTitle("Songs From An Empty Chair")
+                        .setSubtitle("1984")
+                        .setDescription("Some Album Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_BROWSABLE,
+                )
+            mediaItem2 =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("album4")
+                        .setTitle("Final Cut")
+                        .setSubtitle("Pink Floyd")
+                        .setDescription("Some Album Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_BROWSABLE,
+                )
+        } else if (parentId == "album") {
+            mediaItem =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("song")
+                        .setTitle("Led Zeppelin IV")
+                        .setSubtitle("Led Zeppelin")
+                        .setDescription("Some Song Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_PLAYABLE,
+                )
+            mediaItem2 =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("song2")
+                        .setTitle("Seeds of Love")
+                        .setSubtitle("1984")
+                        .setDescription("Some Song Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_PLAYABLE,
+                )
         } else {
-            mediaItem = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("songX")
-                .setTitle("White Noice")
-                .setSubtitle("1984")
-                .setDescription("Some Song Description")
-                .build(), MediaBrowser.MediaItem.FLAG_PLAYABLE)
-            mediaItem2 = MediaBrowser.MediaItem(MediaDescription.Builder()
-                .setMediaId("song4")
-                .setTitle("White Noice")
-                .setSubtitle("1984")
-                .setDescription("Some Song Description")
-                .build(), MediaBrowser.MediaItem.FLAG_PLAYABLE)
+            mediaItem =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("songX")
+                        .setTitle("White Noice")
+                        .setSubtitle("1984")
+                        .setDescription("Some Song Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_PLAYABLE,
+                )
+            mediaItem2 =
+                MediaBrowser.MediaItem(
+                    MediaDescription.Builder()
+                        .setMediaId("song4")
+                        .setTitle("White Noice")
+                        .setSubtitle("1984")
+                        .setDescription("Some Song Description")
+                        .build(),
+                    MediaBrowser.MediaItem.FLAG_PLAYABLE,
+                )
         }
         mediaItems.add(mediaItem)
         mediaItems.add(mediaItem2)

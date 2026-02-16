@@ -48,7 +48,6 @@ import se.avelon.estepona.components.MyStatistics
 import se.avelon.estepona.components.MyStatus
 import se.avelon.estepona.components.MyTime
 import se.avelon.estepona.components.MyVehicle
-import se.avelon.estepona.components.PackageGrid
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
 

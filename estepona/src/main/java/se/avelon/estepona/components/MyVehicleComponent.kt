@@ -133,6 +133,4 @@ fun MyVehicle(modifier: Modifier, viewModel: MyVehicleComponent = viewModel()) {
 
     val context = LocalContext.current
     viewModel.init(context)
-
-
 }

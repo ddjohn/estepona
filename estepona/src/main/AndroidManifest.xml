@@ -141,7 +141,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Estepona"
         android:usesCleartextTraffic="true">
-        <activity
+        <!--activity
             android:name=".LicenseActivity"
             android:exported="true"
             android:theme="@style/Theme.Estepona">
@@ -149,7 +149,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-->
         <!--provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.myapp.fileprovider"

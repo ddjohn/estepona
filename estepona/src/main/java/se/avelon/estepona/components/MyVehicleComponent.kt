@@ -45,6 +45,11 @@ class MyVehicleComponent : ViewModel(), CarPropertyManager.CarPropertyEventCallb
     fun init(context: Context) {
         DLog.method(TAG, "init()")
 
+        if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
+            Toast.makeText(context, "No auto feature", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val file = File("${context.dataDir}/vehicle_${Calendar.getInstance().timeInMillis}.log")
         DLog.info(TAG, "Logging to $file")
         file.parentFile?.mkdirs()
@@ -129,8 +134,5 @@ fun MyVehicle(modifier: Modifier, viewModel: MyVehicleComponent = viewModel()) {
     val context = LocalContext.current
     viewModel.init(context)
 
-    if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
-        Toast.makeText(context, "No auto feature", Toast.LENGTH_SHORT).show()
-        return
-    }
+
 }

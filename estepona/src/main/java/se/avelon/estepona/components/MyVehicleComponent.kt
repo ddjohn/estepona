@@ -54,40 +54,56 @@ class MyVehicleComponent : ViewModel(), CarPropertyManager.CarPropertyEventCallb
 
         val car = Car.createCar(context)
         val mgr = car.getCarManager(Car.PROPERTY_SERVICE) as CarPropertyManager
+
         for (prop in mgr.propertyList) {
             DLog.info(TAG, "prop=$prop")
 
-            if (VehiclePropertyIds.PARKING_BRAKE_ON == prop.propertyId) {
-                try {
-                    val obj = mgr.getProperty<Object>(prop.propertyId, 0)
-                    DLog.error(TAG, "obj=$obj")
-                } catch (e: CarInternalErrorException) {
-                    DLog.exception(TAG, "exception", e)
-                }
-            }
-
             try {
-                mgr.registerSupportedValuesChangeCallback(
-                    prop.propertyId,
-                    object : CarPropertyManager.SupportedValuesChangeCallback {
-                        override fun onSupportedValuesChange(p0: Int, p1: Int) {
-                            DLog.method(TAG, "onSupportedValuesChange(): $p0, $p1")
-                        }
-                    },
-                )
-
                 mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_UI)
                 mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_ONCHANGE)
-            } catch (e: SecurityException) {
-                DLog.exception(TAG, "exception", e)
+            }
+            catch(e: SecurityException) {
+                DLog.info(TAG, "Failed to subscribe to permission or wrong type: " + e.message)
             }
         }
+
+        /*
+
+                for (prop in mgr.propertyList) {
+                    DLog.info(TAG, "prop=$prop")
+
+                    if (VehiclePropertyIds.PARKING_BRAKE_ON == prop.propertyId) {
+                        try {
+                            val obj = mgr.getProperty<Object>(prop.propertyId, 0)
+                            DLog.error(TAG, "obj=$obj")
+                        } catch (e: CarInternalErrorException) {
+                            DLog.exception(TAG, "exception", e)
+                        }
+                    }
+
+                    try {
+                        mgr.registerSupportedValuesChangeCallback(
+                            prop.propertyId,
+                            object : CarPropertyManager.SupportedValuesChangeCallback {
+                                override fun onSupportedValuesChange(p0: Int, p1: Int) {
+                                    DLog.method(TAG, "onSupportedValuesChange(): $p0, $p1")
+                                }
+                            },
+                        )
+
+                        mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_UI)
+                        mgr.registerCallback(this, prop.propertyId, CarPropertyManager.SENSOR_RATE_ONCHANGE)
+                    } catch (e: SecurityException) {
+                        DLog.exception(TAG, "exception", e)
+                    }
+                }
+          */
     }
 
     override fun onChangeEvent(propertyValue: CarPropertyValue<*>?) {
         DLog.method(TAG, "onChangeEvent(): $propertyValue")
         printWriter.println("onChangeEvent(): $propertyValue")
-
+/*
         if (propertyValue?.propertyId == null) {
             return
         }
@@ -101,6 +117,7 @@ class MyVehicleComponent : ViewModel(), CarPropertyManager.CarPropertyEventCallb
 
         listItems.addFirst(MyProperty(propertyValue))
         arrayAdapter.notifyDataSetChanged()
+  */
     }
 
     override fun onErrorEvent(propertyValue: Int, p1: Int) {

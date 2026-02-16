@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.system
+package se.avelon.estepona.layout
 
 import android.content.ClipData
 import android.content.ClipDescription

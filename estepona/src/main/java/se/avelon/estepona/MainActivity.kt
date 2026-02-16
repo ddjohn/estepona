@@ -30,7 +30,7 @@ import se.avelon.estepona.components.MyNavigationComponent
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.os.notification.Notif
 import se.avelon.estepona.os.permission.MyPermissions
-import se.avelon.estepona.system.MyMainScreen
+import se.avelon.estepona.layout.MyMainScreen
 
 class MainActivity : ComponentActivity() {
     companion object {

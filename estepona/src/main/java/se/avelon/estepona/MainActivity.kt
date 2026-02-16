@@ -27,10 +27,10 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import se.avelon.estepona.components.MyNavigationComponent
+import se.avelon.estepona.layout.MyMainScreen
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.os.notification.Notif
 import se.avelon.estepona.os.permission.MyPermissions
-import se.avelon.estepona.layout.MyMainScreen
 
 class MainActivity : ComponentActivity() {
     companion object {

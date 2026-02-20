@@ -26,11 +26,18 @@ import se.avelon.estepona.logging.DLog
 class MainApplication : Application() {
     companion object {
         val TAG = DLog.forTag(MainApplication::class.java)
+
+        fun getApplication(): Application = application!!
+
+        private var application: Application? = null
     }
 
     override fun onCreate() {
         DLog.method(TAG, "onCreate()")
         super.onCreate()
+
+        // if(application == null)
+        application = this
 
         val jobInfo =
             JobInfo.Builder(666, ComponentName(this, MyJobService::class.java))

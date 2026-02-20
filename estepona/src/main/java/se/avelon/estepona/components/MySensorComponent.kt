@@ -16,7 +16,7 @@
 package se.avelon.estepona.components
 
 import android.Manifest
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Context.LOCATION_SERVICE
 import android.content.Context.SENSOR_SERVICE
 import android.hardware.Sensor
@@ -27,7 +27,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.location.OnNmeaMessageListener
-import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,21 +34,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.StringTokenizer
+import se.avelon.estepona.MainApplication
 import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.compose.MyText
 import se.avelon.estepona.logging.DLog
-import se.avelon.estepona.os.permission.MyPermissions
 
+@SuppressLint("MissingPermission")
 class MySensorComponent :
     ViewModel(), SensorEventListener, OnNmeaMessageListener, LocationListener {
     companion object {
         val TAG = DLog.forTag(MySensorComponent::class.java)
     }
 
+    var sensorList: MutableList<Sensor>
     val gyroscope: MutableState<String> = mutableStateOf("")
     val accelerometer: MutableState<String> = mutableStateOf("")
     val rotationVector: MutableState<String> = mutableStateOf("")
@@ -67,11 +67,12 @@ class MySensorComponent :
     val glgsv: MutableState<String> = mutableStateOf("")
     val gagsv = mutableStateOf("")
 
-    @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-    fun init(context: Context) {
+    init {
         DLog.method(TAG, "init()")
+        val context = MainApplication.getApplication().applicationContext
 
         val sensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
+        sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL).toMutableList()
         for (sensor in sensorManager.getSensorList(Sensor.TYPE_ALL)) {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_STATUS_ACCURACY_LOW)
         }
@@ -159,24 +160,8 @@ class MySensorComponent :
 fun MySensor(modifier: Modifier, viewModel: MySensorComponent = viewModel()) {
     DLog.method(MySensorComponent.TAG, "MySensor()")
 
-    val context = LocalContext.current
-
-    if (
-        !MyPermissions.checkSelfPermissions(
-            context,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-        )
-    ) {
-        Toast.makeText(context, "No location", Toast.LENGTH_SHORT).show()
-        return
-    }
-
-    viewModel.init(context)
-
-    val sensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
-
     Row {
-        Column { MyDropMenu("Sensors", sensorManager.getSensorList(Sensor.TYPE_ALL)) }
+        Column { MyDropMenu("Sensors", viewModel.sensorList.toList()) }
         Column {
             MyText(Modifier, "Gyroscope: ${viewModel.gyroscope.value}")
             MyText(Modifier, "Accelerometer: ${viewModel.accelerometer.value}")

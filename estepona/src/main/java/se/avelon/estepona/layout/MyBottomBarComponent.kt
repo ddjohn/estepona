@@ -59,6 +59,7 @@ fun MyBottomBar(
         MyBarItem(viewModel, navController, "Media", R.drawable.navigtion_movie, 6)
         MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 7)
         MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 8)
+        MyBarItem(viewModel, navController, "Power", R.drawable.navigation_power, 28)
         MyBarItem(viewModel, navController, "Sensor", R.drawable.navigation_sensor, 9)
         MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 10)
         MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 11)

@@ -54,6 +54,7 @@ class MyPermissions(val activity: Activity) {
                 Manifest.permission.WRITE_SETTINGS,
                 Car.PERMISSION_ENERGY,
                 Car.PERMISSION_SPEED,
+                "android.car.permission.CAR_POWER",
                 // Car.PERMISSION_VENDOR_EXTENSION,
             )
 

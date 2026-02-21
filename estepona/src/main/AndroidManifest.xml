@@ -124,6 +124,8 @@
         android:name="android.permission.GET_ACCOUNTS_PRIVILEGED"
         tools:ignore="ProtectedPermissions" />
 
+    <uses-permission android:name="android.car.permission.CAR_POWER"/>
+
     <queries>
         <intent>
             <action android:name="android.media.browse.MediaBrowserService" />

@@ -33,7 +33,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -48,102 +47,76 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import se.avelon.estepona.components.packages.PackageItemData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import se.avelon.estepona.MainApplication
 import se.avelon.estepona.compose.MyButton
+import se.avelon.estepona.compose.text
 import se.avelon.estepona.logging.DLog
 
-class MyPackageComponent {
+class MyPackageComponent : ViewModel() {
     companion object {
         val TAG = DLog.forTag(MyPackageComponent::class.java)
     }
+
+    val packages: MutableList<PackageInfo>
+
+    init {
+        val context = MainApplication.getApplication().applicationContext
+        val packageManager = context.packageManager
+
+        packages = packageManager.getInstalledPackages(PackageManager.MATCH_ALL).toMutableList()
+    }
 }
 
 @Composable
-fun MyPackage(modifier: Modifier = Modifier) {
+fun MyPackage(modifier: Modifier = Modifier, viewModel: MyPackageComponent = viewModel()) {
     DLog.method(MyPackageComponent.TAG, "MyPackage()")
 
-    Column {
-        Row { PackageGrid2(modifier) }
-        Row {
-            // PackageGrid2(modifier)
-        }
-    }
+    LazyColumn { item { FlowRow { LaunchablePackages(viewModel) } } }
+    PackageGrid2(modifier)
 }
 
 @Composable
-fun PackageButton(modifier: Modifier = Modifier, item: PackageItemData, onClick: () -> Unit) {
-    DLog.method(MyPackageComponent.TAG, "PackageButton()")
+fun LaunchablePackages(viewModel: MyPackageComponent) {
+    DLog.method(MyPackageComponent.TAG, "Test()")
 
-    Card(
-        modifier = Modifier.size(64.dp, 64.dp).padding(8.dp),
-        onClick = onClick,
-        border = BorderStroke(2.dp, Color.Red),
-    ) {
-        Column {
-            Image(
-                bitmap = item.icon?.toBitmap()?.asImageBitmap()!!,
-                contentDescription = "description",
-            )
-            Text(text = item.text)
-        }
-    }
-}
+    val context = LocalContext.current
+    val packageManager = context.packageManager
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun PackageGrid(modifier: Modifier = Modifier) {
-    DLog.method(MyPackageComponent.TAG, "PackageGrid()")
+    for (pkg in viewModel.packages.toList()) {
+        // val item = PackageItemData(pkg.packageName,
+        // pkg.applicationInfo?.loadIcon(packageManager),
+        // packageManager?.getApplicationLabel(pkg.applicationInfo!!).toString())
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-    ) {
-        DLog.method(MyPackageComponent.TAG, "LazyColumn()")
+        if (context.packageManager?.getLaunchIntentForPackage(pkg.packageName) != null) {
+            Card(
+                modifier = Modifier.size(64.dp, 64.dp).padding(8.dp),
+                onClick = {
+                    DLog.method(MyPackageComponent.TAG, "onClick()")
 
-        item {
-            Text(
-                modifier = Modifier.padding(bottom = 16.dp),
-                text = "Packages",
-                style = MaterialTheme.typography.titleMedium,
-            )
-        }
-
-        item {
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                DLog.method(MyPackageComponent.TAG, "FlowRow()")
-
-                val context = LocalContext.current
-
-                val packageManager = context.packageManager
-                for (pkg in packageManager.getInstalledPackages(MATCH_ALL)) {
-                    val item =
-                        PackageItemData(
-                            pkg.packageName,
-                            pkg.applicationInfo?.loadIcon(context?.packageManager),
-                            packageManager?.getApplicationLabel(pkg.applicationInfo!!).toString(),
-                        )
-
-                    if (
-                        context.packageManager?.getLaunchIntentForPackage(pkg.packageName) != null
-                    ) {
-                        PackageButton(
-                            item = item,
-                            onClick = {
-                                DLog.method(MyPackageComponent.TAG, "onClick(): $this")
-
-                                val intent = Intent(Intent.ACTION_MAIN)
-                                intent.addCategory(Intent.CATEGORY_LAUNCHER)
-                                intent.setFlags(
-                                    Intent.FLAG_ACTIVITY_NEW_TASK or
-                                        Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-                                )
-                                intent.setPackage(item.pkg)
-                                context.startActivity(
-                                    context.packageManager?.getLaunchIntentForPackage(item.pkg)
-                                )
-                            },
-                        )
-                    }
+                    val intent = Intent(Intent.ACTION_MAIN)
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                    intent.setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                    )
+                    intent.setPackage(pkg.packageName)
+                    context.startActivity(
+                        context.packageManager?.getLaunchIntentForPackage(pkg.packageName)
+                    )
+                },
+                border = BorderStroke(2.dp, Color.Red),
+            ) {
+                Column {
+                    Image(
+                        bitmap =
+                            pkg.applicationInfo
+                                ?.loadIcon(packageManager)
+                                ?.toBitmap()
+                                ?.asImageBitmap()!!,
+                        contentDescription = "description",
+                    )
+                    Text(text = packageManager.getApplicationLabel(pkg.applicationInfo!!).text())
                 }
             }
         }

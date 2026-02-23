@@ -24,8 +24,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import se.avelon.estepona.compose.MyButton
@@ -33,13 +31,13 @@ import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.compose.MyText
 import se.avelon.estepona.logging.DLog
 
-object MyInputComponents {
-    val TAG = DLog.forTag(MyInputComponents::class.java)
+object MyInputComponent {
+    val TAG = DLog.forTag(MyInputComponent::class.java)
 }
 
 @Composable
 fun MyInput(modifier: Modifier) {
-    DLog.method(MyInputComponents.TAG, "MyInput()")
+    DLog.method(MyInputComponent.TAG, "MyInput()")
 
     val context = LocalContext.current
     val inputMethodManager = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -48,13 +46,13 @@ fun MyInput(modifier: Modifier) {
     Column {
         Row {
             for (deviceId in inputManager.inputDeviceIds) {
-                DLog.info(MyInputComponents.TAG, "deviceId=$deviceId")
+                DLog.info(MyInputComponent.TAG, "deviceId=$deviceId")
                 MyText(Modifier, "$deviceId")
             }
         }
         Row {
             MyButton(Modifier, "Home") {
-                DLog.info(MyInputComponents.TAG, "Home")
+                DLog.info(MyInputComponent.TAG, "Home")
 
                 val injectInputEvent =
                     inputManager.javaClass.getMethod(
@@ -81,7 +79,7 @@ fun MyInput(modifier: Modifier) {
             MyDropMenu("Input Methods:", inputMethodManager.inputMethodList)
 
             MyButton(Modifier, "Kitchen") {
-                DLog.info(MyInputComponents.TAG, "Kitchen")
+                DLog.info(MyInputComponent.TAG, "Kitchen")
                 context.startActivity(
                     context.packageManager.getLaunchIntentForPackage(
                         "com.google.android.car.kitchensink"

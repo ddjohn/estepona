@@ -17,8 +17,8 @@ package se.avelon.estepona.components
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.accounts.AuthenticatorDescription
 import android.accounts.OnAccountsUpdateListener
-import android.content.Context
 import android.content.Context.ACCOUNT_SERVICE
 import android.os.Handler
 import androidx.compose.foundation.layout.Column
@@ -27,9 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import se.avelon.estepona.MainApplication
 import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.compose.MyText
 import se.avelon.estepona.logging.DLog
@@ -37,25 +37,28 @@ import se.avelon.estepona.logging.DLog
 class MyAccountComponent : ViewModel(), OnAccountsUpdateListener {
     companion object {
         val TAG = DLog.forTag(MyAccountComponent::class.java)
-        var initialized = false
     }
+
+    val accounts: MutableList<Account>
+    val authenticationTypes: MutableList<AuthenticatorDescription>
 
     private val _mutableValue = mutableStateOf("")
     val mutableValue: MutableState<String> = _mutableValue
 
-    fun init(context: Context) {
+    init {
         DLog.method(TAG, "init()")
-        if (initialized) {
-            return
-        }
 
+        val context = MainApplication.getApplication().applicationContext
         val accountManager = context.getSystemService(ACCOUNT_SERVICE) as AccountManager
+
         accountManager.addOnAccountsUpdatedListener(
             this,
             Handler.createAsync(context.mainLooper),
             true,
         )
-        initialized = true
+
+        accounts = accountManager.accounts.toMutableList()
+        authenticationTypes = accountManager.authenticatorTypes.toMutableList()
     }
 
     override fun onAccountsUpdated(accounts: Array<out Account?>?) {
@@ -72,16 +75,10 @@ class MyAccountComponent : ViewModel(), OnAccountsUpdateListener {
 fun MyAccount(modifier: Modifier, viewModel: MyAccountComponent = viewModel()) {
     DLog.method(MyTemplateComponents.TAG, "MyAccount()")
 
-    val context = LocalContext.current
-    viewModel.init(context)
-
-    val accountManager = context.getSystemService(ACCOUNT_SERVICE) as AccountManager
-    val account = accountManager.addAccount("account", "token", arrayOf(), null, null, null, null)
-
     Row {
         Column {
-            MyDropMenu("Accounts", accountManager.accounts)
-            MyDropMenu("Authentication Types", accountManager.authenticatorTypes)
+            MyDropMenu("Accounts", viewModel.accounts.toList())
+            MyDropMenu("Authentication Types", viewModel.authenticationTypes.toList())
         }
         Column { MyText(Modifier, "Account: ${viewModel.mutableValue.value}") }
     }

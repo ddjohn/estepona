@@ -27,12 +27,35 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import se.avelon.estepona.MainApplication
 import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.logging.DLog
 
-object MyAudioComponent {
-    val TAG = DLog.forTag(MyAudioComponent::class.java)
+class MyAudioComponent : ViewModel() {
+    companion object {
+        val TAG = DLog.forTag(MyAudioComponent::class.java)
+    }
+
+    var occupantZones: MutableList<CarOccupantZoneManager.OccupantZoneInfo>
+    var ouputDevices: MutableList<AudioDeviceInfo>
+    var inputDevices: MutableList<AudioDeviceInfo>
+
+    init {
+        DLog.method(TAG, "init()")
+
+        val context = MainApplication.getApplication().applicationContext
+
+        val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
+        val car = Car.createCar(context)
+        val occupantZoneManager =
+            car.getCarManager(Car.CAR_OCCUPANT_ZONE_SERVICE) as CarOccupantZoneManager
+
+        inputDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS).toMutableList()
+        ouputDevices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS).toMutableList()
+        occupantZones = occupantZoneManager.allOccupantZones.toMutableList()
+    }
 }
 
 fun AudioDeviceInfo.text(): String = "ddddd $this"
@@ -41,29 +64,16 @@ fun CarOccupantZoneManager.OccupantZoneInfo.text(): String =
     "eeeee ${this.zoneId} ${this.occupantType}"
 
 @Composable
-fun MyAudio(modifier: Modifier) {
+fun MyAudio(modifier: Modifier, viewModel: MyAudioComponent = viewModel()) {
     DLog.method(MyAudioComponent.TAG, "MyAudio()")
-
-    val context = LocalContext.current
-
-    val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
-    val car = Car.createCar(context)
-    val occupantZoneManager =
-        car.getCarManager(Car.CAR_OCCUPANT_ZONE_SERVICE) as CarOccupantZoneManager
 
     Row(modifier = modifier) {
         Column(modifier = Modifier.weight(1f)) {
-            MyDropMenu(
-                "Audio Input Devices:",
-                audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS).asList(),
-            )
-            MyDropMenu(
-                "Audio output Devices:",
-                audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS).asList(),
-            )
-            MyDropMenu("Occupancy Zones:", occupantZoneManager.allOccupantZones)
+            MyDropMenu("Audio Input Devices:", viewModel.inputDevices.toList())
+            MyDropMenu("Audio output Devices:", viewModel.ouputDevices.toList())
+            MyDropMenu("Occupancy Zones:", viewModel.occupantZones.toList())
 
-            for (device in audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)) {
+            for (device in viewModel.inputDevices.toList()) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {},
@@ -80,7 +90,7 @@ fun MyAudio(modifier: Modifier) {
             }
         }
         Column(modifier = Modifier.weight(1f)) {
-            for (device in audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)) {
+            for (device in viewModel.ouputDevices.toList()) {
                 val occupancyType = occupancyType(device.type)
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -98,7 +108,7 @@ fun MyAudio(modifier: Modifier) {
             }
         }
         Column(modifier = Modifier.weight(1f)) {
-            for (zone in occupantZoneManager.allOccupantZones) {
+            for (zone in viewModel.occupantZones.toList()) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {},

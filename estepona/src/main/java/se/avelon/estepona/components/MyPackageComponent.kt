@@ -65,7 +65,37 @@ class MyPackageComponent : ViewModel() {
         val context = MainApplication.getApplication().applicationContext
         val packageManager = context.packageManager
 
-        packages = packageManager.getInstalledPackages(PackageManager.MATCH_ALL).toMutableList()
+        packages =
+            packageManager
+                .getInstalledPackages(PackageManager.MATCH_ALL or GET_PERMISSIONS or GET_SIGNATURES)
+                .toMutableList()
+
+        DLog.info(TAG, "@startuml\n")
+        for (pkg in packages) {
+            DLog.info(TAG, "class ${pkg.packageName} {}\n")
+
+            if (pkg.permissions != null) {
+                for (permission in pkg.permissions) {
+                    if (permission.name.contains("DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION")) {
+                        continue
+                    }
+
+                    DLog.info(TAG, "interface ${permission.name} {}\n")
+                    DLog.info(TAG, "${pkg.packageName} ..|> ${permission.name}\n")
+                }
+            }
+
+            if (pkg.requestedPermissions != null) {
+                for (requestedPermission in pkg.requestedPermissions) {
+                    if (requestedPermission.contains("DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION")) {
+                        continue
+                    }
+
+                    DLog.info(TAG, "${pkg.packageName} --> $requestedPermission\n")
+                }
+            }
+        }
+        DLog.info(TAG, "@enduml\n")
     }
 }
 
@@ -85,10 +115,6 @@ fun LaunchablePackages(viewModel: MyPackageComponent) {
     val packageManager = context.packageManager
 
     for (pkg in viewModel.packages.toList()) {
-        // val item = PackageItemData(pkg.packageName,
-        // pkg.applicationInfo?.loadIcon(packageManager),
-        // packageManager?.getApplicationLabel(pkg.applicationInfo!!).toString())
-
         if (context.packageManager?.getLaunchIntentForPackage(pkg.packageName) != null) {
             Card(
                 modifier = Modifier.size(64.dp, 64.dp).padding(8.dp),

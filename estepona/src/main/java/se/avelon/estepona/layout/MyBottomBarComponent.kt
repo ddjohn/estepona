@@ -64,6 +64,7 @@ fun MyBottomBar(
         MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 10)
         MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 11)
         MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 12)
+        MyBarItem(viewModel, navController, "Telecom", R.drawable.navigation_telecom, 23)
         MyBarItem(viewModel, navController, "Time", R.drawable.navigation_time, 13)
         MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 14)
 

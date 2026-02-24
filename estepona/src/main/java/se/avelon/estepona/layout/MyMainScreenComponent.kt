@@ -102,6 +102,7 @@ fun MyMainScreen() {
                     composable("Speech") { MySpeech(modifier = Modifier.fillMaxSize()) }
                     composable("Statistics") { MyStatistics(modifier = Modifier.fillMaxSize()) }
                     composable("Status") { MyStatus(modifier = Modifier.fillMaxSize()) }
+                    composable("Telecom") { MyTelecom(modifier = Modifier.fillMaxSize()) }
                     composable("Time") { MyTime(modifier = Modifier.fillMaxSize()) }
                     composable("Vehicle") { MyVehicle(modifier = Modifier.fillMaxSize()) }
                 }

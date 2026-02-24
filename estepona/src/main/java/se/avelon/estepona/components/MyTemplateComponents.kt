@@ -23,7 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import se.avelon.estepona.MainApplication
 import se.avelon.estepona.logging.DLog
 
-class MyTemplateComponents: ViewModel() {
+class MyTemplateComponents : ViewModel() {
     companion object {
         val TAG = DLog.forTag(MyTemplateComponents::class.java)
     }
@@ -31,8 +31,6 @@ class MyTemplateComponents: ViewModel() {
     init {
         DLog.method(TAG, "init()")
         val context = MainApplication.getApplication().applicationContext
-
-
     }
 }
 
@@ -41,6 +39,4 @@ fun MyTemplate(modifier: Modifier, viewModel: MyTemplateComponents = viewModel()
     DLog.method(MyTemplateComponents.TAG, "MyTemplate()")
 
     val context = LocalContext.current
-
-
 }

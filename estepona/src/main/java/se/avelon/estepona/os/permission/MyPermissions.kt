@@ -56,6 +56,8 @@ class MyPermissions(val activity: Activity) {
                 Car.PERMISSION_SPEED,
                 "android.car.permission.CAR_POWER",
                 // Car.PERMISSION_VENDOR_EXTENSION,
+                Manifest.permission.ANSWER_PHONE_CALLS,
+                Manifest.permission.MANAGE_OWN_CALLS,
             )
 
         fun checkSelfPermissions(context: Context, permissions: Array<String>): Boolean {

@@ -27,6 +27,7 @@ import android.telecom.PhoneAccount
 import android.telecom.PhoneAccountHandle
 import android.telecom.TelecomManager
 import androidx.annotation.RequiresPermission
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -112,11 +113,14 @@ fun MyTelecom(modifier: Modifier, viewModel: MyTelecomComponents = viewModel()) 
     val context = LocalContext.current
 
     Row {
-        MyButton(Modifier, "Place call") { viewModel.placeCall("0371-128 52") }
-        MyButton(Modifier, "End ongoing call") { viewModel.endCall() }
-        MyButton(Modifier, "Add new incoming call") { viewModel.addNewIncomingCall() }
-
-        MyDropMenu("Capable phone accounts", viewModel.cpablePhoneAccounts.toList())
-        MyDropMenu("Self managed phone accounts", viewModel.selfManagedphoneAccounts.toList())
+        Column {
+            MyButton(Modifier, "Place call") { viewModel.placeCall("0371-128 52") }
+            MyButton(Modifier, "End ongoing call") { viewModel.endCall() }
+            MyButton(Modifier, "Add new incoming call") { viewModel.addNewIncomingCall() }
+        }
+        Column {
+            MyDropMenu("Capable phone accounts", viewModel.cpablePhoneAccounts.toList())
+            MyDropMenu("Self managed phone accounts", viewModel.selfManagedphoneAccounts.toList())
+        }
     }
 }

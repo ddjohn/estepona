@@ -151,6 +151,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Estepona"
         android:usesCleartextTraffic="true">
+
         <service
             android:name=".services.MyConnectionService"
             android:enabled="true"
@@ -160,7 +161,6 @@
                 <action android:name="android.telecom.ConnectionService" />
             </intent-filter>
         </service>
-
         <!--
         activity
             android:name=".LicenseActivity"
@@ -193,17 +193,14 @@ provider
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- android:permission="se.avelon.permissin.testpermission" -->
-
         <service
             android:name=".jobs.MyJobService"
             android:enabled="true"
             android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-        </service>
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <service
             android:name=".services.MyMediaBrowserService"
@@ -222,6 +219,21 @@ provider
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".receivers.MyTelecomReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_INCOMING_CALL" />
+                <action android:name="android.intent.action.ACTION_DEFAULT_DIALER_CHANGED" />
+                <action android:name="android.intent.action.ACTION_DEFAULT_CALL_SCREENING_APP_CHANGED" />
+                <action android:name="android.intent.action.ACTION_CHANGE_DEFAULT_DIALER" />
+                <action android:name="android.intent.action.ACTION_NEW_UNKNOWN_CALL" />
+                <action android:name="android.intent.action.ACTION_CONFIGURE_PHONE_ACCOUNT" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -107,7 +107,7 @@ class MyPowerComponent : ViewModel(), CarPowerManager.CarPowerPolicyListener {
 
 @Composable
 fun MyPower(modifier: Modifier, viewModel: MyPowerComponent = viewModel()) {
-    DLog.method(MyTemplateComponents.TAG, "MyTemplate()")
+    DLog.method(MyPowerComponent.TAG, "MyTemplate()")
 
     Row {
         Column {

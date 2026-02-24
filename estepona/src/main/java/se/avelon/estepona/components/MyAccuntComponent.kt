@@ -73,7 +73,7 @@ class MyAccountComponent : ViewModel(), OnAccountsUpdateListener {
 
 @Composable
 fun MyAccount(modifier: Modifier, viewModel: MyAccountComponent = viewModel()) {
-    DLog.method(MyTemplateComponents.TAG, "MyAccount()")
+    DLog.method(MyAccountComponent.TAG, "MyAccount()")
 
     Row {
         Column {

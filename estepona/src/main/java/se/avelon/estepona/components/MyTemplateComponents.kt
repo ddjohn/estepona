@@ -18,15 +18,29 @@ package se.avelon.estepona.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import se.avelon.estepona.MainApplication
 import se.avelon.estepona.logging.DLog
 
-object MyTemplateComponents {
-    val TAG = DLog.forTag(MyTemplateComponents::class.java)
+class MyTemplateComponents: ViewModel() {
+    companion object {
+        val TAG = DLog.forTag(MyTemplateComponents::class.java)
+    }
+
+    init {
+        DLog.method(TAG, "init()")
+        val context = MainApplication.getApplication().applicationContext
+
+
+    }
 }
 
 @Composable
-fun MyTemplate(modifier: Modifier) {
+fun MyTemplate(modifier: Modifier, viewModel: MyTemplateComponents = viewModel()) {
     DLog.method(MyTemplateComponents.TAG, "MyTemplate()")
 
     val context = LocalContext.current
+
+
 }

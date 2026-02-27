@@ -27,9 +27,11 @@ import android.content.Context.WIFI_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.hardware.display.DisplayManager
+import android.hardware.usb.UsbManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.UserManager
+import android.provider.Settings
 import android.view.Surface
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +42,7 @@ import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.ChargingStation
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Badge
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -64,6 +67,7 @@ import java.util.Calendar
 import java.util.Locale
 import kotlin.concurrent.thread
 import se.avelon.estepona.R
+import se.avelon.estepona.compose.MyButton
 import se.avelon.estepona.logging.DLog
 
 class MyTopBarComponent : ViewModel() {
@@ -161,6 +165,8 @@ class MyTopBarComponent : ViewModel() {
 fun MyTopBar(modifier: Modifier = Modifier, viewModel: MyTopBarComponent = viewModel()) {
     DLog.method(MyTopBarComponent.TAG, "MyTopBar()")
 
+    val context = LocalContext.current
+
     viewModel.init(LocalContext.current)
 
     TopAppBar(
@@ -211,6 +217,14 @@ fun MyTopBar(modifier: Modifier = Modifier, viewModel: MyTopBarComponent = viewM
                 Spacer(modifier = Modifier.width(32.dp))
                 Text(viewModel.user.value)
                 Text("Version 1.15")
+
+                Button(modifier = Modifier, content = {Text("ADB")}, onClick = {
+                    Settings.Global.putString(context.contentResolver, Settings.Global.ADB_ENABLED, "1")
+                })
+
+                Button(modifier = Modifier, content = {Text("MTP")}, onClick = {
+                    Settings.Global.putString(context.contentResolver, Settings.Global.ADB_ENABLED, "0")
+                })
 
                 Spacer(Modifier.weight(2f, true))
                 Text(viewModel.time.value)

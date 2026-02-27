@@ -18,15 +18,20 @@ package se.avelon.estepona.layout
 import android.annotation.SuppressLint
 import android.content.Context.DISPLAY_SERVICE
 import android.hardware.display.DisplayManager
+import android.view.SurfaceView
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -45,8 +50,10 @@ import se.avelon.estepona.components.MySensor
 import se.avelon.estepona.components.MySpeech
 import se.avelon.estepona.components.MyStatistics
 import se.avelon.estepona.components.MyStatus
+import se.avelon.estepona.components.MyTelecom
 import se.avelon.estepona.components.MyTime
 import se.avelon.estepona.components.MyVehicle
+import se.avelon.estepona.compose.MyButton
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
@@ -82,11 +89,12 @@ fun MyMainScreen() {
                 DLog.method(TAG, "Row()")
 
                 MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.15f))
+                // VirtualDevices()
+                MyButton(Modifier.fillMaxWidth(0.35f), "Test") {}
                 NavHost(
                     navController = navController,
                     startDestination = "Account",
-                    modifier = Modifier.padding(innerPadding),
-                    // .width(Dp(min.toFloat())).height(Dp(min.toFloat())),
+                    modifier = Modifier.padding(innerPadding).fillMaxWidth(0.5f),
                 ) {
                     composable("Account") { MyAccount(modifier = Modifier.fillMaxSize()) }
                     composable("Audio") { MyAudio(modifier = Modifier.fillMaxSize()) }
@@ -109,4 +117,27 @@ fun MyMainScreen() {
             }
         }
     }
+}
+
+@Composable
+fun VirtualDevices() {
+    val context = LocalContext.current
+
+    val displayManager = context.getSystemService(DISPLAY_SERVICE) as DisplayManager
+
+    val localSurfaceView: SurfaceView = remember {
+        val surfaceView = SurfaceView(context)
+        surfaceView
+    }
+
+    AndroidView(factory = { localSurfaceView })
+
+    displayManager.createVirtualDisplay(
+        "Hello",
+        300,
+        200,
+        121,
+        localSurfaceView.holder.surface,
+        DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
+    )
 }

@@ -7,6 +7,9 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
     <uses-permission
         android:name="android.permission.BIND_JOB_SERVICE"
         tools:ignore="ProtectedPermissions" />

@@ -85,7 +85,6 @@ import se.avelon.estepona.components.MyTime
 import se.avelon.estepona.components.MyVehicle
 import se.avelon.estepona.compose.CleanButton
 import se.avelon.estepona.compose.CleanText
-import se.avelon.estepona.compose.MyText
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
@@ -203,12 +202,14 @@ fun MyMediaPlayer(viewModel: MyScreenComponent = viewModel()) {
             Modifier.fillMaxWidth()
                 .background(color = Color.Black, shape = RoundedCornerShape(8.dp))
     ) {
-        CleanText("Title: " +
-                viewModel.getControls2().metadata?.getString(MediaMetadata.METADATA_KEY_TITLE))
+        CleanText(
+            "Title: " +
+                viewModel.getControls2().metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
+        )
 
         CleanText(
             "Artist: " +
-                viewModel.getControls2().metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST),
+                viewModel.getControls2().metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST)
         )
         Row {
             CleanButton(

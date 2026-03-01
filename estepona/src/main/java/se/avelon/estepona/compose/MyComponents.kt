@@ -62,6 +62,10 @@ fun CleanButton(content: @Composable RowScope.() -> Unit, onClick: () -> Unit) {
 }
 
 @Composable
+fun CleanText(text: String) {
+    Text(text, style = MaterialTheme.typography.titleMedium)
+}
+@Composable
 fun MyText(modifier: Modifier = Modifier, text: String) {
     Text(text, style = MaterialTheme.typography.titleMedium)
 }

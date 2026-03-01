@@ -258,6 +258,11 @@ provider
                 <action android:name="android.intent.action.ACTION_CHANGE_DEFAULT_DIALER" />
                 <action android:name="android.intent.action.ACTION_NEW_UNKNOWN_CALL" />
                 <action android:name="android.intent.action.ACTION_CONFIGURE_PHONE_ACCOUNT" />
+
+                <!-- To be placed in other reciever -->
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
             </intent-filter>
         </receiver>
 

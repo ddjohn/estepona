@@ -23,6 +23,7 @@ import android.media.MediaMetadata
 import android.media.session.MediaController
 import android.media.session.MediaSessionManager
 import android.view.SurfaceView
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,6 +41,7 @@ import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.SkipNext
 import androidx.compose.material.icons.outlined.SkipPrevious
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Label
@@ -197,11 +199,21 @@ fun MyMainScreen(viewModel: MyScreenComponent = viewModel()) {
 
 @Composable
 fun MyMediaPlayer(viewModel: MyScreenComponent = viewModel()) {
-    Column(
+    val context = LocalContext.current
+
+    Card(
         modifier =
-            Modifier.fillMaxWidth()
-                .background(color = Color.Black, shape = RoundedCornerShape(8.dp))
+            Modifier.fillMaxWidth(),
+               // .background( shape = RoundedCornerShape(8.dp)),
+        border = BorderStroke(2.dp, Color.Red),
     ) {
+        val packageManager = context.packageManager
+
+        Image(
+            imageVector = Icons.Outlined.SkipPrevious,
+            contentDescription = "Test",
+            colorFilter = ColorFilter.tint(Color.White),
+        )
         CleanText(
             "Title: " +
                 viewModel.getControls2().metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)

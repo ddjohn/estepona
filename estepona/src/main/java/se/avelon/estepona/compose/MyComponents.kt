@@ -16,6 +16,7 @@
 package se.avelon.estepona.compose
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -43,6 +44,17 @@ fun MyButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
         modifier = modifier,
         onClick = onClick,
         content = { MyText(text = text) },
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(2.dp, Color.DarkGray),
+        colors = ButtonDefaults.outlinedButtonColors(),
+    )
+}
+
+@Composable
+fun CleanButton(content: @Composable RowScope.() -> Unit, onClick: () -> Unit) {
+    Button(
+        content = content,
+        onClick = onClick,
         shape = RoundedCornerShape(8.dp),
         border = BorderStroke(2.dp, Color.DarkGray),
         colors = ButtonDefaults.outlinedButtonColors(),

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="string/your_account">
+        <Preference app:title="email" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="help">
+        <Preference app:title="feedback" />
+    </PreferenceCategory>
+
+    <Preference app:title="terms" />
+    <Preference app:title="version" />
+</PreferenceScreen>

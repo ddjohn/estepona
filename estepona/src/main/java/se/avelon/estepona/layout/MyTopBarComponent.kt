@@ -27,7 +27,6 @@ import android.content.Context.WIFI_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.hardware.display.DisplayManager
-import android.hardware.usb.UsbManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.UserManager
@@ -67,7 +66,6 @@ import java.util.Calendar
 import java.util.Locale
 import kotlin.concurrent.thread
 import se.avelon.estepona.R
-import se.avelon.estepona.compose.MyButton
 import se.avelon.estepona.logging.DLog
 
 class MyTopBarComponent : ViewModel() {
@@ -218,13 +216,29 @@ fun MyTopBar(modifier: Modifier = Modifier, viewModel: MyTopBarComponent = viewM
                 Text(viewModel.user.value)
                 Text("Version 1.15")
 
-                Button(modifier = Modifier, content = {Text("ADB")}, onClick = {
-                    Settings.Global.putString(context.contentResolver, Settings.Global.ADB_ENABLED, "1")
-                })
+                Button(
+                    modifier = Modifier,
+                    content = { Text("ADB") },
+                    onClick = {
+                        Settings.Global.putString(
+                            context.contentResolver,
+                            Settings.Global.ADB_ENABLED,
+                            "1",
+                        )
+                    },
+                )
 
-                Button(modifier = Modifier, content = {Text("MTP")}, onClick = {
-                    Settings.Global.putString(context.contentResolver, Settings.Global.ADB_ENABLED, "0")
-                })
+                Button(
+                    modifier = Modifier,
+                    content = { Text("MTP") },
+                    onClick = {
+                        Settings.Global.putString(
+                            context.contentResolver,
+                            Settings.Global.ADB_ENABLED,
+                            "0",
+                        )
+                    },
+                )
 
                 Spacer(Modifier.weight(2f, true))
                 Text(viewModel.time.value)

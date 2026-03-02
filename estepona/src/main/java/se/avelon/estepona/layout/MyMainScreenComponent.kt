@@ -158,7 +158,6 @@ fun MyMainScreen(viewModel: MyScreenComponent = viewModel()) {
                 DLog.method(TAG, "Row()")
 
                 MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.15f))
-                // VirtualDevices()
                 Column(Modifier.padding(innerPadding).fillMaxWidth(0.35f)) {
                     Button(content = { Text("Button") }, onClick = {})
                     Text("Text")
@@ -167,6 +166,7 @@ fun MyMainScreen(viewModel: MyScreenComponent = viewModel()) {
                     Label(content = { Text("Label") }, label = {})
                     TextField(state = TextFieldState("TextField"))
                     MyMediaPlayer(viewModel)
+                    VirtualDevices()
                 }
                 NavHost(
                     navController = navController,
@@ -297,8 +297,6 @@ fun VirtualDevices() {
         surfaceView
     }
 
-    AndroidView(factory = { localSurfaceView })
-
     displayManager.createVirtualDisplay(
         "Hello",
         300,
@@ -307,4 +305,12 @@ fun VirtualDevices() {
         localSurfaceView.holder.surface,
         DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
     )
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        // .background( shape = RoundedCornerShape(8.dp)),
+        border = BorderStroke(2.dp, Color.Red),
+    ) {
+        AndroidView(factory = { localSurfaceView })
+    }
 }

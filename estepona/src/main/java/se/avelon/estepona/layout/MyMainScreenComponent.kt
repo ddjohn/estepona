@@ -18,6 +18,7 @@ package se.avelon.estepona.layout
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.DISPLAY_SERVICE
+import android.content.pm.PackageManager
 import android.hardware.display.DisplayManager
 import android.media.MediaMetadata
 import android.media.session.MediaController
@@ -26,7 +27,6 @@ import android.view.SurfaceView
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +34,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
@@ -55,15 +54,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mapbox.maps.extension.style.expressions.dsl.generated.color
 import se.avelon.estepona.MainActivity.Companion.TAG
 import se.avelon.estepona.MainApplication
 import se.avelon.estepona.components.MyAccount
@@ -202,12 +203,16 @@ fun MyMediaPlayer(viewModel: MyScreenComponent = viewModel()) {
     val context = LocalContext.current
 
     Card(
-        modifier =
-            Modifier.fillMaxWidth(),
-               // .background( shape = RoundedCornerShape(8.dp)),
+        modifier = Modifier.fillMaxWidth(),
+        // .background( shape = RoundedCornerShape(8.dp)),
         border = BorderStroke(2.dp, Color.Red),
     ) {
-        val packageManager = context.packageManager
+        val name = viewModel.mediaSession.value?.packageName
+
+        Image(
+            bitmap = PackageManagerHelper.getBitmap(context, name),
+            contentDescription = "description",
+        )
 
         Image(
             imageVector = Icons.Outlined.SkipPrevious,
@@ -266,6 +271,18 @@ fun MyMediaPlayer(viewModel: MyScreenComponent = viewModel()) {
                 },
             )
         }
+    }
+}
+
+object PackageManagerHelper {
+    fun getBitmap(context: Context, name: String?): ImageBitmap {
+        val packageManager = context.packageManager
+        val packageInfo =
+            packageManager.getPackageInfo(
+                name!!,
+                PackageManager.PackageInfoFlags.of(PackageManager.GET_PERMISSIONS.toLong()),
+            )
+        return packageInfo.applicationInfo?.loadIcon(packageManager)?.toBitmap()?.asImageBitmap()!!
     }
 }
 

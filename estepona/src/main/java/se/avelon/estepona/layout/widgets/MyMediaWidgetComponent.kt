@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.avelon.estepona.layout
+package se.avelon.estepona.layout.widgets
 
 import android.content.Context
 import android.media.MediaMetadata
@@ -41,6 +41,8 @@ import se.avelon.estepona.MainActivity.Companion.TAG
 import se.avelon.estepona.MainApplication
 import se.avelon.estepona.compose.CleanButton
 import se.avelon.estepona.compose.CleanText
+import se.avelon.estepona.layout.MyScreenComponent
+import se.avelon.estepona.layout.PackageManagerHelper
 import se.avelon.estepona.logging.DLog
 
 class MyMediaWidgetComponent : ViewModel(), MediaSessionManager.OnActiveSessionsChangedListener {

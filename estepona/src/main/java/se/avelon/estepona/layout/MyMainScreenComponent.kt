@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Button
@@ -74,6 +75,8 @@ import se.avelon.estepona.components.MyStatus
 import se.avelon.estepona.components.MyTelecom
 import se.avelon.estepona.components.MyTime
 import se.avelon.estepona.components.MyVehicle
+import se.avelon.estepona.layout.widgets.MyGaugeWidget
+import se.avelon.estepona.layout.widgets.MyMediaWidget
 import se.avelon.estepona.logging.DLog
 import se.avelon.estepona.ui.theme.EsteponaTheme
 
@@ -117,7 +120,10 @@ fun MyMainScreen(viewModel: MyScreenComponent = viewModel()) {
                 MyDragAndDropBoxes(modifier = Modifier.padding(innerPadding).fillMaxWidth(0.15f))
                 Column(Modifier.padding(innerPadding).fillMaxWidth(0.35f)) {
                     MyMediaWidget()
-                    // VirtualDevices()
+                    MyGaugeWidget(inputValue = 22, progressColors = listOf(Color.Green, Color.Red),
+                        innerGradient = Color.Yellow
+                    )
+                    VirtualDevices()
 
                     Button(content = { Text("Button") }, onClick = {})
                     Text("Text")
@@ -178,7 +184,7 @@ fun VirtualDevices() {
         val surfaceView = SurfaceView(context)
         surfaceView
     }
-
+/*
     displayManager.createVirtualDisplay(
         "Hello",
         300,
@@ -187,12 +193,20 @@ fun VirtualDevices() {
         localSurfaceView.holder.surface,
         DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
     )
+*/
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().height(200.dp),
         // .background( shape = RoundedCornerShape(8.dp)),
         border = BorderStroke(2.dp, Color.Red),
     ) {
         AndroidView(factory = { localSurfaceView })
     }
+
+    /*
+    val canvas = localSurfaceView.holder.lockCanvas()
+    canvas.drawCircle(100f, 100f, 50f, Paint())
+    localSurfaceView.holder.unlockCanvasAndPost(canvas)
+*/
+
 }

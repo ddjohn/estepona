@@ -16,6 +16,7 @@
 package se.avelon.estepona.components
 
 import android.car.Car
+import android.car.VehiclePropertyIds
 import android.car.hardware.CarPropertyValue
 import android.car.hardware.property.CarPropertyManager
 import android.content.Context
@@ -24,6 +25,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
@@ -39,6 +42,9 @@ class MyVehicleComponent : ViewModel(), CarPropertyManager.CarPropertyEventCallb
     companion object {
         val TAG = DLog.forTag(MyVehicleComponent::class.java)
     }
+
+    val speed: MutableState<Float> = mutableStateOf(0f)
+    val rpm: MutableState<Float> = mutableStateOf(0f)
 
     lateinit var printWriter: PrintWriter
     private val listItems = arrayListOf<MyProperty<*>>()
@@ -107,6 +113,12 @@ class MyVehicleComponent : ViewModel(), CarPropertyManager.CarPropertyEventCallb
     override fun onChangeEvent(propertyValue: CarPropertyValue<*>?) {
         DLog.method(TAG, "onChangeEvent(): $propertyValue")
         printWriter.println("onChangeEvent(): $propertyValue")
+
+        if (propertyValue?.propertyId == VehiclePropertyIds.PERF_VEHICLE_SPEED) {
+            speed.value = propertyValue.value as Float
+        } else if (propertyValue?.propertyId == VehiclePropertyIds.ENGINE_RPM) {
+            rpm.value = propertyValue.value as Float
+        }
         /*
         if (propertyValue?.propertyId == null) {
             return
@@ -137,7 +149,19 @@ fun MyVehicle(modifier: Modifier, viewModel: MyVehicleComponent = viewModel()) {
     viewModel.init(context)
 
     Row {
-        MyGaugeWidget(size = 512, value = 90, unit = "km/h", min = 0, max = 180)
-        MyGaugeWidget(size = 512, value = 3400, unit = "rpm", min = 0, max = 6000)
+        MyGaugeWidget(
+            size = 512,
+            value = viewModel.speed.value.toInt(),
+            unit = "km/h",
+            min = 0,
+            max = 180,
+        )
+        MyGaugeWidget(
+            size = 512,
+            value = viewModel.rpm.value.toInt(),
+            unit = "rpm",
+            min = 0,
+            max = 6000,
+        )
     }
 }

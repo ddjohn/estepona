@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +32,7 @@ import java.io.File
 import java.io.PrintWriter
 import java.util.Calendar
 import se.avelon.estepona.components.vehicle.MyProperty
+import se.avelon.estepona.layout.widgets.MyGaugeWidget
 import se.avelon.estepona.logging.DLog
 
 class MyVehicleComponent : ViewModel(), CarPropertyManager.CarPropertyEventCallback {
@@ -133,4 +135,9 @@ fun MyVehicle(modifier: Modifier, viewModel: MyVehicleComponent = viewModel()) {
 
     val context = LocalContext.current
     viewModel.init(context)
+
+    Row {
+        MyGaugeWidget(size = 512, value = 90, unit = "km/h", min = 0, max = 180)
+        MyGaugeWidget(size = 512, value = 3400, unit = "rpm", min = 0, max = 6000)
+    }
 }

@@ -15,45 +15,34 @@
  */
 package se.avelon.estepona.layout.widgets
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Card
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Brush.Companion.horizontalGradient
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import se.avelon.estepona.MainApplication
 import se.avelon.estepona.logging.DLog
-import kotlin.math.cos
-import kotlin.math.sin
 
 class MyMGaugeWidgetComponent : ViewModel() {
     companion object {
         val TAG = DLog.forTag(MyMGaugeWidgetComponent::class.java)
     }
-
 
     init {
         DLog.method(TAG, "init()")
@@ -62,114 +51,46 @@ class MyMGaugeWidgetComponent : ViewModel() {
 }
 
 @Composable
-fun MyGaugeWidget(
-    modifier: Modifier = Modifier,
-    inputValue: Int,
-    trackColor: Color = Color(0xFFE0E0E0),
-    progressColors: List<Color>,
-    innerGradient: Color,
-    percentageColor: Color = Color.White
-) {
-
-    val meterValue = getMeterValue(inputValue)
-    Box(modifier = modifier.size(196.dp)) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val sweepAngle = 240f
-            val fillSwipeAngle = (meterValue / 100f) * sweepAngle
-            val height = size.height
-            val width = size.width
-            val startAngle = 150f
-            val arcHeight = height - 20.dp.toPx()
-
+fun MyGaugeWidget(size: Int, value: Int, unit: String = "%", min: Int = 0, max: Int = 100) {
+    Box(
+        modifier =
+            Modifier.size(size.dp)
+                .border(width = 2.dp, color = Red, shape = RoundedCornerShape(16.dp)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Canvas(
+            modifier =
+                Modifier.size((0.85 * size).dp)
+                    .border(width = 2.dp, color = Blue, shape = RoundedCornerShape(16.dp))
+        ) {
             drawArc(
-                color = trackColor,
-                startAngle = startAngle,
-                sweepAngle = sweepAngle,
+                color = Color.DarkGray,
+                startAngle = 150f,
+                sweepAngle = 240f,
                 useCenter = false,
-                topLeft = Offset((width - height + 60f) / 2f, (height - arcHeight) / 2f),
-                size = Size(arcHeight, arcHeight),
-                style = Stroke(width = 50f, cap = StrokeCap.Round)
+                style = Stroke(width = 0.13f * size, cap = StrokeCap.Round),
             )
 
             drawArc(
-                brush = Brush.horizontalGradient(progressColors),
-                startAngle = startAngle,
-                sweepAngle = fillSwipeAngle,
+                color = Color.Gray,
+                startAngle = 150f,
+                sweepAngle = 240f * value / (max - min),
                 useCenter = false,
-                topLeft = Offset((width - height + 60f) / 2f, (height - arcHeight) / 2),
-                size = Size(arcHeight, arcHeight),
-                style = Stroke(width = 50f, cap = StrokeCap.Round)
+                style = Stroke(width = 0.13f * size, cap = StrokeCap.Round),
             )
-            val centerOffset = Offset(width / 2f, height / 2.09f)
+
             drawCircle(
-                Brush.radialGradient(
-                    listOf(
-                        innerGradient.copy(alpha = 0.2f),
-                        Color.Transparent
-                    )
-                ), width / 2f
-            )
-            drawCircle(Color.White, 24f, centerOffset)
-
-            // Calculate needle angle based on inputValue
-            val needleAngle = (meterValue / 100f) * sweepAngle + startAngle
-            val needleLength = 160f // Adjust this value to control needle length
-            val needleBaseWidth = 10f // Adjust this value to control the base width
-
-
-            val needlePath = Path().apply {
-                // Calculate the top point of the needle
-                val topX = centerOffset.x + needleLength * cos(
-                    Math.toRadians(needleAngle.toDouble()).toFloat()
-                )
-                val topY = centerOffset.y + needleLength * sin(
-                    Math.toRadians(needleAngle.toDouble()).toFloat()
-                )
-
-                // Calculate the base points of the needle
-                val baseLeftX = centerOffset.x + needleBaseWidth * cos(
-                    Math.toRadians((needleAngle - 90).toDouble()).toFloat()
-                )
-                val baseLeftY = centerOffset.y + needleBaseWidth * sin(
-                    Math.toRadians((needleAngle - 90).toDouble()).toFloat()
-                )
-                val baseRightX = centerOffset.x + needleBaseWidth * cos(
-                    Math.toRadians((needleAngle + 90).toDouble()).toFloat()
-                )
-                val baseRightY = centerOffset.y + needleBaseWidth * sin(
-                    Math.toRadians((needleAngle + 90).toDouble()).toFloat()
-                )
-
-                moveTo(topX, topY)
-                lineTo(baseLeftX, baseLeftY)
-                lineTo(baseRightX, baseRightY)
-                close()
-            }
-
-            drawPath(
-                color = Color.White,
-                path = needlePath
+                Brush.radialGradient(listOf(Color.Black.copy(alpha = 0.1f), Color.Transparent)),
+                size / 2f,
             )
         }
 
         Column(
-            modifier = Modifier
-                .padding(bottom = 5.dp)
-                .align(Alignment.BottomCenter), horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "$inputValue %", fontSize = 20.sp, lineHeight = 28.sp, color = percentageColor)
-            Text(text = "Percentage", fontSize = 16.sp, lineHeight = 24.sp, color = Color(0xFFB0B4CD))
+            Text(text = "$value", fontSize = (0.1 * size).sp, lineHeight = 28.sp)
+            Text(text = "$unit", fontSize = (0.08 * size).sp, lineHeight = 24.sp)
         }
-
-    }
-}
-
-private fun getMeterValue(inputPercentage: Int): Int {
-    return if (inputPercentage < 0) {
-        0
-    } else if (inputPercentage > 100) {
-        100
-    } else {
-        inputPercentage
     }
 }

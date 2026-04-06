@@ -15,6 +15,11 @@
  */
 package se.avelon.estepona.layout
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -23,7 +28,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import se.avelon.estepona.R
@@ -46,32 +54,39 @@ fun MyBottomBar(
     DLog.method(MyBottomBarComponent.TAG, "MyBottomBar()")
 
     NavigationBar(
-        modifier = modifier,
+        modifier.border(width = 2.dp, color = Red, shape = RoundedCornerShape(16.dp)),
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         contentColor = MaterialTheme.colorScheme.primary,
     ) {
-        MyBarItem(viewModel, navController, "Account", R.drawable.navigation_account, 0)
-        MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 1)
-        MyBarItem(viewModel, navController, "Bluetooth", R.drawable.navigation_bluetooth, 2)
-        MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 3)
-        MyBarItem(viewModel, navController, "Display", R.drawable.navigation_display, 4)
-        MyBarItem(viewModel, navController, "Input", R.drawable.navigation_input, 5)
-        MyBarItem(viewModel, navController, "Media", R.drawable.navigtion_movie, 6)
-        MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 7)
-        MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 8)
-        MyBarItem(viewModel, navController, "Performance", R.drawable.navigation_performance, 8)
-        MyBarItem(viewModel, navController, "Power", R.drawable.navigation_power, 28)
-        MyBarItem(viewModel, navController, "Sensor", R.drawable.navigation_sensor, 9)
-        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 9)
-        MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 10)
-        MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 11)
-        MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 12)
-        MyBarItem(viewModel, navController, "Telecom", R.drawable.navigation_telecom, 23)
-        MyBarItem(viewModel, navController, "Time", R.drawable.navigation_time, 13)
-        MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 14)
+        Row(
+            modifier
+                .fillMaxWidth()
+                .border(width = 2.dp, color = Blue, shape = RoundedCornerShape(16.dp)),
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            MyBarItem(viewModel, navController, "Account", R.drawable.navigation_account, 0)
+            MyBarItem(viewModel, navController, "Audio", R.drawable.navigation_audio, 1)
+            MyBarItem(viewModel, navController, "Bluetooth", R.drawable.navigation_bluetooth, 2)
+            MyBarItem(viewModel, navController, "Camera", R.drawable.navigation_camera, 3)
+            MyBarItem(viewModel, navController, "Display", R.drawable.navigation_display, 4)
+            MyBarItem(viewModel, navController, "Input", R.drawable.navigation_input, 5)
+            MyBarItem(viewModel, navController, "Media", R.drawable.navigtion_movie, 6)
+            MyBarItem(viewModel, navController, "Navigation", R.drawable.navigation_map, 7)
+            MyBarItem(viewModel, navController, "Package", R.drawable.navigation_package, 8)
+            MyBarItem(viewModel, navController, "Performance", R.drawable.navigation_performance, 8)
+            MyBarItem(viewModel, navController, "Power", R.drawable.navigation_power, 28)
+            MyBarItem(viewModel, navController, "Sensor", R.drawable.navigation_sensor, 9)
+            MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 9)
+            MyBarItem(viewModel, navController, "Speech", R.drawable.navigation_speech, 10)
+            MyBarItem(viewModel, navController, "Statistics", R.drawable.navigation_statistics, 11)
+            MyBarItem(viewModel, navController, "Status", R.drawable.navigation_display, 12)
+            MyBarItem(viewModel, navController, "Telecom", R.drawable.navigation_telecom, 23)
+            MyBarItem(viewModel, navController, "Time", R.drawable.navigation_time, 13)
+            MyBarItem(viewModel, navController, "Vehicle", R.drawable.navigation_auto, 14)
 
-        MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 15)
-        MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 16)
+            MyBarItem(viewModel, navController, "Stocks", R.drawable.navigation_stocks, 15)
+            MyBarItem(viewModel, navController, "Settings", R.drawable.navigation_settings, 16)
+        }
     }
 }
 

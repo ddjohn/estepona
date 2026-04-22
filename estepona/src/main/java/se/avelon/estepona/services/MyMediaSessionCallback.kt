@@ -16,14 +16,23 @@
 package se.avelon.estepona.services
 
 import android.content.Intent
+import android.media.MediaMetadata
 import android.media.session.MediaSession
 import android.media.session.PlaybackState
 import android.os.Bundle
 import se.avelon.estepona.logging.DLog
 
-class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Callback() {
+class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Callback(), Runnable {
     companion object {
         val TAG = DLog.forTag(MyMediaSessionCallback::class.java)
+    }
+
+    val thread: Thread = Thread(this)
+    var position = 0L
+    var state = PlaybackState.STATE_NONE
+
+    init {
+        thread.start()
     }
 
     override fun onPrepare() {
@@ -34,11 +43,15 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
     override fun onPlay() {
         DLog.method(TAG, "onPlay()")
         super.onPlay()
+
+        mediaSession.isActive = true
     }
 
     override fun onStop() {
         DLog.method(TAG, "onStop()")
         super.onPlay()
+
+        mediaSession.isActive = false
     }
 
     override fun onMediaButtonEvent(mediaButtonIntent: Intent): Boolean {
@@ -50,13 +63,48 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
         DLog.method(TAG, "onPlayFromMediaId(): $mediaId, $extras")
         super.onPlayFromMediaId(mediaId, extras)
 
-        mediaSession.setPlaybackState(
-            PlaybackState.Builder().setState(PlaybackState.STATE_PLAYING, 1200, 1f).build()
-        )
+        state = PlaybackState.STATE_PLAYING
+        position = 0
     }
 
     override fun onPlayFromSearch(query: String?, extras: Bundle?) {
         DLog.method(TAG, "onPlayFromMediaId(): $query, $extras")
         super.onPlayFromSearch(query, extras)
+    }
+
+    override fun run() {
+        DLog.method(TAG, "run()")
+
+        while (true) {
+            if (state == PlaybackState.STATE_PLAYING) {
+                position += 1000
+            }
+
+            if (position > 240000L) {
+                state = PlaybackState.STATE_NONE
+                position = 0
+            }
+
+            DLog.info(TAG, "PlaybackState = $state, $position")
+            mediaSession.setPlaybackState(
+                PlaybackState.Builder()
+                    .setState(state, position, 1f)
+                    .setActions(
+                        PlaybackState.ACTION_PLAY_PAUSE or
+                            PlaybackState.ACTION_PAUSE or
+                            PlaybackState.ACTION_PLAY
+                    )
+                    .build()
+            )
+
+            mediaSession.setMetadata(
+                MediaMetadata.Builder()
+                    .putString(MediaMetadata.METADATA_KEY_TITLE, "Track title: $position")
+                    .putString(MediaMetadata.METADATA_KEY_ARTIST, "Artist: $state")
+                    .build()
+            )
+
+            Thread.sleep(1000)
+        }
     }
 }

@@ -26,17 +26,28 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import se.avelon.estepona.MainApplication
 import se.avelon.estepona.compose.MyButton
 import se.avelon.estepona.compose.MyDropMenu
 import se.avelon.estepona.compose.MyText
 import se.avelon.estepona.logging.DLog
 
-object MyInputComponent {
-    val TAG = DLog.forTag(MyInputComponent::class.java)
+class MyInputComponent : ViewModel() {
+    companion object {
+        val TAG = DLog.forTag(MyInputComponent::class.java)
+    }
+
+    init {
+        DLog.method(TAG, "init()")
+
+        val context = MainApplication.getApplication().applicationContext
+    }
 }
 
 @Composable
-fun MyInput(modifier: Modifier) {
+fun MyInput(modifier: Modifier, viewModel: MyInputComponent = viewModel()) {
     DLog.method(MyInputComponent.TAG, "MyInput()")
 
     val context = LocalContext.current

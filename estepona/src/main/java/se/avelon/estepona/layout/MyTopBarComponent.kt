@@ -65,6 +65,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import kotlin.concurrent.thread
+import se.avelon.estepona.MainApplication
 import se.avelon.estepona.R
 import se.avelon.estepona.logging.DLog
 
@@ -81,7 +82,10 @@ class MyTopBarComponent : ViewModel() {
     val bluetooth: MutableState<Boolean> = mutableStateOf(false)
     val user: MutableState<String> = mutableStateOf("")
 
-    fun init(context: Context) {
+    init {
+        DLog.method(TAG, "init()")
+        val context = MainApplication.getApplication().applicationContext
+
         val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
         wifi.value = false
         ssid.value = wifiManager.connectionInfo.ssid
@@ -164,8 +168,6 @@ fun MyTopBar(modifier: Modifier = Modifier, viewModel: MyTopBarComponent = viewM
     DLog.method(MyTopBarComponent.TAG, "MyTopBar()")
 
     val context = LocalContext.current
-
-    viewModel.init(LocalContext.current)
 
     TopAppBar(
         colors =

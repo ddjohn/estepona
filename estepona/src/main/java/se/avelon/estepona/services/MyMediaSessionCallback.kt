@@ -17,12 +17,14 @@ package se.avelon.estepona.services
 
 import android.content.Intent
 import android.drm.DrmStore
+import android.graphics.Bitmap
 import android.media.MediaMetadata
 import android.media.session.MediaSession
 import android.media.session.PlaybackState
 import android.os.Bundle
 import android.os.SystemClock
 import se.avelon.estepona.logging.DLog
+import androidx.core.graphics.createBitmap
 
 class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Callback(), Runnable {
     companion object {
@@ -52,9 +54,11 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
         DLog.method(TAG, "onPlay()")
         super.onPlay()
 
+        if(position == PlaybackState.PLAYBACK_POSITION_UNKNOWN)
+            position = 0
+
         mediaSession.isActive = true
         state = PlaybackState.STATE_PLAYING
-        position = 0
         speed = 1f
     }
 
@@ -108,9 +112,6 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
                                 or PlaybackState.ACTION_PAUSE
                     )
 
-                    if(position == PlaybackState.PLAYBACK_POSITION_UNKNOWN)
-                        position = 0
-
                     position += 1000
                 }
                 PlaybackState.STATE_PAUSED -> {
@@ -138,9 +139,28 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
 
             mediaSession.setMetadata(
                 MediaMetadata.Builder()
+                    .putString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE, "display title")
                     .putString(MediaMetadata.METADATA_KEY_TITLE, "Track title: $position")
+                    .putString(MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE, "display artist")
                     .putString(MediaMetadata.METADATA_KEY_ARTIST, "Artist: $state")
-                    .build()
+                    .putString(MediaMetadata.METADATA_KEY_DISPLAY_DESCRIPTION, "display album")
+                    .putLong(MediaMetadata.METADATA_KEY_DURATION, 240000)
+
+                    .putString(MediaMetadata.METADATA_KEY_MEDIA_ID, "Media ID")
+                    .putString(MediaMetadata.METADATA_KEY_ART_URI, "http://www.aftonbladet.se")
+                    .putString(MediaMetadata.METADATA_KEY_ALBUM_ART_URI, "albumArtUri")
+                    .putBitmap(MediaMetadata.METADATA_KEY_ART, createBitmap(32, 32))
+
+                    .putString(MediaMetadata.METADATA_KEY_ALBUM, "album")
+                    .putString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST, "albumArtist")
+                    .putLong(MediaMetadata.METADATA_KEY_TRACK_NUMBER, 12L)
+                    .putLong(MediaMetadata.METADATA_KEY_NUM_TRACKS, 14L)
+
+                    .putString(MediaMetadata.METADATA_KEY_GENRE, "genre")
+                    .putString(MediaMetadata.METADATA_KEY_DATE, "releaseDate")
+                    .putLong(MediaMetadata.METADATA_KEY_YEAR, 2026L)
+
+                .build()
             )
 
             Thread.sleep(1000)

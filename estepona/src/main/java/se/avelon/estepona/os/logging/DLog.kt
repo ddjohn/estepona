@@ -18,6 +18,8 @@ package se.avelon.estepona.logging
 import android.os.Bundle
 import android.util.Log
 
+val DEBUG = false
+
 object DLog {
     fun forTag(clazz: Class<*>): String = "@@.${clazz.simpleName}"
 
@@ -26,7 +28,8 @@ object DLog {
     }
 
     fun debug(tag: String, msg: Any) {
-        Log.d(tag, "\uD83D\uDFE6$msg") // Blue box
+        if(DEBUG)
+            Log.d(tag, "\uD83D\uDFE6$msg") // Blue box
     }
 
     fun info(tag: String, msg: Any) {
@@ -47,6 +50,7 @@ object DLog {
 
     fun test() {
         method("@@.DLog", "method")
+        debug("@@.DLog", "debug")
         info("@@.DLog", "info")
         warning("@@.DLog", "warning")
         error("@@.DLog", "error")

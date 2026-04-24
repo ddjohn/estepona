@@ -16,10 +16,12 @@
 package se.avelon.estepona.services
 
 import android.content.Intent
+import android.drm.DrmStore
 import android.media.MediaMetadata
 import android.media.session.MediaSession
 import android.media.session.PlaybackState
 import android.os.Bundle
+import android.os.SystemClock
 import se.avelon.estepona.logging.DLog
 
 class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Callback(), Runnable {
@@ -27,11 +29,17 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
         val TAG = DLog.forTag(MyMediaSessionCallback::class.java)
     }
 
-    val thread: Thread = Thread(this)
-    var position = 0L
+    val playbackStateBuilder = PlaybackState.Builder()
+    val defaultActions = PlaybackState.ACTION_SKIP_TO_PREVIOUS or PlaybackState.ACTION_SKIP_TO_NEXT
+    //PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_PLAY or PlaybackState.ACTION_FAST_FORWARD or PlaybackState.ACTION_PLAY_FROM_MEDIA_ID or PlaybackState.ACTION_PLAY_FROM_SEARCH or PlaybackState.ACTION_PLAY_FROM_URI or PlaybackState.ACTION_PLAY_PAUSE
+    var speed = 0f
+    var position = PlaybackState.PLAYBACK_POSITION_UNKNOWN
     var state = PlaybackState.STATE_NONE
 
+    val thread: Thread = Thread(this)
+
     init {
+        DLog.method(TAG, "init()")
         thread.start()
     }
 
@@ -45,13 +53,27 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
         super.onPlay()
 
         mediaSession.isActive = true
+        state = PlaybackState.STATE_PLAYING
+        position = 0
+        speed = 1f
     }
 
     override fun onStop() {
         DLog.method(TAG, "onStop()")
-        super.onPlay()
+        super.onStop()
 
         mediaSession.isActive = false
+        state = PlaybackState.STATE_STOPPED
+        speed = 0f
+    }
+
+    override fun onPause() {
+        DLog.method(TAG, "onStop()")
+        super.onStop()
+
+        mediaSession.isActive = false
+        state = PlaybackState.STATE_PAUSED
+        speed = 0f
     }
 
     override fun onMediaButtonEvent(mediaButtonIntent: Intent): Boolean {
@@ -63,8 +85,10 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
         DLog.method(TAG, "onPlayFromMediaId(): $mediaId, $extras")
         super.onPlayFromMediaId(mediaId, extras)
 
+        mediaSession.isActive = true
         state = PlaybackState.STATE_PLAYING
         position = 0
+        speed = 1f
     }
 
     override fun onPlayFromSearch(query: String?, extras: Bundle?) {
@@ -76,24 +100,39 @@ class MyMediaSessionCallback(val mediaSession: MediaSession) : MediaSession.Call
         DLog.method(TAG, "run()")
 
         while (true) {
-            if (state == PlaybackState.STATE_PLAYING) {
-                position += 1000
+            when(state) {
+                PlaybackState.STATE_PLAYING -> {
+                    playbackStateBuilder.setActions(defaultActions or
+                        PlaybackState.ACTION_PAUSE
+                                or PlaybackState.ACTION_STOP
+                                or PlaybackState.ACTION_PAUSE
+                    )
+
+                    if(position == PlaybackState.PLAYBACK_POSITION_UNKNOWN)
+                        position = 0
+
+                    position += 1000
+                }
+                PlaybackState.STATE_PAUSED -> {
+                    playbackStateBuilder.setActions(defaultActions or
+                        PlaybackState.ACTION_PLAY
+                                or PlaybackState.ACTION_PAUSE
+                    )
+                }
+                else -> {}
             }
+
 
             if (position > 240000L) {
                 state = PlaybackState.STATE_NONE
-                position = 0
+                speed = 0f
+                position = PlaybackState.PLAYBACK_POSITION_UNKNOWN
             }
 
-            DLog.info(TAG, "PlaybackState = $state, $position")
+            DLog.debug(TAG, "PlaybackState = $state, $position")
             mediaSession.setPlaybackState(
-                PlaybackState.Builder()
-                    .setState(state, position, 1f)
-                    .setActions(
-                        PlaybackState.ACTION_PLAY_PAUSE or
-                            PlaybackState.ACTION_PAUSE or
-                            PlaybackState.ACTION_PLAY
-                    )
+                playbackStateBuilder
+                    .setState(state, position, speed, SystemClock.elapsedRealtime())
                     .build()
             )
 

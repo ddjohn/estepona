@@ -15,9 +15,12 @@
  */
 package se.avelon.estepona.receivers
 
+import android.Manifest
+import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.RequiresPermission
 import se.avelon.estepona.logging.DLog
 
 class MyTelecomReceiver : BroadcastReceiver() {
@@ -25,7 +28,25 @@ class MyTelecomReceiver : BroadcastReceiver() {
         val TAG = DLog.forTag(MyTelecomReceiver::class.java)
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun onReceive(context: Context, intent: Intent) {
-        DLog.method(TAG, "onReceive(): $intent")
+        DLog.method(TAG, "onReceive(): ${intent}")
+        DLog.method(TAG, "onReceive(): ${intent.extras}")
+
+        if(intent.action == BluetoothDevice.ACTION_FOUND) {
+            DLog.error(TAG, "" +  intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE))
+            DLog.error(TAG, "" +  intent.getParcelableExtra(BluetoothDevice.EXTRA_CLASS))
+            DLog.error(TAG, "" + intent.extras?.get(BluetoothDevice.EXTRA_NAME))
+//            DLog.error(TAG, "" +  intent.getParcelableExtra(BluetoothDevice.EXTRA_RSSI))
+ //           DLog.error(TAG, "" +  intent.getParcelableExtra(BluetoothDevice.EXTRA_IS_COORDINATED_SET_MEMBER))
+        }
+        if(intent.extras?.getString(BluetoothDevice.EXTRA_NAME) == "Davids S22") {
+            DLog.info(TAG, "bind...")
+            val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+            val method = device?.javaClass?.getMethod("createBond" )
+            method?.invoke(device)
+
+            device?.fetchUuidsWithSdp()
+        }
     }
 }
